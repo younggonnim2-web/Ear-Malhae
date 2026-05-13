@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { normalize, similarity, evaluateTyped } from '../../utils/fuzzyMatch'
+import { normalize, evaluateTyped } from '../../utils/fuzzyMatch'
 
 describe('normalize', () => {
   it('소문자 변환 + 구두점 제거', () => {

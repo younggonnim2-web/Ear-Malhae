@@ -1,12 +1,13 @@
+/// <reference types="vitest/globals" />
 import '@testing-library/jest-dom'
 
-global.SpeechSynthesisUtterance = class {
+window.SpeechSynthesisUtterance = class {
   text = ''
   lang = ''
   rate = 1
 } as unknown as typeof SpeechSynthesisUtterance
 
-Object.defineProperty(global, 'speechSynthesis', {
+Object.defineProperty(window, 'speechSynthesis', {
   value: {
     speak: vi.fn(),
     cancel: vi.fn(),

@@ -23,7 +23,7 @@ function getSameCategory(item: StudyItem, all: StudyItem[]): StudyItem[] {
   return all.filter(i => isWordItem(i) && i.category === item.category)
 }
 
-export function QuizStep({ item, allItems, assignment, wordIndex, onComplete, onWrong }: Props) {
+export function QuizStep({ item, allItems, assignment, wordIndex, onComplete, onWrong: _onWrong }: Props) {
   const { speak } = useSpeech()
   const pool = getSameCategory(item, allItems)
   const fallbackPool = pool.length >= 4 ? pool : allItems
