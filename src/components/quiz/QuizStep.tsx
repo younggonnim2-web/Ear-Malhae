@@ -6,6 +6,8 @@ import { buildChoices } from '../../utils/quizHelpers'
 import { ImageChoiceQuiz } from './ImageChoiceQuiz'
 import { MatchingQuiz } from './MatchingQuiz'
 import { ListenChoiceQuiz } from './ListenChoiceQuiz'
+import { SentenceBuilderQuiz } from './SentenceBuilderQuiz'
+import { SENTENCES } from '../../data/sentences'
 
 interface Props {
   item: StudyItem
@@ -46,6 +48,11 @@ export function QuizStep({ item, allItems, assignment, onComplete }: Props) {
         speak={speak}
       />
     )
+  }
+
+  if (assignment.type === 'sentence-builder') {
+    const sentence = SENTENCES[wordIndex % SENTENCES.length]
+    return <SentenceBuilderQuiz sentence={sentence} onCorrect={handleCorrect} />
   }
 
   // image-choice is default
