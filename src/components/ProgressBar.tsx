@@ -4,7 +4,7 @@ interface Props {
   step: 'view' | 'quiz' | 'speak'
 }
 
-const STEP_LABELS = { view: '보기', quiz: '퀴즈', speak: '발음' } as const
+const STEP_LABELS = { view: '보기', quiz: '풀기', speak: '발음' } as const
 
 export function ProgressBar({ current, total, step }: Props) {
   const pct = total === 0 ? 0 : Math.round((current / total) * 100)

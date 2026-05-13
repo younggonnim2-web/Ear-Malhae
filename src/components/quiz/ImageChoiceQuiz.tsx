@@ -17,7 +17,7 @@ function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
 }
 
 function getQuestion(direction: QuizDirection): string {
-  return direction === 'en-to-ko' ? '이 그림의 뜻은?' : '이 그림에 맞는 영어는?'
+  return direction === 'en-to-ko' ? '뜻을 고르세요' : '영어를 고르세요'
 }
 
 export function ImageChoiceQuiz({ item, choices, direction, onCorrect, allowNextOnWrong, onNext }: Props) {

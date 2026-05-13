@@ -15,6 +15,7 @@ interface Props {
   assignment: QuizAssignment
   wordIndex: number
   onComplete: () => void
+  onWrong?: () => void
 }
 
 function getSameCategory(item: StudyItem, all: StudyItem[]): StudyItem[] {
@@ -22,7 +23,7 @@ function getSameCategory(item: StudyItem, all: StudyItem[]): StudyItem[] {
   return all.filter(i => isWordItem(i) && i.category === item.category)
 }
 
-export function QuizStep({ item, allItems, assignment, onComplete }: Props) {
+export function QuizStep({ item, allItems, assignment, wordIndex, onComplete, onWrong }: Props) {
   const { speak } = useSpeech()
   const pool = getSameCategory(item, allItems)
   const fallbackPool = pool.length >= 4 ? pool : allItems
