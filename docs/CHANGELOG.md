@@ -6,6 +6,38 @@
 
 ---
 
+## 2026-05-13
+
+### Easy English MVP — 코드 구현 완료 (STEP 5)
+
+#### 구현 요약
+- **Tech Stack:** React 18, Vite 5, TypeScript 5, Tailwind CSS 3, React Router v6, Vitest
+- **테스트:** 53개 전체 통과 (11개 테스트 파일)
+- **프로덕션 빌드:** 190.78 kB JS / 13.62 kB CSS (gzip: 61.65 kB)
+
+#### 구현된 기능
+| Task | 내용 | 커밋 |
+|------|------|------|
+| T1 | 프로젝트 부트스트랩 (Vite + React + Tailwind + Vitest) | 7ef0f47 |
+| T2 | Types + Utilities (streak, quizAssignment, quizHelpers) | 00285eb |
+| T3 | 콘텐츠 데이터 (알파벳 26자 + 단어 90개) | 9c51f46 |
+| T4 | AppContext (localStorage 진도·스트릭) | 77472e5 |
+| T5 | useSpeech Hook (Web Speech API TTS) | 9578b7f |
+| T6 | 공통 UI 컴포넌트 (ProgressBar, FlashCard 등) | e294e9b |
+| T7 | ImageChoiceQuiz (유형 A) | c23b91d |
+| T8 | MatchingQuiz (유형 B, animate-flash) | e3ef973 |
+| T9 | ListenChoiceQuiz + QuizStep 오케스트레이터 | 237dcb4 |
+| T10 | SentenceBuilderQuiz (유형 D, fuzzy match) | 1d2f43a |
+| T11 | StudySession 페이지 (view→quiz→speak, 복습 라운드) | 74dcfee |
+| T12 | Home, AlphabetList, WordList 페이지 | 526f9ac |
+| T13 | Complete 페이지 + App.tsx 라우팅 | 9d5d21e |
+
+#### 참고 사항
+- 단어 수: 90개 (플랜 목표 100개 대비 — 플랜 실제 데이터 기준)
+- `useBlocker` (브라우저 뒤로가기 차단): BrowserRouter에서 정상 동작, MemoryRouter 테스트 환경에서는 제외됨
+
+---
+
 ## 2026-04-28
 
 ### 출처
