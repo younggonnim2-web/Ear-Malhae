@@ -27,15 +27,19 @@ export interface AppStorage {
   alphabetProgress: string[]
   wordProgress: string[]
   lessonProgress: string[]
+  lessonStars: Record<string, 1 | 2 | 3>
 }
 
 export interface AppContextValue {
   progress: AppStorage
   markAlphabetDone: (id: string) => void
   markWordDone: (id: string) => void
-  markLessonDone: (id: string) => void
+  markLessonDone: (id: string, stars: 1 | 2 | 3) => void
   updateStreak: () => void
   isPhraseUnlocked: () => boolean
+  totalXp: number
+  currentLevel: number
+  xpToNextLevel: number | null
 }
 
 export type QuizType = 'image-choice' | 'matching' | 'listen-choice' | 'sentence-builder'
