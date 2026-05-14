@@ -9,15 +9,12 @@ export function buildChallengeSequence(
   const { itemIds } = lesson
   const seq: LessonChallenge[] = []
 
-  // Flash challenges: one for each item
   for (const itemId of itemIds) {
     seq.push({ kind: 'flash', itemId })
   }
 
-  // Single matching challenge
   seq.push({ kind: 'matching' })
 
-  // Image-choice challenges: one for each item, alternating direction
   for (let i = 0; i < itemIds.length; i++) {
     seq.push({
       kind: 'image-choice',
@@ -26,7 +23,6 @@ export function buildChallengeSequence(
     })
   }
 
-  // Listen-choice challenges: ceil(N/2) for each item
   const listenCount = Math.ceil(itemIds.length / 2)
   for (let i = 0; i < listenCount; i++) {
     seq.push({
@@ -36,7 +32,6 @@ export function buildChallengeSequence(
     })
   }
 
-  // Sentence-builder challenges: always 2, cycling through sentences based on lessonIndex
   for (let i = 0; i < 2; i++) {
     const idx = (lessonIndex * 2 + i) % allSentences.length
     seq.push({ kind: 'sentence-builder', sentenceId: allSentences[idx].id })
