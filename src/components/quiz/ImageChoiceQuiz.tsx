@@ -52,9 +52,7 @@ export function ImageChoiceQuiz({
     if (answered) return
     setSelected(id)
     setAnswered(true)
-    if (id === item.id) {
-      setTimeout(onCorrect, 800)
-    } else {
+    if (id !== item.id) {
       onWrong?.()
     }
   }
@@ -102,13 +100,11 @@ export function ImageChoiceQuiz({
             : `정답은 "${getChoiceLabel(item, direction)}"이에요. 괜찮아요! 👏`}
         </p>
       )}
-      {answered && selected !== item.id && allowNextOnWrong && (
-        <button onClick={onNext} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
-          다음 ▶
-        </button>
-      )}
-      {answered && selected !== item.id && !allowNextOnWrong && (
-        <button onClick={onCorrect} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
+      {answered && (
+        <button
+          onClick={selected === item.id ? onCorrect : allowNextOnWrong ? onNext : onCorrect}
+          className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
+        >
           다음 ▶
         </button>
       )}

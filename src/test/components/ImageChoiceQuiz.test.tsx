@@ -24,12 +24,11 @@ describe('ImageChoiceQuiz', () => {
     expect(screen.getByText('banana')).toBeInTheDocument()
   })
 
-  it('정답 선택 시 onCorrect 호출 (800ms 후)', async () => {
-    vi.useFakeTimers()
+  it('정답 선택 후 다음 버튼 클릭 시 onCorrect 호출', () => {
     const onCorrect = vi.fn()
     render(<ImageChoiceQuiz item={correct} choices={choices} direction="en-to-ko" onCorrect={onCorrect} />)
     fireEvent.click(screen.getByText('사과'))
-    vi.advanceTimersByTime(800)
+    fireEvent.click(screen.getByText('다음 ▶'))
     expect(onCorrect).toHaveBeenCalledTimes(1)
   })
 
