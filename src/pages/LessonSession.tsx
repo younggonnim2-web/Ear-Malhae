@@ -165,6 +165,7 @@ export function LessonSession() {
           key={`${phase}-${challengeIndex}`}
           sentence={sentence}
           onCorrect={advance}
+          speak={speak}
         />
       )
     }
