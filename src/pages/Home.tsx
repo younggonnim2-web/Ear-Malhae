@@ -6,7 +6,7 @@ import { ProgressCard } from '../components/ProgressCard'
 
 export function Home() {
   const navigate = useNavigate()
-  const { progress, isPhraseUnlocked } = useApp()
+  const { progress, isPhraseUnlocked, totalXp, currentLevel } = useApp()
 
   function getNextLesson(): string | null {
     for (const unitId of UNIT_ORDER) {
@@ -41,7 +41,7 @@ export function Home() {
         <ProgressCard
           emoji="📚"
           title="전체 레슨"
-          subtitle={`총 ${totalLessons}개 레슨`}
+          subtitle={`Lv.${currentLevel} · ${totalXp} XP`}
           current={doneLessons}
           total={totalLessons}
           onClick={() => navigate('/units')}
