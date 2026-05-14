@@ -36,6 +36,7 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, speak }:
         direction={direction}
         onCorrect={onCorrect}
         showEmoji={false}
+        showWord={false}
       />
     </div>
   )

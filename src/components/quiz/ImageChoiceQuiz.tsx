@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
 import { cn } from '../../utils/cn'
@@ -12,6 +12,8 @@ interface Props {
   allowNextOnWrong?: boolean
   onNext?: () => void
   showEmoji?: boolean
+  showWord?: boolean
+  speak?: (text: string) => void
 }
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
@@ -23,9 +25,21 @@ function getQuestion(direction: QuizDirection): string {
   return direction === 'en-to-ko' ? '뜻을 고르세요' : '영어를 고르세요'
 }
 
-export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext, showEmoji = true }: Props) {
+function getQuestionWord(item: StudyItem, direction: QuizDirection): string {
+  if (direction === 'en-to-ko') return isWordItem(item) ? item.word : item.exampleWord
+  return item.meaning
+}
+
+export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext, showEmoji = true, showWord = true, speak }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
+
+  const questionWord = getQuestionWord(item, direction)
+
+  useEffect(() => {
+    if (speak) speak(questionWord)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item.id])
 
   function handleSelect(id: string) {
     if (answered) return
@@ -41,6 +55,17 @@ export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, 
   return (
     <div className="flex flex-col items-center gap-5 p-6">
       {showEmoji && <span className="text-6xl">{item.emoji}</span>}
+      {showWord && (
+        <p className="text-3xl font-bold text-ink">{questionWord}</p>
+      )}
+      {speak && (
+        <button
+          onClick={() => speak(questionWord)}
+          className="px-5 py-2 bg-brand-green-dim text-ink text-base font-semibold rounded-full hover:bg-brand-green-dim/80 transition-colors"
+        >
+          🔊 다시 듣기
+        </button>
+      )}
       <p className="text-xl text-steel">{getQuestion(direction)}</p>
       <div
         className="grid grid-cols-2 gap-3 w-full"

@@ -138,6 +138,8 @@ export function LessonSession() {
           direction={current.direction ?? 'en-to-ko'}
           onCorrect={advance}
           onWrong={() => handleWrong(current)}
+          showEmoji={false}
+          speak={speak}
         />
       )
     }
