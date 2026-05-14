@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function ListenChoiceQuiz({ item, choices, direction, onCorrect, speak }: Props) {
-  const word = isWordItem(item) ? item.word : item.letter
+  const word = isWordItem(item) ? item.word : item.exampleWord
 
   useEffect(() => {
     speak(word)
