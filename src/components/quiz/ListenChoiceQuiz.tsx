@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
+import { cn } from '../../utils/cn'
 import { ImageChoiceQuiz } from './ImageChoiceQuiz'
 
 interface Props {
@@ -9,9 +10,10 @@ interface Props {
   direction: QuizDirection
   onCorrect: () => void
   speak: (text: string) => void
+  isSpeaking?: boolean
 }
 
-export function ListenChoiceQuiz({ item, choices, direction, onCorrect, speak }: Props) {
+export function ListenChoiceQuiz({ item, choices, direction, onCorrect, speak, isSpeaking }: Props) {
   const word = isWordItem(item) ? item.word : item.exampleWord
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, speak }:
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-center gap-3 pt-6">
-        <span className="text-6xl">🔊</span>
+        <span className={cn('text-6xl', isSpeaking && 'animate-speaking')}>🔊</span>
         <button
           onClick={() => speak(word)}
           className="px-6 py-3 bg-brand-green-dim text-ink text-lg font-semibold rounded-full hover:bg-brand-green-dim/80 transition-colors"

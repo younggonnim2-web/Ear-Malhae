@@ -24,7 +24,7 @@ export function LessonSession() {
   const { lessonId } = useParams<{ lessonId: string }>()
   const navigate = useNavigate()
   const { markLessonDone, updateStreak } = useApp()
-  const { speak } = useSpeech()
+  const { speak, isSpeaking } = useSpeech()
 
   const lesson = lessonId ? LESSONS_MAP[lessonId] : null
   const unit = lesson ? UNITS_MAP[lesson.unitId] : null
@@ -140,6 +140,7 @@ export function LessonSession() {
           onWrong={() => handleWrong(current)}
           showEmoji={false}
           speak={speak}
+          isSpeaking={isSpeaking}
         />
       )
     }
@@ -154,6 +155,7 @@ export function LessonSession() {
           direction={current.direction ?? 'en-to-ko'}
           onCorrect={advance}
           speak={speak}
+          isSpeaking={isSpeaking}
         />
       )
     }

@@ -14,6 +14,7 @@ interface Props {
   showEmoji?: boolean
   showWord?: boolean
   speak?: (text: string) => void
+  isSpeaking?: boolean
 }
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
@@ -30,7 +31,7 @@ function getQuestionWord(item: StudyItem, direction: QuizDirection): string {
   return item.meaning
 }
 
-export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext, showEmoji = true, showWord = true, speak }: Props) {
+export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext, showEmoji = true, showWord = true, speak, isSpeaking }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
 
@@ -63,7 +64,7 @@ export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, 
           onClick={() => speak(questionWord)}
           className="px-5 py-2 bg-brand-green-dim text-ink text-base font-semibold rounded-full hover:bg-brand-green-dim/80 transition-colors"
         >
-          🔊 다시 듣기
+          <span className={cn(isSpeaking && 'animate-speaking inline-block')}>🔊</span> 다시 듣기
         </button>
       )}
       <p className="text-xl text-steel">{getQuestion(direction)}</p>
