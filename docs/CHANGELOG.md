@@ -6,6 +6,72 @@
 
 ---
 
+## 2026-05-14
+
+### Duolingo Phase 1 — Unit → Lesson 구조 도입 (STEP 5 Phase 1)
+
+#### 목표
+기존 "항목 하나씩" 학습 구조를 "레슨 묶음 단위" 구조로 전환.
+같은 단어를 한 레슨 안에서 Flash → Matching → ImageChoice → ListenChoice → SentenceBuilder 순으로 반복 노출.
+
+#### 구현 요약
+- **테스트:** 61개 전체 통과 (12개 테스트 파일)
+- **프로덕션 빌드:** 191.27 kB JS / 12.74 kB CSS (gzip: 61.94 kB)
+- **구현 방식:** Subagent-Driven Development (태스크별 서브에이전트 + spec/quality 리뷰)
+
+#### 구현된 기능
+
+| Task | 내용 | 커밋 |
+|------|------|------|
+| T1 | 타입 정의: `Unit`, `Lesson`, `LessonChallenge` (`src/types/lesson.ts`) | bdcd570, 6be677f |
+| T2 | 레슨 데이터 22개 (`src/data/lessons.ts`) + 유닛 9개 (`src/data/units.ts`) | 77f7523 |
+| T3 | `buildChallengeSequence()` 유틸 TDD (8개 테스트) | 96a3c1c, caa9f7c |
+| T4 | AppContext 확장: `markLessonDone`, `isPhraseUnlocked` 레슨 기반 업데이트 | 6b4a6a3 |
+| T5 | `LessonSession` 페이지: Flash→Match→Choice→Listen→Sentence, main+retry 2-phase | 1986a5b |
+| T6 | `UnitMap` 페이지: 유닛별 레슨 진행 현황, done/next/locked 상태 | 23c77dc |
+| T7 | 라우터 `/units`, `/lesson/:lessonId` 추가, `Home.tsx` 레슨 기반 네비게이션 | df05a25 |
+| fix | `SentenceBuilderQuiz` 테스트 fake timers 적용 (auto-advance 동작 반영) | b70bc67 |
+
+#### 새 파일 목록
+
+| 파일 | 역할 |
+|------|------|
+| `src/types/lesson.ts` | ChallengeKind, LessonChallenge, Lesson, Unit 타입 |
+| `src/data/lessons.ts` | LESSONS_MAP — 22레슨 (알파벳5 + 단어17) |
+| `src/data/units.ts` | UNITS_MAP + UNIT_ORDER — 9유닛 |
+| `src/utils/lessonSequence.ts` | buildChallengeSequence() |
+| `src/test/utils/lessonSequence.test.ts` | 시퀀스 생성기 테스트 8개 |
+| `src/pages/LessonSession.tsx` | 레슨 세션 페이지 (5종 챌린지) |
+| `src/pages/UnitMap.tsx` | 학습 맵 페이지 |
+
+#### 수정된 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `src/types/index.ts` | `AppStorage.lessonProgress`, `AppContextValue.markLessonDone` 추가 |
+| `src/context/AppContext.tsx` | markLessonDone (immutable), isPhraseUnlocked 레슨 기반 (10개 word lesson) |
+| `src/components/quiz/ImageChoiceQuiz.tsx` | `onWrong?: () => void` prop 추가 |
+| `src/App.tsx` | /units, /lesson/:lessonId 라우트 추가 |
+| `src/pages/Home.tsx` | 레슨 기반 네비게이션, 전체 레슨 진행 카드 |
+| `src/test/components/SentenceBuilderQuiz.test.tsx` | fake timers + fireEvent.change 적용 |
+
+#### 아키텍처 결정 사항
+
+- **챌린지 시퀀스 (5항목 기준):** flash×5 + matching×1 + image-choice×5 + listen-choice×3 + sentence-builder×2 = 16개
+- **문장 선택:** `lessonIndex * 2 % allSentences.length` — 레슨마다 다른 문장 노출
+- **오답 처리:** image-choice 오답 → `retryQueue` 적재 → 메인 시퀀스 완료 후 retry phase
+- **isPhraseUnlocked 기준:** word lesson 10개 완료 (fruit-1/2, animal-1/2/3, color-1/2, body-1/2, food-1)
+- **하위 호환:** 기존 `/alphabet/:id`, `/words/:id` 라우트 유지
+
+#### 다음 단계 후보
+
+- Phase 2: 레슨 완료 후 별(Star) 평가 + 경험치 시스템
+- Phase 2: 학습 통계 화면 (일별 완료 레슨, 스트릭 캘린더)
+- Phase 2: 발음 피드백 (Web Speech API Recognition)
+- 회화 모드 잠금 해제 조건 조정 (현재 word lesson 10개)
+
+---
+
 ## 2026-05-13
 
 ### Easy English MVP — 코드 구현 완료 (STEP 5)
