@@ -17,6 +17,9 @@ function TestConsumer({ action }: { action?: (ctx: ReturnType<typeof useApp>) =>
       <span data-testid="alphabet">{ctx.progress.alphabetProgress.join(',')}</span>
       <span data-testid="word">{ctx.progress.wordProgress.join(',')}</span>
       <span data-testid="unlocked">{String(ctx.isPhraseUnlocked())}</span>
+      <span data-testid="totalXp">{ctx.totalXp}</span>
+      <span data-testid="currentLevel">{ctx.currentLevel}</span>
+      <span data-testid="xpToNextLevel">{ctx.xpToNextLevel ?? 'null'}</span>
     </div>
   )
 }
@@ -58,5 +61,48 @@ describe('AppContext', () => {
     )
     act(() => ctx.updateStreak())
     expect(getByTestId('streak').textContent).toBe('1')
+  })
+
+  it('markLessonDone: lessonProgress에 id 추가, lessonStars 기록', () => {
+    let ctx!: ReturnType<typeof useApp>
+    render(<AppProvider><TestConsumer action={c => { ctx = c }} /></AppProvider>)
+    act(() => ctx.markLessonDone('fruit-1', 3))
+    expect(ctx.progress.lessonProgress).toContain('fruit-1')
+    expect(ctx.progress.lessonStars['fruit-1']).toBe(3)
+  })
+
+  it('markLessonDone: 리플레이 시 더 높은 별점만 반영', () => {
+    let ctx!: ReturnType<typeof useApp>
+    render(<AppProvider><TestConsumer action={c => { ctx = c }} /></AppProvider>)
+    act(() => ctx.markLessonDone('fruit-1', 2))
+    act(() => ctx.markLessonDone('fruit-1', 1))
+    expect(ctx.progress.lessonStars['fruit-1']).toBe(2)
+  })
+
+  it('markLessonDone: 리플레이 시 더 높은 별점 업데이트', () => {
+    let ctx!: ReturnType<typeof useApp>
+    render(<AppProvider><TestConsumer action={c => { ctx = c }} /></AppProvider>)
+    act(() => ctx.markLessonDone('fruit-1', 2))
+    act(() => ctx.markLessonDone('fruit-1', 3))
+    expect(ctx.progress.lessonStars['fruit-1']).toBe(3)
+  })
+
+  it('totalXp: lessonStars에서 파생', () => {
+    let ctx!: ReturnType<typeof useApp>
+    const { getByTestId } = render(
+      <AppProvider><TestConsumer action={c => { ctx = c }} /></AppProvider>
+    )
+    act(() => { ctx.markLessonDone('fruit-1', 3); ctx.markLessonDone('fruit-2', 2) })
+    expect(getByTestId('totalXp').textContent).toBe('50')
+  })
+
+  it('currentLevel: XP 0이면 Lv1', () => {
+    const { getByTestId } = render(<AppProvider><TestConsumer /></AppProvider>)
+    expect(getByTestId('currentLevel').textContent).toBe('1')
+  })
+
+  it('xpToNextLevel: Lv1 초기 상태에서 100', () => {
+    const { getByTestId } = render(<AppProvider><TestConsumer /></AppProvider>)
+    expect(getByTestId('xpToNextLevel').textContent).toBe('100')
   })
 })

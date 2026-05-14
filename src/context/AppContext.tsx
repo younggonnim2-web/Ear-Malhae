@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react'
 import type { AppStorage, AppContextValue } from '../types'
 import { calculateStreak, getTodayString } from '../utils/streak'
+import { calcXp, calcLevel, calcXpToNext } from '../utils/xp'
 
 const STORAGE_KEY = 'easy-english-progress'
 
@@ -10,6 +11,7 @@ const DEFAULT_STORAGE: AppStorage = {
   alphabetProgress: [],
   wordProgress: [],
   lessonProgress: [],
+  lessonStars: {},
 }
 
 function loadStorage(): AppStorage {
@@ -52,10 +54,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  function markLessonDone(id: string) {
+  function markLessonDone(id: string, stars: 1 | 2 | 3) {
     setProgress(prev => {
-      if (prev.lessonProgress.includes(id)) return prev
-      return { ...prev, lessonProgress: [...prev.lessonProgress, id] }
+      const prevStars = (prev.lessonStars[id] ?? 0) as 0 | 1 | 2 | 3
+      const newStars = Math.max(prevStars, stars) as 1 | 2 | 3
+      return {
+        ...prev,
+        lessonProgress: prev.lessonProgress.includes(id)
+          ? prev.lessonProgress
+          : [...prev.lessonProgress, id],
+        lessonStars: { ...prev.lessonStars, [id]: newStars },
+      }
     })
   }
 
@@ -75,8 +84,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return wordLessonIds.every(id => progress.lessonProgress.includes(id))
   }
 
+  const totalXp = useMemo(() => calcXp(progress.lessonStars), [progress.lessonStars])
+  const currentLevel = useMemo(() => calcLevel(totalXp), [totalXp])
+  const xpToNextLevel = useMemo(() => calcXpToNext(totalXp), [totalXp])
+
   return (
-    <AppContext.Provider value={{ progress, markAlphabetDone, markWordDone, markLessonDone, updateStreak, isPhraseUnlocked }}>
+    <AppContext.Provider value={{
+      progress,
+      markAlphabetDone,
+      markWordDone,
+      markLessonDone,
+      updateStreak,
+      isPhraseUnlocked,
+      totalXp,
+      currentLevel,
+      xpToNextLevel,
+    }}>
       {children}
     </AppContext.Provider>
   )
