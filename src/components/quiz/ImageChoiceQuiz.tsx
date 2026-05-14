@@ -11,6 +11,7 @@ interface Props {
   onWrong?: () => void
   allowNextOnWrong?: boolean
   onNext?: () => void
+  showEmoji?: boolean
 }
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
@@ -22,7 +23,7 @@ function getQuestion(direction: QuizDirection): string {
   return direction === 'en-to-ko' ? '뜻을 고르세요' : '영어를 고르세요'
 }
 
-export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext }: Props) {
+export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext, showEmoji = true }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
 
@@ -39,7 +40,7 @@ export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, 
 
   return (
     <div className="flex flex-col items-center gap-5 p-6">
-      <span className="text-6xl">{item.emoji}</span>
+      {showEmoji && <span className="text-6xl">{item.emoji}</span>}
       <p className="text-xl text-steel">{getQuestion(direction)}</p>
       <div
         className="grid grid-cols-2 gap-3 w-full"
