@@ -8,12 +8,15 @@ export type ChallengeKind =
   | 'listen-choice'
   | 'sentence-builder'
 
+export type ChallengeTag = '새로운 단어' | '어려운 연습'
+
 export interface LessonChallenge {
   kind: ChallengeKind
   itemId?: string
   direction?: QuizDirection
   sentenceId?: string
   displayMode?: 'cards' | 'list'
+  tag?: ChallengeTag
 }
 
 export interface Lesson {

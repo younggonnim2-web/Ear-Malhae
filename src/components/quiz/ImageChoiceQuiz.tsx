@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
+import type { ChallengeTag } from '../../types/lesson'
 import { cn } from '../../utils/cn'
+import { CharacterBubble } from '../CharacterBubble'
+import { TagBadge } from '../TagBadge'
 
 interface Props {
   item: StudyItem
@@ -11,22 +14,15 @@ interface Props {
   onWrong?: () => void
   allowNextOnWrong?: boolean
   onNext?: () => void
-  showEmoji?: boolean
-  showWord?: boolean
-  speak?: (text: string) => void
+  speak?: (text: string, lang?: string, rate?: number) => void
   isSpeaking?: boolean
   displayMode?: 'cards' | 'list'
+  tag?: ChallengeTag
 }
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
   if (direction === 'en-to-ko') return item.meaning
   return isWordItem(item) ? item.word : item.exampleWord
-}
-
-function getQuestion(direction: QuizDirection, displayMode: 'cards' | 'list'): string {
-  if (displayMode === 'cards') return '어느 그림이 맞나요?'
-  if (direction === 'en-to-ko') return '올바른 의미를 선택하세요'
-  return '영어를 고르세요'
 }
 
 function getQuestionWord(item: StudyItem, direction: QuizDirection): string {
@@ -36,7 +32,7 @@ function getQuestionWord(item: StudyItem, direction: QuizDirection): string {
 
 export function ImageChoiceQuiz({
   item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext,
-  showEmoji = true, showWord = true, speak, isSpeaking, displayMode = 'list',
+  speak, isSpeaking, displayMode = 'list', tag,
 }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
@@ -44,53 +40,83 @@ export function ImageChoiceQuiz({
   const questionWord = getQuestionWord(item, direction)
 
   useEffect(() => {
-    if (speak) speak(questionWord)
+    // list 모드 + 영어 단어 표시(en-to-ko)일 때만 자동 발음
+    if (speak && displayMode !== 'cards' && direction === 'en-to-ko') {
+      speak(questionWord, 'en-US')
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.id])
 
   function handleSelect(id: string) {
     if (answered) return
     setSelected(id)
-    setAnswered(true)
-    if (id !== item.id) {
-      onWrong?.()
+    if (displayMode === 'cards') {
+      // cards 모드: 선택 후 선택 카드의 영어 단어 발음, 확인 버튼 대기
+      const choice = choices.find(c => c.id === id)
+      if (speak && choice) {
+        const word = isWordItem(choice) ? choice.word : choice.exampleWord
+        speak(word, 'en-US')
+      }
+    } else {
+      // list 모드: 바로 정답 처리
+      setAnswered(true)
+      if (id !== item.id) onWrong?.()
     }
   }
 
+  function handleConfirm() {
+    if (!selected || answered) return
+    setAnswered(true)
+    if (selected !== item.id) onWrong?.()
+  }
+
   return (
-    <div className="flex flex-col items-center gap-5 p-6">
-      {showEmoji && <span className="text-6xl">{item.emoji}</span>}
-      {showWord && (
-        <p className="text-3xl font-bold text-ink">{questionWord}</p>
+    <div className="flex flex-col gap-5 p-6">
+      {tag && (
+        <div>
+          <TagBadge tag={tag} />
+        </div>
       )}
-      {speak && (
-        <button
-          onClick={() => speak(questionWord)}
-          className="px-5 py-2 bg-brand-green-dim text-ink text-base font-semibold rounded-full hover:bg-brand-green-dim/80 transition-colors"
-        >
-          <span className={cn(isSpeaking && 'animate-speaking inline-block')}>🔊</span> 다시 듣기
-        </button>
-      )}
-      <p className="text-base text-steel">{getQuestion(direction, displayMode)}</p>
 
       {displayMode === 'cards' ? (
-        <CardChoices
-          choices={choices}
-          item={item}
-          direction={direction}
-          selected={selected}
-          answered={answered}
-          onSelect={handleSelect}
-        />
+        <>
+          <p className="text-2xl font-bold text-ink">
+            다음 중 어느 그림이 {questionWord}인가요?
+          </p>
+          <CardChoices
+            choices={choices}
+            item={item}
+            direction={direction}
+            selected={selected}
+            answered={answered}
+            onSelect={handleSelect}
+          />
+          {selected && !answered && (
+            <button
+              onClick={handleConfirm}
+              className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
+            >
+              확인 ✓
+            </button>
+          )}
+        </>
       ) : (
-        <ListChoices
-          choices={choices}
-          item={item}
-          direction={direction}
-          selected={selected}
-          answered={answered}
-          onSelect={handleSelect}
-        />
+        <>
+          <p className="text-2xl font-bold text-ink">올바른 의미를 선택하세요</p>
+          <CharacterBubble
+            word={questionWord}
+            onSpeak={direction === 'en-to-ko' && speak ? () => speak(questionWord, 'en-US') : undefined}
+            isSpeaking={isSpeaking}
+          />
+          <ListChoices
+            choices={choices}
+            item={item}
+            direction={direction}
+            selected={selected}
+            answered={answered}
+            onSelect={handleSelect}
+          />
+        </>
       )}
 
       {answered && (
@@ -124,7 +150,7 @@ interface ChoicesProps {
 function CardChoices({ choices, item, direction, selected, answered, onSelect }: ChoicesProps) {
   return (
     <div className="grid grid-cols-3 gap-3 w-full" role="radiogroup" aria-label="quiz choices">
-      {choices.map(choice => {
+      {choices.map((choice, idx) => {
         const isCorrect = choice.id === item.id
         const isSelected = choice.id === selected
         return (
@@ -134,8 +160,9 @@ function CardChoices({ choices, item, direction, selected, answered, onSelect }:
             aria-checked={isSelected}
             onClick={() => onSelect(choice.id)}
             className={cn(
-              'flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-colors',
-              !answered && 'border-hairline bg-canvas',
+              'relative flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-colors',
+              !answered && !isSelected && 'border-hairline bg-canvas',
+              !answered && isSelected && 'border-primary bg-primary/10',
               answered && isCorrect && 'border-green-500 bg-green-50',
               answered && isSelected && !isCorrect && 'border-red-400 bg-red-50',
               answered && !isSelected && !isCorrect && 'border-hairline bg-canvas opacity-40',
@@ -143,13 +170,16 @@ function CardChoices({ choices, item, direction, selected, answered, onSelect }:
           >
             <span className="text-5xl">{choice.emoji}</span>
             <span className={cn(
-              'text-xs font-semibold text-center leading-tight',
+              'text-sm font-semibold text-center leading-tight',
               !answered && 'text-ink',
               answered && isCorrect && 'text-green-800',
               answered && isSelected && !isCorrect && 'text-red-700',
               answered && !isSelected && !isCorrect && 'text-muted',
             )}>
               {getChoiceLabel(choice, direction)}
+            </span>
+            <span className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-gray-200 text-gray-500 text-xs flex items-center justify-center font-bold">
+              {idx + 1}
             </span>
           </button>
         )
@@ -171,7 +201,7 @@ function ListChoices({ choices, item, direction, selected, answered, onSelect }:
             aria-checked={isSelected}
             onClick={() => onSelect(choice.id)}
             className={cn(
-              'flex items-center gap-4 px-4 py-4 rounded-2xl border-2 transition-colors text-left',
+              'flex items-center gap-4 px-4 py-4 rounded-2xl border-2 transition-colors',
               !answered && 'border-hairline bg-canvas text-ink',
               answered && isCorrect && 'border-green-500 bg-green-50 text-green-800',
               answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
@@ -187,7 +217,9 @@ function ListChoices({ choices, item, direction, selected, answered, onSelect }:
             )}>
               {idx + 1}
             </span>
-            <span className="font-semibold text-base">{getChoiceLabel(choice, direction)}</span>
+            <span className="font-semibold text-base flex-1 text-center">
+              {getChoiceLabel(choice, direction)}
+            </span>
           </button>
         )
       })}

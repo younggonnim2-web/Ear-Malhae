@@ -20,7 +20,7 @@ describe('MatchingQuiz', () => {
     render(<MatchingQuiz items={items} onComplete={vi.fn()} />)
     fireEvent.click(screen.getByText('apple'))
     fireEvent.click(screen.getByText('바나나'))  // 오답
-    const wrongBtn = screen.getByText('바나나')
+    const wrongBtn = screen.getByText('바나나').closest('button')!
     expect(wrongBtn.className).toContain('animate-flash')
   })
 

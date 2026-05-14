@@ -58,11 +58,12 @@ export function LessonSession() {
     if (!current?.itemId) return []
     const item = allItems.find(i => i.id === current.itemId)
     if (!item) return []
-    const count = current.displayMode === 'cards' ? 3 : 4
-    return buildChoices(item, allItems, count)
+    // All modes use 3 choices
+    return buildChoices(item, allItems, 3)
   // recompute only when the challenge changes, not on isSpeaking re-renders
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [challengeIndex, phase])
+
   const progressPct = Math.round(
     ((phase === 'main' ? challengeIndex : challenges.length + challengeIndex) /
       (challenges.length + retryQueue.length)) *
@@ -144,11 +145,11 @@ export function LessonSession() {
           key={`${phase}-${challengeIndex}`}
           item={item}
           choices={currentChoices}
-          direction={current.direction ?? 'en-to-ko'}
-          displayMode={current.displayMode ?? 'list'}
+          direction={current.direction ?? 'ko-to-en'}
+          displayMode={current.displayMode ?? 'cards'}
+          tag={current.tag}
           onCorrect={advance}
           onWrong={() => handleWrong(current)}
-          showEmoji={false}
           speak={speak}
           isSpeaking={isSpeaking}
         />
@@ -161,8 +162,9 @@ export function LessonSession() {
           key={`${phase}-${challengeIndex}`}
           item={item}
           choices={currentChoices}
-          direction={current.direction ?? 'en-to-ko'}
+          direction={current.direction ?? 'ko-to-en'}
           onCorrect={advance}
+          onWrong={() => handleWrong(current)}
           speak={speak}
           isSpeaking={isSpeaking}
         />
@@ -177,19 +179,15 @@ export function LessonSession() {
           sentence={sentence}
           onCorrect={advance}
           speak={speak}
+          direction={current.direction ?? 'en-to-ko'}
+          tag={current.tag}
+          isSpeaking={isSpeaking}
         />
       )
     }
 
     return null
   }
-
-  const phaseLabel =
-    current.kind === 'flash' ? '단어 보기' :
-    current.kind === 'matching' ? '짝 맞추기' :
-    current.kind === 'image-choice' ? '뜻 고르기' :
-    current.kind === 'listen-choice' ? '듣고 고르기' :
-    '문장 연습'
 
   return (
     <>
@@ -209,7 +207,6 @@ export function LessonSession() {
               style={{ width: `${progressPct}%` }}
             />
           </div>
-          <span className="text-xs text-muted w-14 text-right">{phaseLabel}</span>
         </div>
 
         {phase === 'retry' && (

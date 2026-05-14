@@ -7,39 +7,33 @@ const wordLesson = LESSONS_MAP['fruit-1']    // 5 items, words
 const alphaLesson = LESSONS_MAP['alphabet-1'] // alphabet
 
 describe('buildChallengeSequence — words', () => {
-  it('flash count equals item count', () => {
+  it('no flash in words sequence', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
-    expect(seq.filter(c => c.kind === 'flash')).toHaveLength(5)
+    expect(seq.filter(c => c.kind === 'flash')).toHaveLength(0)
   })
 
-  it('flash is immediately followed by cards image-choice for same item', () => {
-    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
-    for (let i = 0; i < seq.length - 1; i++) {
-      if (seq[i].kind === 'flash') {
-        expect(seq[i + 1].kind).toBe('image-choice')
-        expect(seq[i + 1].displayMode).toBe('cards')
-        expect(seq[i + 1].itemId).toBe(seq[i].itemId)
-      }
-    }
-  })
-
-  it('stage-1 cards use ko-to-en direction', () => {
+  it('stage-1 cards (ko-to-en): one per item, all tagged 새로운 단어', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     const cards = seq.filter(c => c.kind === 'image-choice' && c.displayMode === 'cards')
+    expect(cards).toHaveLength(5)
     expect(cards.every(c => c.direction === 'ko-to-en')).toBe(true)
+    expect(cards.every(c => c.tag === '새로운 단어')).toBe(true)
   })
 
-  it('stage-3 list choices use en-to-ko direction', () => {
+  it('list choices (ko-to-en): ceil(N/2) + floor(N/2) = N total', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     const list = seq.filter(c => c.kind === 'image-choice' && c.displayMode === 'list')
-    expect(list.every(c => c.direction === 'en-to-ko')).toBe(true)
+    expect(list).toHaveLength(5)
+    expect(list.every(c => c.direction === 'ko-to-en')).toBe(true)
   })
 
-  it('has exactly one matching challenge after stage-1', () => {
+  it('all cards come before first list choice', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
-    expect(seq.filter(c => c.kind === 'matching')).toHaveLength(1)
-    const matchIdx = seq.findIndex(c => c.kind === 'matching')
-    expect(matchIdx).toBeGreaterThan(9) // after 5 flash + 5 image-choice
+    const lastCardIdx = [...seq]
+      .map((c, i) => (c.kind === 'image-choice' && c.displayMode === 'cards') ? i : -1)
+      .filter(i => i >= 0).at(-1)!
+    const firstListIdx = seq.findIndex(c => c.kind === 'image-choice' && c.displayMode === 'list')
+    expect(firstListIdx).toBeGreaterThan(lastCardIdx)
   })
 
   it('listen-choice count is ceil(N/2) = 3', () => {
@@ -47,9 +41,37 @@ describe('buildChallengeSequence — words', () => {
     expect(seq.filter(c => c.kind === 'listen-choice')).toHaveLength(3)
   })
 
-  it('has exactly 2 sentence-builder challenges', () => {
+  it('listen-choice direction is ko-to-en', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
-    expect(seq.filter(c => c.kind === 'sentence-builder')).toHaveLength(2)
+    const listens = seq.filter(c => c.kind === 'listen-choice')
+    expect(listens.every(c => c.direction === 'ko-to-en')).toBe(true)
+  })
+
+  it('has 3 sentence-builder en-to-ko challenges tagged 새로운 단어', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    const enToKo = seq.filter(c => c.kind === 'sentence-builder' && c.direction === 'en-to-ko')
+    expect(enToKo).toHaveLength(3)
+    expect(enToKo.every(c => c.tag === '새로운 단어')).toBe(true)
+  })
+
+  it('has 2 sentence-builder ko-to-en challenges tagged 어려운 연습', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    const koToEn = seq.filter(c => c.kind === 'sentence-builder' && c.direction === 'ko-to-en')
+    expect(koToEn).toHaveLength(2)
+    expect(koToEn.every(c => c.tag === '어려운 연습')).toBe(true)
+  })
+
+  it('has exactly 1 matching challenge', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    expect(seq.filter(c => c.kind === 'matching')).toHaveLength(1)
+  })
+
+  it('matching is NOT last (ko-to-en sentences come after)', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    const matchIdx = seq.findIndex(c => c.kind === 'matching')
+    expect(matchIdx).toBeLessThan(seq.length - 1)
+    expect(seq[seq.length - 1].kind).toBe('sentence-builder')
+    expect(seq[seq.length - 1].direction).toBe('ko-to-en')
   })
 
   it('sentence IDs differ between lessons', () => {
@@ -61,7 +83,10 @@ describe('buildChallengeSequence — words', () => {
   })
 
   it('total count for 5-item words lesson is 19', () => {
-    // 5 flash + 5 cards(ko-to-en) + 1 matching + 3 listen + 3 list(en-to-ko) + 2 sentence = 19
+    // Stage 1: 5 cards + Stage 2: 3 list + Stage 3: 3 listen
+    // Stage 4: 2 en-to-ko + Stage 5: 2 list + Stage 6: 1 en-to-ko
+    // Stage 7: 1 matching + Stage 8: 2 ko-to-en
+    // = 5 + 3 + 3 + 2 + 2 + 1 + 1 + 2 = 19
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     expect(seq).toHaveLength(19)
   })

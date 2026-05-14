@@ -47,8 +47,10 @@ export type QuizType = 'image-choice' | 'matching' | 'listen-choice' | 'sentence
 export interface SentenceItem {
   id: string
   english: string
+  korean: string
   parts: string[]
   distractors: string[]
+  englishDistractors: string[]
 }
 export type QuizDirection = 'en-to-ko' | 'ko-to-en'
 
@@ -57,4 +59,4 @@ export interface QuizAssignment {
   direction: QuizDirection
 }
 
-export type { ChallengeKind, LessonChallenge, Lesson, Unit } from './lesson'
+export type { ChallengeKind, ChallengeTag, LessonChallenge, Lesson, Unit } from './lesson'
