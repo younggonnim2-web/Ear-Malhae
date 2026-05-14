@@ -14,7 +14,8 @@ export function useSpeech(): UseSpeechResult {
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = lang
     utterance.rate = 0.85
-    window.speechSynthesis.speak(utterance)
+    // Chrome bug: speak() immediately after cancel() sometimes silently fails
+    setTimeout(() => window.speechSynthesis.speak(utterance), 50)
   }, [isSupported])
 
   return { speak, isSupported }
