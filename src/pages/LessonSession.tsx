@@ -53,6 +53,15 @@ export function LessonSession() {
 
   const currentList = phase === 'main' ? challenges : retryQueue
   const current = currentList[challengeIndex]
+
+  const currentChoices = useMemo(() => {
+    if (!current?.itemId) return []
+    const item = allItems.find(i => i.id === current.itemId)
+    if (!item) return []
+    return buildChoices(item, allItems, 4)
+  // recompute only when the challenge changes, not on isSpeaking re-renders
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [challengeIndex, phase])
   const progressPct = Math.round(
     ((phase === 'main' ? challengeIndex : challenges.length + challengeIndex) /
       (challenges.length + retryQueue.length)) *
@@ -129,12 +138,11 @@ export function LessonSession() {
     }
 
     if (current.kind === 'image-choice' && item) {
-      const choices = buildChoices(item, allItems, 4)
       return (
         <ImageChoiceQuiz
           key={`${phase}-${challengeIndex}`}
           item={item}
-          choices={choices}
+          choices={currentChoices}
           direction={current.direction ?? 'en-to-ko'}
           onCorrect={advance}
           onWrong={() => handleWrong(current)}
@@ -146,12 +154,11 @@ export function LessonSession() {
     }
 
     if (current.kind === 'listen-choice' && item) {
-      const choices = buildChoices(item, allItems, 4)
       return (
         <ListenChoiceQuiz
           key={`${phase}-${challengeIndex}`}
           item={item}
-          choices={choices}
+          choices={currentChoices}
           direction={current.direction ?? 'en-to-ko'}
           onCorrect={advance}
           speak={speak}
