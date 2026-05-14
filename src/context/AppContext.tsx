@@ -68,7 +68,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   function isPhraseUnlocked() {
-    return progress.wordProgress.length >= 50
+    const wordLessonIds = [
+      'fruit-1','fruit-2','animal-1','animal-2','animal-3',
+      'color-1','color-2','body-1','body-2','food-1',
+    ]
+    return wordLessonIds.every(id => progress.lessonProgress.includes(id))
   }
 
   return (
