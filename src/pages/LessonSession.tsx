@@ -16,6 +16,7 @@ import { ImageChoiceQuiz } from '../components/quiz/ImageChoiceQuiz'
 import { ListenChoiceQuiz } from '../components/quiz/ListenChoiceQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
 import { useSpeech } from '../hooks/useSpeech'
+import { STAR_XP } from '../utils/xp'
 import type { LessonChallenge } from '../types/lesson'
 import type { StudyItem } from '../types'
 
@@ -47,6 +48,7 @@ export function LessonSession() {
   const [challengeIndex, setChallengeIndex] = useState(0)
   const [retryQueue, setRetryQueue] = useState<LessonChallenge[]>([])
   const [phase, setPhase] = useState<'main' | 'retry'>('main')
+  const [wrongCount, setWrongCount] = useState(0)
   const [showExit, setShowExit] = useState(false)
 
   const currentList = phase === 'main' ? challenges : retryQueue
@@ -58,6 +60,7 @@ export function LessonSession() {
   )
 
   const handleWrong = useCallback((challenge: LessonChallenge) => {
+    setWrongCount(c => c + 1)
     setRetryQueue(prev => [...prev, { ...challenge }])
   }, [])
 
@@ -68,9 +71,10 @@ export function LessonSession() {
       setPhase('retry')
       setChallengeIndex(0)
     } else {
-      if (lessonId) markLessonDone(lessonId)
+      const stars: 1 | 2 | 3 = wrongCount === 0 ? 3 : wrongCount <= 2 ? 2 : 1
+      if (lessonId) markLessonDone(lessonId, stars)
       updateStreak()
-      navigate('/complete')
+      navigate('/complete', { state: { stars, xpGained: STAR_XP[stars] } })
     }
   }
 
