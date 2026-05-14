@@ -13,6 +13,7 @@ export interface LessonChallenge {
   itemId?: string
   direction?: QuizDirection
   sentenceId?: string
+  displayMode?: 'cards' | 'list'
 }
 
 export interface Lesson {

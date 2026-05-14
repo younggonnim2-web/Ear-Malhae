@@ -3,78 +3,98 @@ import { buildChallengeSequence } from '../../utils/lessonSequence'
 import { LESSONS_MAP } from '../../data/lessons'
 import { SENTENCES } from '../../data/sentences'
 
-const lesson = LESSONS_MAP['fruit-1'] // 5 items
+const wordLesson = LESSONS_MAP['fruit-1']    // 5 items, words
+const alphaLesson = LESSONS_MAP['alphabet-1'] // alphabet
 
-describe('buildChallengeSequence', () => {
-  it('flash count equals item count and order preserved', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
-    const flashes = seq.filter(c => c.kind === 'flash')
-    expect(flashes).toHaveLength(5)
-    expect(flashes.map(c => c.itemId)).toEqual(lesson.itemIds)
+describe('buildChallengeSequence — words', () => {
+  it('flash count equals item count', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    expect(seq.filter(c => c.kind === 'flash')).toHaveLength(5)
   })
 
-  it('flash is immediately followed by image-choice for same item', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
+  it('flash is immediately followed by cards image-choice for same item', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     for (let i = 0; i < seq.length - 1; i++) {
       if (seq[i].kind === 'flash') {
         expect(seq[i + 1].kind).toBe('image-choice')
+        expect(seq[i + 1].displayMode).toBe('cards')
         expect(seq[i + 1].itemId).toBe(seq[i].itemId)
       }
     }
   })
 
-  it('has exactly one matching challenge', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
+  it('stage-1 cards use ko-to-en direction', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    const cards = seq.filter(c => c.kind === 'image-choice' && c.displayMode === 'cards')
+    expect(cards.every(c => c.direction === 'ko-to-en')).toBe(true)
+  })
+
+  it('stage-3 list choices use en-to-ko direction', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    const list = seq.filter(c => c.kind === 'image-choice' && c.displayMode === 'list')
+    expect(list.every(c => c.direction === 'en-to-ko')).toBe(true)
+  })
+
+  it('has exactly one matching challenge after stage-1', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     expect(seq.filter(c => c.kind === 'matching')).toHaveLength(1)
-  })
-
-  it('matching appears after all flash+image-choice pairs (stage 2)', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
     const matchIdx = seq.findIndex(c => c.kind === 'matching')
-    const lastFlashIdx = [...seq].reverse().findIndex(c => c.kind === 'flash')
-    expect(matchIdx).toBeGreaterThan(seq.length - 1 - lastFlashIdx)
-  })
-
-  it('image-choice has N en-to-ko + ceil(N/2) ko-to-en = 8 total for N=5', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
-    const choices = seq.filter(c => c.kind === 'image-choice')
-    const enToKo = choices.filter(c => c.direction === 'en-to-ko')
-    const koToEn = choices.filter(c => c.direction === 'ko-to-en')
-    expect(enToKo).toHaveLength(5)
-    expect(koToEn).toHaveLength(3)
-    expect(choices).toHaveLength(8)
+    expect(matchIdx).toBeGreaterThan(9) // after 5 flash + 5 image-choice
   })
 
   it('listen-choice count is ceil(N/2) = 3', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     expect(seq.filter(c => c.kind === 'listen-choice')).toHaveLength(3)
   })
 
-  it('listen-choice and ko-to-en image-choice are interleaved in stage 3', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
-    const matchIdx = seq.findIndex(c => c.kind === 'matching')
-    const stage3 = seq.slice(matchIdx + 1).filter(c => c.kind !== 'sentence-builder')
-    expect(stage3[0].kind).toBe('listen-choice')
-    expect(stage3[1].kind).toBe('image-choice')
-    expect(stage3[1].direction).toBe('ko-to-en')
-  })
-
   it('has exactly 2 sentence-builder challenges', () => {
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     expect(seq.filter(c => c.kind === 'sentence-builder')).toHaveLength(2)
   })
 
   it('sentence IDs differ between lessons', () => {
-    const seq0 = buildChallengeSequence(lesson, 0, SENTENCES)
-    const seq1 = buildChallengeSequence(lesson, 1, SENTENCES)
+    const seq0 = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    const seq1 = buildChallengeSequence(wordLesson, 1, SENTENCES, 'words')
     const ids0 = seq0.filter(c => c.kind === 'sentence-builder').map(c => c.sentenceId)
     const ids1 = seq1.filter(c => c.kind === 'sentence-builder').map(c => c.sentenceId)
     expect(ids0).not.toEqual(ids1)
   })
 
-  it('total challenge count for 5-item lesson is 19', () => {
-    // 5 flash + 5 image-choice(en-to-ko) + 1 matching + 3 listen + 3 image-choice(ko-to-en) + 2 sentence = 19
-    const seq = buildChallengeSequence(lesson, 0, SENTENCES)
+  it('total count for 5-item words lesson is 19', () => {
+    // 5 flash + 5 cards(ko-to-en) + 1 matching + 3 listen + 3 list(en-to-ko) + 2 sentence = 19
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     expect(seq).toHaveLength(19)
+  })
+})
+
+describe('buildChallengeSequence — alphabet', () => {
+  it('all flashes come before any image-choice', () => {
+    const seq = buildChallengeSequence(alphaLesson, 0, SENTENCES, 'alphabet')
+    const lastFlashIdx = [...seq].map((c, i) => c.kind === 'flash' ? i : -1).filter(i => i >= 0).at(-1)!
+    const firstChoiceIdx = seq.findIndex(c => c.kind === 'image-choice')
+    expect(firstChoiceIdx).toBeGreaterThan(lastFlashIdx)
+  })
+
+  it('image-choice cards use en-to-ko direction', () => {
+    const seq = buildChallengeSequence(alphaLesson, 0, SENTENCES, 'alphabet')
+    const cards = seq.filter(c => c.kind === 'image-choice')
+    expect(cards.every(c => c.direction === 'en-to-ko' && c.displayMode === 'cards')).toBe(true)
+  })
+
+  it('has exactly one matching challenge', () => {
+    const seq = buildChallengeSequence(alphaLesson, 0, SENTENCES, 'alphabet')
+    expect(seq.filter(c => c.kind === 'matching')).toHaveLength(1)
+  })
+
+  it('listen-choice count equals item count', () => {
+    const seq = buildChallengeSequence(alphaLesson, 0, SENTENCES, 'alphabet')
+    const flashCount = seq.filter(c => c.kind === 'flash').length
+    const listenCount = seq.filter(c => c.kind === 'listen-choice').length
+    expect(listenCount).toBe(flashCount)
+  })
+
+  it('has no sentence-builder for alphabet', () => {
+    const seq = buildChallengeSequence(alphaLesson, 0, SENTENCES, 'alphabet')
+    expect(seq.filter(c => c.kind === 'sentence-builder')).toHaveLength(0)
   })
 })

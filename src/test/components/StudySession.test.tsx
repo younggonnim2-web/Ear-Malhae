@@ -28,7 +28,7 @@ describe('StudySession', () => {
   it('"다음 ▶" 클릭 시 Step 2로 이동', () => {
     renderSession('/alphabet/A')
     fireEvent.click(screen.getByText('다음 ▶'))
-    expect(screen.getByText(/퀴즈|맞춰|고르|듣|문장/)).toBeInTheDocument()
+    expect(screen.getByText(/퀴즈|맞춰|고르|선택|듣|문장|그림/)).toBeInTheDocument()
   })
 
   it('X 버튼 클릭 시 나가기 확인 다이얼로그 표시', () => {

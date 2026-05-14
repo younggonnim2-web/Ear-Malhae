@@ -43,7 +43,7 @@ export function LessonSession() {
   )
 
   const [challenges] = useState<LessonChallenge[]>(() =>
-    lesson ? buildChallengeSequence(lesson, lessonIndex, SENTENCES) : []
+    lesson ? buildChallengeSequence(lesson, lessonIndex, SENTENCES, unit?.type ?? 'words') : []
   )
   const [challengeIndex, setChallengeIndex] = useState(0)
   const [retryQueue, setRetryQueue] = useState<LessonChallenge[]>([])
@@ -58,7 +58,8 @@ export function LessonSession() {
     if (!current?.itemId) return []
     const item = allItems.find(i => i.id === current.itemId)
     if (!item) return []
-    return buildChoices(item, allItems, 4)
+    const count = current.displayMode === 'cards' ? 3 : 4
+    return buildChoices(item, allItems, count)
   // recompute only when the challenge changes, not on isSpeaking re-renders
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [challengeIndex, phase])
@@ -144,6 +145,7 @@ export function LessonSession() {
           item={item}
           choices={currentChoices}
           direction={current.direction ?? 'en-to-ko'}
+          displayMode={current.displayMode ?? 'list'}
           onCorrect={advance}
           onWrong={() => handleWrong(current)}
           showEmoji={false}
