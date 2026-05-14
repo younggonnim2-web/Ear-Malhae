@@ -15,21 +15,21 @@ function renderHome() {
 }
 
 describe('Home', () => {
-  it('제목과 2개 진도 카드 렌더링', () => {
+  it('제목과 섹션 카드 렌더링', () => {
     renderHome()
     expect(screen.getByText('Easy English')).toBeInTheDocument()
-    expect(screen.getByText('전체 레슨')).toBeInTheDocument()
-    expect(screen.getByText('회화')).toBeInTheDocument()
+    expect(screen.getByText('알파벳')).toBeInTheDocument()
+    expect(screen.getByText('단어')).toBeInTheDocument()
   })
 
-  it('"오늘 학습 시작" 버튼 존재', () => {
+  it('알파벳 섹션 시작하기 버튼 존재', () => {
     renderHome()
-    expect(screen.getByText('오늘 학습 시작 ▶')).toBeInTheDocument()
+    const buttons = screen.getAllByText('시작하기 ▶')
+    expect(buttons.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('회화 카드는 잠금 상태 (단어 50개 미완료)', () => {
+  it('학습 맵 보기 버튼 존재', () => {
     renderHome()
-    const lockIcon = screen.getByText('🔒')
-    expect(lockIcon).toBeInTheDocument()
+    expect(screen.getByText('학습 맵 보기')).toBeInTheDocument()
   })
 })
