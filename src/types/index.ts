@@ -26,12 +26,14 @@ export interface AppStorage {
   lastStudiedDate: string
   alphabetProgress: string[]
   wordProgress: string[]
+  lessonProgress: string[]
 }
 
 export interface AppContextValue {
   progress: AppStorage
   markAlphabetDone: (id: string) => void
   markWordDone: (id: string) => void
+  markLessonDone: (id: string) => void
   updateStreak: () => void
   isPhraseUnlocked: () => boolean
 }

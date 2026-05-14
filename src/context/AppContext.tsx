@@ -9,6 +9,7 @@ const DEFAULT_STORAGE: AppStorage = {
   lastStudiedDate: '',
   alphabetProgress: [],
   wordProgress: [],
+  lessonProgress: [],
 }
 
 function loadStorage(): AppStorage {
@@ -51,6 +52,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  function markLessonDone(id: string) {
+    setProgress(prev => {
+      if (prev.lessonProgress.includes(id)) return prev
+      return { ...prev, lessonProgress: [...prev.lessonProgress, id] }
+    })
+  }
+
   function updateStreak() {
     setProgress(prev => ({
       ...prev,
@@ -64,7 +72,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AppContext.Provider value={{ progress, markAlphabetDone, markWordDone, updateStreak, isPhraseUnlocked }}>
+    <AppContext.Provider value={{ progress, markAlphabetDone, markWordDone, markLessonDone, updateStreak, isPhraseUnlocked }}>
       {children}
     </AppContext.Provider>
   )
