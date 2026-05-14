@@ -52,3 +52,5 @@ export interface QuizAssignment {
   type: QuizType
   direction: QuizDirection
 }
+
+export type { ChallengeKind, LessonChallenge, Lesson, Unit } from './lesson'
