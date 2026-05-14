@@ -12,7 +12,14 @@ export function UnitMap() {
 
   return (
     <div className="min-h-screen bg-surface max-w-md mx-auto pb-8">
-      <div className="bg-ink px-4 pt-10 pb-6 text-center text-white">
+      <div className="bg-ink px-4 pt-10 pb-6 text-center text-white relative">
+        <button
+          onClick={() => navigate(-1)}
+          aria-label="뒤로가기"
+          className="absolute left-4 top-10 text-white/70 text-2xl font-bold hover:text-white"
+        >
+          ←
+        </button>
         <h1 className="text-2xl font-bold">학습 맵</h1>
         <p className="text-white/60 mt-1 text-sm">배운 레슨을 확인하세요</p>
         <div className="mt-4">
