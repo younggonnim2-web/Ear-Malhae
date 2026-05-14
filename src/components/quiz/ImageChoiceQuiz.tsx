@@ -1,26 +1,28 @@
 import { useState } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
+import { cn } from '../../utils/cn'
 
 interface Props {
   item: StudyItem
   choices: StudyItem[]
   direction: QuizDirection
   onCorrect: () => void
+  onWrong?: () => void
   allowNextOnWrong?: boolean
   onNext?: () => void
 }
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
   if (direction === 'en-to-ko') return item.meaning
-  return isWordItem(item) ? item.word : item.letter
+  return isWordItem(item) ? item.word : item.exampleWord
 }
 
 function getQuestion(direction: QuizDirection): string {
   return direction === 'en-to-ko' ? '뜻을 고르세요' : '영어를 고르세요'
 }
 
-export function ImageChoiceQuiz({ item, choices, direction, onCorrect, allowNextOnWrong, onNext }: Props) {
+export function ImageChoiceQuiz({ item, choices, direction, onCorrect, onWrong, allowNextOnWrong, onNext }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
 
@@ -28,13 +30,17 @@ export function ImageChoiceQuiz({ item, choices, direction, onCorrect, allowNext
     if (answered) return
     setSelected(id)
     setAnswered(true)
-    if (id === item.id) setTimeout(onCorrect, 800)
+    if (id === item.id) {
+      setTimeout(onCorrect, 800)
+    } else {
+      onWrong?.()
+    }
   }
 
   return (
     <div className="flex flex-col items-center gap-5 p-6">
       <span className="text-6xl">{item.emoji}</span>
-      <p className="text-xl text-gray-500">{getQuestion(direction)}</p>
+      <p className="text-xl text-steel">{getQuestion(direction)}</p>
       <div
         className="grid grid-cols-2 gap-3 w-full"
         role="radiogroup"
@@ -43,17 +49,18 @@ export function ImageChoiceQuiz({ item, choices, direction, onCorrect, allowNext
         {choices.map(choice => {
           const isCorrect = choice.id === item.id
           const isSelected = choice.id === selected
-          let cls = 'py-5 text-xl font-bold rounded-2xl border-2 transition-colors '
-          if (!answered) cls += 'border-gray-200 bg-white text-gray-800'
-          else if (isCorrect) cls += 'border-green-500 bg-green-50 text-green-800'
-          else if (isSelected) cls += 'border-red-400 bg-red-50 text-red-700'
-          else cls += 'border-gray-100 bg-white text-gray-300'
           return (
             <button
               key={choice.id}
               role="radio"
               aria-checked={isSelected}
-              className={cls}
+              className={cn(
+                'py-5 text-xl font-bold rounded-full border-2 transition-colors',
+                !answered && 'border-hairline bg-canvas text-ink',
+                answered && isCorrect && 'border-green-500 bg-green-50 text-green-800',
+                answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
+                answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted',
+              )}
               onClick={() => handleSelect(choice.id)}
             >
               {getChoiceLabel(choice, direction)}
@@ -62,19 +69,19 @@ export function ImageChoiceQuiz({ item, choices, direction, onCorrect, allowNext
         })}
       </div>
       {answered && (
-        <p className={`text-lg font-medium ${selected === item.id ? 'text-green-600' : 'text-gray-600'}`}>
+        <p className={`text-lg font-medium ${selected === item.id ? 'text-green-600' : 'text-steel'}`}>
           {selected === item.id
             ? '✓ 정답이에요! 잘했어요 👍'
             : `정답은 "${getChoiceLabel(item, direction)}"이에요. 괜찮아요! 👏`}
         </p>
       )}
       {answered && selected !== item.id && allowNextOnWrong && (
-        <button onClick={onNext} className="w-full py-4 bg-primary text-white text-xl font-bold rounded-2xl">
+        <button onClick={onNext} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
           다음 ▶
         </button>
       )}
       {answered && selected !== item.id && !allowNextOnWrong && (
-        <button onClick={onCorrect} className="w-full py-4 bg-primary text-white text-xl font-bold rounded-2xl">
+        <button onClick={onCorrect} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
           다음 ▶
         </button>
       )}
