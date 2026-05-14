@@ -15,11 +15,10 @@ function renderHome() {
 }
 
 describe('Home', () => {
-  it('제목과 3개 진도 카드 렌더링', () => {
+  it('제목과 2개 진도 카드 렌더링', () => {
     renderHome()
     expect(screen.getByText('Easy English')).toBeInTheDocument()
-    expect(screen.getByText('알파벳')).toBeInTheDocument()
-    expect(screen.getByText('단어')).toBeInTheDocument()
+    expect(screen.getByText('전체 레슨')).toBeInTheDocument()
     expect(screen.getByText('회화')).toBeInTheDocument()
   })
 

@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
-import { ALPHABET } from '../data/alphabet'
-import { WORDS } from '../data/words'
+import { UNIT_ORDER, UNITS_MAP } from '../data/units'
 import { StreakCard } from '../components/StreakCard'
 import { ProgressCard } from '../components/ProgressCard'
 
@@ -9,44 +8,43 @@ export function Home() {
   const navigate = useNavigate()
   const { progress, isPhraseUnlocked } = useApp()
 
-  function handleStart() {
-    const nextAlphabet = ALPHABET.find(a => !progress.alphabetProgress.includes(a.id))
-    if (nextAlphabet) { navigate(`/alphabet/${nextAlphabet.id}`); return }
-    const nextWord = WORDS.find(w => !progress.wordProgress.includes(w.id))
-    if (nextWord) navigate(`/words/${nextWord.id}`)
+  function getNextLesson(): string | null {
+    for (const unitId of UNIT_ORDER) {
+      const unit = UNITS_MAP[unitId]
+      for (const lessonId of unit.lessonIds) {
+        if (!progress.lessonProgress.includes(lessonId)) return lessonId
+      }
+    }
+    return null
   }
 
+  function handleStart() {
+    const next = getNextLesson()
+    if (next) navigate(`/lesson/${next}`)
+  }
+
+  const totalLessons = UNIT_ORDER.reduce(
+    (sum, uid) => sum + UNITS_MAP[uid].lessonIds.length, 0
+  )
+  const doneLessons = progress.lessonProgress.length
+
   return (
-    <div className="min-h-screen bg-gray-50 max-w-md mx-auto">
-      <div className="bg-blue-500 px-4 pt-10 pb-10 text-center text-white">
+    <div className="min-h-screen bg-surface max-w-md mx-auto">
+      <div className="bg-ink px-4 pt-10 pb-10 text-center text-white">
         <h1 className="text-3xl font-bold">Easy English</h1>
-        <p className="text-blue-100 mt-1">오늘도 5분 영어!</p>
+        <p className="text-white/60 mt-1">오늘도 5분 영어!</p>
       </div>
 
       <StreakCard streak={progress.streak} />
 
       <div className="p-4 flex flex-col gap-3 mt-4">
         <ProgressCard
-          emoji="🔤"
-          title="알파벳"
-          subtitle="A ~ Z, 26자"
-          current={progress.alphabetProgress.length}
-          total={26}
-          onClick={() => {
-            const next = ALPHABET.find(a => !progress.alphabetProgress.includes(a.id))
-            if (next) navigate(`/alphabet/${next.id}`)
-          }}
-        />
-        <ProgressCard
-          emoji="📖"
-          title="단어"
-          subtitle="기초 단어 100개"
-          current={progress.wordProgress.length}
-          total={100}
-          onClick={() => {
-            const next = WORDS.find(w => !progress.wordProgress.includes(w.id))
-            if (next) navigate(`/words/${next.id}`)
-          }}
+          emoji="📚"
+          title="전체 레슨"
+          subtitle={`총 ${totalLessons}개 레슨`}
+          current={doneLessons}
+          total={totalLessons}
+          onClick={() => navigate('/units')}
         />
         <ProgressCard
           emoji="💬"
@@ -58,12 +56,18 @@ export function Home() {
         />
       </div>
 
-      <div className="px-4 mt-2">
+      <div className="px-4 mt-2 flex flex-col gap-3">
         <button
           onClick={handleStart}
-          className="w-full py-5 bg-primary text-white text-2xl font-bold rounded-2xl"
+          className="w-full py-5 bg-primary text-ink font-bold text-2xl rounded-full"
         >
           오늘 학습 시작 ▶
+        </button>
+        <button
+          onClick={() => navigate('/units')}
+          className="w-full py-3 bg-surface border border-hairline text-ink font-semibold rounded-full"
+        >
+          학습 맵 보기
         </button>
       </div>
     </div>
