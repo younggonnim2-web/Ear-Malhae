@@ -132,6 +132,7 @@ export function LessonSession() {
       const choices = buildChoices(item, allItems, 4)
       return (
         <ImageChoiceQuiz
+          key={`${phase}-${challengeIndex}`}
           item={item}
           choices={choices}
           direction={current.direction ?? 'en-to-ko'}
@@ -145,6 +146,7 @@ export function LessonSession() {
       const choices = buildChoices(item, allItems, 4)
       return (
         <ListenChoiceQuiz
+          key={`${phase}-${challengeIndex}`}
           item={item}
           choices={choices}
           direction={current.direction ?? 'en-to-ko'}
