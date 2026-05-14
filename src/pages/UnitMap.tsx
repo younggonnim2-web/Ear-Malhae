@@ -3,16 +3,32 @@ import { useApp } from '../context/AppContext'
 import { UNITS_MAP, UNIT_ORDER } from '../data/units'
 import { LESSONS_MAP } from '../data/lessons'
 import { cn } from '../utils/cn'
+import { calcLevelBarPct } from '../utils/xp'
 
 export function UnitMap() {
   const navigate = useNavigate()
-  const { progress } = useApp()
+  const { progress, totalXp, currentLevel, xpToNextLevel } = useApp()
+  const barPct = calcLevelBarPct(totalXp, currentLevel)
 
   return (
     <div className="min-h-screen bg-surface max-w-md mx-auto pb-8">
       <div className="bg-ink px-4 pt-10 pb-6 text-center text-white">
         <h1 className="text-2xl font-bold">학습 맵</h1>
         <p className="text-white/60 mt-1 text-sm">배운 레슨을 확인하세요</p>
+        <div className="mt-4">
+          <div className="flex justify-between text-sm mb-1">
+            <span className="font-bold">Lv.{currentLevel}</span>
+            <span className="text-white/60">
+              {xpToNextLevel === null ? 'MAX' : `${totalXp} XP · 다음 레벨까지 ${xpToNextLevel} XP`}
+            </span>
+          </div>
+          <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-white rounded-full transition-all duration-300"
+              style={{ width: `${barPct}%` }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="px-4 mt-6 flex flex-col gap-6">
@@ -51,7 +67,9 @@ export function UnitMap() {
                         !done && !isNext && 'bg-surface border-hairline text-muted',
                       )}
                     >
-                      {done ? '✓ ' : ''}{lesson.title}
+                      {done
+                        ? `${'★'.repeat(progress.lessonStars[lessonId] ?? 1)}${'☆'.repeat(3 - (progress.lessonStars[lessonId] ?? 1))} ${lesson.title}`
+                        : lesson.title}
                     </button>
                   )
                 })}
