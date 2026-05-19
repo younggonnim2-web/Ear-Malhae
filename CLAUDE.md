@@ -105,26 +105,26 @@
 # ── 아래는 프로젝트별 설정 (매 프로젝트 수정) ──
 
 ## Project Meta
-- 프로젝트명: `{PROJECT_NAME}`
-- 시작일: `{START_DATE}`
-- 기획자/오너: `{OWNER}`
+- 프로젝트명: `Ear-Malhae (Easy English)`
+- 시작일: `2026-05-07`
+- 기획자/오너: `younggonnim2-web`
+- GitHub: `https://github.com/younggonnim2-web/Ear-Malhae`
 
 ## 기술 스택
-- **Frontend**: `{e.g. Next.js 15 + TypeScript + Tailwind}`
-- **Backend**: `{e.g. NestJS / FastAPI / Spring Boot}`
-- **DB**: `{e.g. PostgreSQL + Prisma}`
-- **Infra**: `{e.g. AWS / Vercel / Supabase}`
-- **Auth**: `{e.g. NextAuth / Clerk / 자체}`
+- **Frontend**: React 18 + Vite 5 + TypeScript 5 + Tailwind CSS 3
+- **Backend**: 없음 (순수 클라이언트 앱, localStorage 기반)
+- **DB**: 없음
+- **Infra**: 미정 (로컬 개발 중)
+- **Auth**: 없음
 
 ## 코드 컨벤션
-- 린터: `{eslint + prettier / biome}`
-- 테스트: `{vitest / jest / pytest}`
-- 커버리지 하한: `{80%}`
+- 린터: 없음 (TypeScript strict 모드)
+- 테스트: Vitest + React Testing Library
+- 커버리지 하한: 80%
 
 ## 환경 변수
-- `.env.example` 최신 유지 필수
-- 실제 값은 `.env.local` (gitignored)
+- 없음 (외부 API 미사용)
 
 ## 배포
-- 브랜치 전략: `{trunk / git-flow}`
-- 배포 대상: `{main → prod, develop → staging}`
+- 브랜치 전략: trunk (master 단일 브랜치)
+- 배포 대상: 미정
