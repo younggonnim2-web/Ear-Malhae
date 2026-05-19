@@ -10,22 +10,23 @@ import { ImageChoiceQuiz } from '../components/quiz/ImageChoiceQuiz'
 import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
 import { cn } from '../utils/cn'
+import { buildChoices } from '../utils/quizHelpers'
 import type { WordItem, SentenceItem } from '../types'
 
 // 섹션 인덱스(1~4) → 난이도 설정
-// buildQ는 항상 ko-to-en (한국어 보고 영어 작성 = 최고 난이도)
+// fillQ는 영어 빈칸(en), buildQ는 항상 ko-to-en
 const DIFFICULTY_BY_IDX: Record<number, { hearts: number; wordQ: number; pickQ: number; fillQ: number; buildQ: number }> = {
-  1: { hearts: 3, wordQ: 4, pickQ: 3, fillQ: 3, buildQ: 2 },  // → 탐험가  (12문제)
-  2: { hearts: 3, wordQ: 3, pickQ: 4, fillQ: 4, buildQ: 3 },  // → 여행자  (14문제)
-  3: { hearts: 2, wordQ: 2, pickQ: 4, fillQ: 5, buildQ: 5 },  // → 도전자  (16문제)
-  4: { hearts: 1, wordQ: 1, pickQ: 4, fillQ: 6, buildQ: 7 },  // → 마스터  (18문제)
+  1: { hearts: 3, wordQ: 2, pickQ: 2, fillQ: 3, buildQ: 4 },  // → 탐험가  (11문제)
+  2: { hearts: 3, wordQ: 1, pickQ: 2, fillQ: 4, buildQ: 5 },  // → 여행자  (12문제)
+  3: { hearts: 2, wordQ: 0, pickQ: 3, fillQ: 5, buildQ: 6 },  // → 도전자  (14문제)
+  4: { hearts: 1, wordQ: 0, pickQ: 2, fillQ: 6, buildQ: 8 },  // → 마스터  (16문제)
 }
 const DEFAULT_DIFFICULTY = DIFFICULTY_BY_IDX[1]
 
 // ── 문제 타입 ─────────────────────────────────────────────
 type WordChoiceQ   = { type: 'word-choice';    item: WordItem; choices: WordItem[]; direction: 'en-to-ko' | 'ko-to-en' }
 type SentencePickQ = { type: 'sentence-pick';  sentence: SentenceItem; choices: string[]; answer: string; direction: 'en-to-ko' | 'ko-to-en' }
-type FillBlankQ    = { type: 'fill-blank';     sentence: SentenceItem; blankIndex: number }
+type FillBlankQ    = { type: 'fill-blank';     sentence: SentenceItem; blankIndex: number; direction: 'ko' | 'en' }
 type SentenceBuildQ = { type: 'sentence-build'; sentence: SentenceItem; direction: 'en-to-ko' | 'ko-to-en' }
 type QuestionDef   = WordChoiceQ | SentencePickQ | FillBlankQ | SentenceBuildQ
 
@@ -45,12 +46,12 @@ function dir(idx: number): 'en-to-ko' | 'ko-to-en' {
 
 // ── 문제 생성 ──────────────────────────────────────────────
 function buildWordChoiceQs(words: WordItem[], count: number): WordChoiceQ[] {
-  return shuffle(words).slice(0, count).map((item, idx) => {
-    const same  = shuffle(words.filter(w => w.id !== item.id && w.category === item.category))
-    const other = shuffle(words.filter(w => w.id !== item.id && w.category !== item.category))
-    const choices = shuffle([item, ...[...same, ...other].slice(0, 3)])
-    return { type: 'word-choice', item, choices, direction: dir(idx) }
-  })
+  return shuffle(words).slice(0, count).map((item, idx) => ({
+    type: 'word-choice',
+    item,
+    choices: buildChoices(item, words, 4) as WordItem[],
+    direction: dir(idx),
+  }))
 }
 
 function buildSentencePickQs(pool: SentenceItem[], all: SentenceItem[], count: number): SentencePickQ[] {
@@ -63,12 +64,16 @@ function buildSentencePickQs(pool: SentenceItem[], all: SentenceItem[], count: n
   })
 }
 
-function buildFillBlankQs(pool: SentenceItem[], count: number): FillBlankQ[] {
-  return pool.slice(0, count).map(sentence => ({
-    type: 'fill-blank',
-    sentence,
-    blankIndex: Math.floor(Math.random() * sentence.parts.length),
-  }))
+function buildFillBlankQs(pool: SentenceItem[], count: number, direction: 'ko' | 'en' = 'en'): FillBlankQ[] {
+  return pool.slice(0, count).map(sentence => {
+    const parts = direction === 'en' ? sentence.englishParts : sentence.parts
+    return {
+      type: 'fill-blank',
+      sentence,
+      blankIndex: Math.floor(Math.random() * Math.max(parts.length, 1)),
+      direction,
+    }
+  })
 }
 
 // sentence-build는 항상 ko-to-en (한국어 보고 영어 작성 = 최고 난이도)
@@ -116,8 +121,12 @@ function SentencePickQuiz({ q, onCorrect, onWrong }: {
   function handleSelect(choice: string) {
     if (answered) return
     setSelected(choice)
+  }
+
+  function handleConfirm() {
+    if (!selected || answered) return
     setAnswered(true)
-    if (choice !== q.answer) onWrong()
+    if (selected !== q.answer) onWrong()
   }
 
   const label = q.direction === 'en-to-ko' ? '올바른 한국어 번역을 고르세요' : '올바른 영어 번역을 고르세요'
@@ -140,7 +149,8 @@ function SentencePickQuiz({ q, onCorrect, onWrong }: {
               disabled={answered}
               className={cn(
                 'px-4 py-4 rounded-2xl border-2 text-base font-semibold text-left transition-colors',
-                !answered && 'border-hairline bg-canvas text-ink hover:border-primary',
+                !answered && !isSelected && 'border-hairline bg-canvas text-ink hover:border-primary',
+                !answered && isSelected && 'border-primary bg-primary/10 text-ink',
                 answered && isCorrect  && 'border-green-500 bg-green-50 text-green-800',
                 answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
                 answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted opacity-50',
@@ -151,6 +161,11 @@ function SentencePickQuiz({ q, onCorrect, onWrong }: {
           )
         })}
       </div>
+      {selected && !answered && (
+        <button onClick={handleConfirm} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
+          확인 ✓
+        </button>
+      )}
       {answered && (
         <p className={`text-base font-medium ${selected === q.answer ? 'text-green-600' : 'text-steel'}`}>
           {selected === q.answer ? '✓ 정답이에요! 👍' : `정답: "${q.answer}"`}
@@ -161,6 +176,40 @@ function SentencePickQuiz({ q, onCorrect, onWrong }: {
           다음 ▶
         </button>
       )}
+    </div>
+  )
+}
+
+// ── 인트로 화면 ────────────────────────────────────────────
+function IntroScreen({ sectionNum, onStart, onLater }: {
+  sectionNum: number
+  onStart: () => void
+  onLater: () => void
+}) {
+  const particle = sectionNum === 3 ? '으로' : '로'
+  return (
+    <div className="min-h-screen bg-white flex flex-col max-w-md mx-auto">
+      <div className="flex-1 flex flex-col items-center justify-center gap-10 px-8">
+        <div className="flex flex-col items-center gap-3">
+          <span className="text-[96px] leading-none select-none animate-bounce">🦉</span>
+          <div className="w-16 h-2.5 bg-gray-200 rounded-full blur-[2px] opacity-70" />
+        </div>
+        <p className="text-xl font-bold text-gray-800 text-center leading-snug">
+          이 테스트를 통과하면<br />섹션 {sectionNum} ({particle}) 건너뜁니다!
+        </p>
+      </div>
+
+      <div className="border-t border-gray-100 px-6 py-5 flex items-center justify-between w-full">
+        <button onClick={onLater} className="text-[#1CB0F6] font-bold text-sm">
+          나중에 하기
+        </button>
+        <button
+          onClick={onStart}
+          className="bg-[#1CB0F6] text-white font-bold px-8 py-3 rounded-2xl text-sm shadow-sm"
+        >
+          계속하기
+        </button>
+      </div>
     </div>
   )
 }
@@ -235,7 +284,7 @@ export function JumpTest() {
   const heartsRef = useRef(cfg.hearts)
   const [heartsDisplay, setHeartsDisplay] = useState(cfg.hearts)
   const [current, setCurrent] = useState(0)
-  const [phase, setPhase] = useState<'quiz' | 'pass' | 'fail'>('quiz')
+  const [phase, setPhase] = useState<'intro' | 'quiz' | 'pass' | 'fail'>('intro')
 
   if (!targetSection || targetIdx <= 0) {
     return <div className="min-h-screen bg-surface flex items-center justify-center"><p className="text-steel">잘못된 접근입니다.</p></div>
@@ -246,6 +295,16 @@ export function JumpTest() {
         <p className="text-steel text-center">건너뛰기 테스트를 위한 학습 콘텐츠가 부족합니다.</p>
         <button onClick={() => navigate('/')} className="text-primary font-bold">돌아가기</button>
       </div>
+    )
+  }
+
+  if (phase === 'intro') {
+    return (
+      <IntroScreen
+        sectionNum={targetIdx + 1}
+        onStart={() => setPhase('quiz')}
+        onLater={() => navigate('/')}
+      />
     )
   }
 
@@ -336,6 +395,7 @@ export function JumpTest() {
             key={`fb-${current}`}
             sentence={q.sentence}
             blankIndex={q.blankIndex}
+            direction={q.direction}
             onCorrect={handleAdvance}
             onWrong={handleWrong}
             speak={speak}

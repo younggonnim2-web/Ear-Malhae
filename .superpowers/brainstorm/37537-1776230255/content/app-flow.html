@@ -1,0 +1,75 @@
+<h2>화면 흐름 설계</h2>
+<p class="subtitle">앱의 전체 화면 구조와 이동 흐름입니다. 맞는지 확인해 주세요.</p>
+
+<div style="font-family:sans-serif;max-width:700px;margin:0 auto;">
+
+  <!-- Flow diagram -->
+  <div style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+
+    <!-- Home -->
+    <div style="background:#2196F3;color:white;border-radius:12px;padding:16px 40px;text-align:center;width:220px;box-shadow:0 2px 8px rgba(33,150,243,0.3);">
+      <div style="font-size:20px;">🏠</div>
+      <div style="font-weight:bold;font-size:16px;">홈 화면</div>
+      <div style="font-size:12px;opacity:0.85;margin-top:4px;">오늘 학습 현황 + 스트릭</div>
+    </div>
+
+    <div style="font-size:20px;color:#999;">↓</div>
+
+    <!-- Mode Select -->
+    <div style="display:flex;gap:16px;justify-content:center;">
+      <div style="background:#FF9800;color:white;border-radius:12px;padding:14px 20px;text-align:center;width:140px;">
+        <div style="font-size:18px;">🔤</div>
+        <div style="font-weight:bold;font-size:14px;">알파벳</div>
+        <div style="font-size:11px;opacity:0.85;margin-top:4px;">A~Z 26자</div>
+      </div>
+      <div style="background:#4CAF50;color:white;border-radius:12px;padding:14px 20px;text-align:center;width:140px;">
+        <div style="font-size:18px;">📖</div>
+        <div style="font-weight:bold;font-size:14px;">단어</div>
+        <div style="font-size:11px;opacity:0.85;margin-top:4px;">기초 50개</div>
+      </div>
+    </div>
+
+    <div style="font-size:20px;color:#999;">↓ (단원 선택 후)</div>
+
+    <!-- 3 Steps -->
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <div style="background:white;border:2px solid #FFC107;border-radius:12px;padding:14px 16px;text-align:center;width:130px;">
+        <div style="font-size:24px;">👀</div>
+        <div style="font-weight:bold;color:#F57F17;font-size:14px;">Step 1</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;">카드 보기<br>그림+글자+발음</div>
+      </div>
+      <div style="color:#999;align-self:center;font-size:18px;">→</div>
+      <div style="background:white;border:2px solid #2196F3;border-radius:12px;padding:14px 16px;text-align:center;width:130px;">
+        <div style="font-size:24px;">✏️</div>
+        <div style="font-weight:bold;color:#1565C0;font-size:14px;">Step 2</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;">4지선다 퀴즈<br>그림 → 단어 선택</div>
+      </div>
+      <div style="color:#999;align-self:center;font-size:18px;">→</div>
+      <div style="background:white;border:2px solid #4CAF50;border-radius:12px;padding:14px 16px;text-align:center;width:130px;">
+        <div style="font-size:24px;">🔊</div>
+        <div style="font-weight:bold;color:#2E7D32;font-size:14px;">Step 3</div>
+        <div style="font-size:12px;color:#555;margin-top:4px;">발음 듣기<br>버튼 누르면 재생</div>
+      </div>
+    </div>
+
+    <div style="font-size:20px;color:#999;">↓</div>
+
+    <!-- Result -->
+    <div style="background:#9C27B0;color:white;border-radius:12px;padding:16px 40px;text-align:center;width:220px;box-shadow:0 2px 8px rgba(156,39,176,0.3);">
+      <div style="font-size:20px;">🎉</div>
+      <div style="font-weight:bold;font-size:16px;">완료 화면</div>
+      <div style="font-size:12px;opacity:0.85;margin-top:4px;">오늘 학습 결과 + 스트릭 업데이트</div>
+    </div>
+
+  </div>
+
+  <!-- Note -->
+  <div style="margin-top:28px;background:#f5f5f5;border-radius:8px;padding:16px;font-size:13px;color:#555;">
+    <strong>📌 진도 저장 방식</strong><br>
+    로그인 없이 localStorage에 저장. 브라우저를 닫아도 유지됨.<br>
+    알파벳 완료 여부, 단어별 학습 여부, 연속 학습 일수(스트릭) 보관.
+  </div>
+
+</div>
+
+<p style="margin-top:20px;color:#999;font-size:13px;text-align:center;">이 흐름이 맞으면 터미널에 "맞아요"를 입력해 주세요. 수정이 필요하면 말씀해 주세요.</p>

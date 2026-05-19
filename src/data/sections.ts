@@ -7,6 +7,7 @@ export interface Section {
   border: string
   text: string
   unitIds: string[]
+  baseTier: number
 }
 
 export const SECTIONS: Section[] = [
@@ -19,6 +20,7 @@ export const SECTIONS: Section[] = [
     border: 'border-blue-400',
     text: 'text-blue-600',
     unitIds: ['alphabet', 'daily'],
+    baseTier: 0,
   },
   {
     id: 'explorer',
@@ -29,6 +31,7 @@ export const SECTIONS: Section[] = [
     border: 'border-green-400',
     text: 'text-green-600',
     unitIds: ['number', 'fruit', 'animal'],
+    baseTier: 1,
   },
   {
     id: 'traveler',
@@ -39,6 +42,7 @@ export const SECTIONS: Section[] = [
     border: 'border-teal-400',
     text: 'text-teal-600',
     unitIds: ['color', 'body', 'food', 'place'],
+    baseTier: 1,
   },
   {
     id: 'challenger',
@@ -49,6 +53,7 @@ export const SECTIONS: Section[] = [
     border: 'border-orange-400',
     text: 'text-orange-600',
     unitIds: ['family', 'weather', 'feeling'],
+    baseTier: 2,
   },
   {
     id: 'master',
@@ -59,5 +64,6 @@ export const SECTIONS: Section[] = [
     border: 'border-purple-400',
     text: 'text-purple-600',
     unitIds: ['transport', 'health'],
+    baseTier: 2,
   },
 ]

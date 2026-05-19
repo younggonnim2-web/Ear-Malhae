@@ -1,5 +1,5 @@
 import type { Lesson, LessonChallenge } from '../types/lesson'
-import type { SentenceItem } from '../types'
+import type { SentenceItem, WordItem } from '../types'
 import { shuffle } from './quizHelpers'
 
 export function buildChallengeSequence(
@@ -8,10 +8,13 @@ export function buildChallengeSequence(
   allSentences: SentenceItem[],
   unitType: 'alphabet' | 'words' = 'words',
   completionCount = 0,
+  sectionBaseTier = 0,
+  reviewItems: WordItem[] = [],
+  difficultyOffset = 0,
 ): LessonChallenge[] {
   return unitType === 'alphabet'
     ? buildAlphabetSequence(lesson.itemIds)
-    : buildWordsSequence(lesson.itemIds, lessonIndex, allSentences, completionCount)
+    : buildWordsSequence(lesson.itemIds, lessonIndex, lesson.unitId, allSentences, completionCount, sectionBaseTier, reviewItems, difficultyOffset)
 }
 
 /**
@@ -33,20 +36,36 @@ export function buildChallengeSequence(
  *   listen(ko-to-en)×N | listen(en-to-ko)×N |
  *   sb(en-to-ko)×4 | matching | sb(ko-to-en)×5  = 20
  */
+function buildReviewChallenges(reviewItems: WordItem[]): LessonChallenge[] {
+  return shuffle([...reviewItems])
+    .slice(0, 2)
+    .map(item => ({ kind: 'listen-choice' as const, itemId: item.id, direction: 'ko-to-en' as const, tag: '복습' as const }))
+}
+
+// 유닛 ID → 결정론적 숫자 (각 유닛이 다른 문장 풀을 참조하도록)
+function unitSeed(unitId: string): number {
+  return unitId.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
+}
+
 function buildWordsSequence(
   itemIds: string[],
   lessonIndex: number,
+  unitId: string,
   allSentences: SentenceItem[],
   completionCount: number,
+  sectionBaseTier: number,
+  reviewItems: WordItem[],
+  difficultyOffset = 0,
 ): LessonChallenge[] {
-  const tier = Math.min(completionCount, 3)
+  const tier = Math.min(difficultyOffset + sectionBaseTier + completionCount, 3)
   const seq: LessonChallenge[] = []
   const N = itemIds.length
   const half = Math.ceil(N / 2)
+  const seed = unitSeed(unitId)
 
   function pickSentences(count: number, offset: number): SentenceItem[] {
     return Array.from({ length: count }, (_, i) =>
-      allSentences[(lessonIndex * 5 + offset + i) % allSentences.length]
+      allSentences[(seed + lessonIndex * 5 + offset + i) % allSentences.length]
     )
   }
 
@@ -67,7 +86,7 @@ function buildWordsSequence(
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
 
     for (const id of shuffle([...secondHalf]))
-      seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
+      seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
 
     for (const s of pickSentences(1, 2))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
@@ -110,6 +129,9 @@ function buildWordsSequence(
     for (const id of shuffle([...itemIds]))
       seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
 
+    for (const id of shuffle([...itemIds]).slice(0, 2))
+      seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })
+
     for (const s of pickSentences(3, 0))
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
 
@@ -126,6 +148,9 @@ function buildWordsSequence(
     for (const id of shuffle([...itemIds]))
       seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
 
+    for (const id of shuffle([...itemIds]).slice(0, 3))
+      seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })
+
     for (const id of shuffle([...itemIds]))
       seq.push({ kind: 'listen-choice', itemId: id, direction: 'en-to-ko' })
 
@@ -139,6 +164,14 @@ function buildWordsSequence(
 
     for (const s of pickSentences(5, 7))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
+  }
+
+  // 이전 섹션 복습 문제 — matching 직전에 삽입
+  if (reviewItems.length > 0) {
+    const matchIdx = seq.findIndex(c => c.kind === 'matching')
+    if (matchIdx >= 0) {
+      seq.splice(matchIdx, 0, ...buildReviewChallenges(reviewItems))
+    }
   }
 
   return seq
@@ -159,13 +192,13 @@ function buildAlphabetSequence(itemIds: string[]): LessonChallenge[] {
     seq.push({ kind: 'flash', itemId })
   }
 
-  for (const itemId of itemIds) {
+  for (const itemId of shuffle([...itemIds])) {
     seq.push({ kind: 'image-choice', itemId, direction: 'en-to-ko', displayMode: 'cards' })
   }
 
   seq.push({ kind: 'matching' })
 
-  for (const itemId of itemIds) {
+  for (const itemId of shuffle([...itemIds])) {
     seq.push({ kind: 'listen-choice', itemId, direction: 'en-to-ko' })
   }
 

@@ -8,8 +8,9 @@ export type ChallengeKind =
   | 'listen-choice'
   | 'sentence-builder'
   | 'fill-blank'
+  | 'speak-check'
 
-export type ChallengeTag = '새로운 단어' | '어려운 연습' | '새로운 패턴'
+export type ChallengeTag = '새로운 단어' | '어려운 연습' | '새로운 패턴' | '복습'
 
 export interface LessonChallenge {
   kind: ChallengeKind

@@ -8,6 +8,8 @@ import type { Section } from '../data/sections'
 
 const ZIGZAG = [50, 67, 50, 33, 50, 67, 50, 33]
 
+const ALPHABET_LESSON_IDS = new Set(UNITS_MAP['alphabet']?.lessonIds ?? [])
+
 const ALL_LESSON_IDS = SECTIONS.flatMap(s =>
   s.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
 )
@@ -22,15 +24,22 @@ export function SectionPath() {
   const { sectionId } = useParams<{ sectionId: string }>()
   const navigate = useNavigate()
   const { progress } = useApp()
-  const completedSet = new Set(progress.lessonProgress)
+
+  const isNonBeginner = progress.difficultyLevel !== 'beginner'
+  const effectiveCompletedSet = isNonBeginner
+    ? new Set([...progress.lessonProgress, ...ALPHABET_LESSON_IDS])
+    : new Set(progress.lessonProgress)
 
   const section = SECTIONS.find(s => s.id === sectionId)
   const sectionIdx = SECTIONS.findIndex(s => s.id === sectionId)
   if (!section) return <div className="p-8 text-steel text-center">섹션을 찾을 수 없습니다</div>
 
-  const currentLessonId = ALL_LESSON_IDS.find(id => !completedSet.has(id))
+  const currentLessonId = ALL_LESSON_IDS.find(id => !effectiveCompletedSet.has(id))
 
-  const units = section.unitIds.map(uid => UNITS_MAP[uid]).filter(Boolean) as Unit[]
+  // Non-beginners: hide alphabet unit entirely from the lesson path
+  const units = section.unitIds
+    .filter(uid => !(isNonBeginner && uid === 'alphabet'))
+    .map(uid => UNITS_MAP[uid]).filter(Boolean) as Unit[]
 
   return (
     <div className="min-h-screen bg-surface">
@@ -55,7 +64,7 @@ export function SectionPath() {
             key={unit.id}
             unit={unit}
             section={section}
-            completedSet={completedSet}
+            completedSet={effectiveCompletedSet}
             currentLessonId={currentLessonId}
             stars={progress.lessonStars}
             onLessonClick={id => navigate(`/lesson/${id}`)}
@@ -174,7 +183,7 @@ function LessonNode({ emoji, title, done, isCurrent, locked, stars, sectionBg, o
         ))}
       </div>
 
-      <span className="text-[11px] font-semibold text-steel text-center leading-tight max-w-[80px]">
+      <span className="text-[13px] font-semibold text-steel text-center leading-tight max-w-[84px]">
         {title}
       </span>
     </div>

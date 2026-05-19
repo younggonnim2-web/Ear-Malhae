@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
@@ -22,11 +22,11 @@ interface Props {
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
   if (direction === 'en-to-ko') return item.meaning
-  return isWordItem(item) ? item.word : item.exampleWord
+  return isWordItem(item) ? (item.sentence ?? item.word) : item.exampleWord
 }
 
 function getQuestionWord(item: StudyItem, direction: QuizDirection): string {
-  if (direction === 'en-to-ko') return isWordItem(item) ? item.word : item.exampleWord
+  if (direction === 'en-to-ko') return isWordItem(item) ? (item.sentence ?? item.word) : item.exampleWord
   return item.meaning
 }
 
@@ -36,12 +36,14 @@ export function ImageChoiceQuiz({
 }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
+  const hasSpokenRef = useRef(false)
 
   const questionWord = getQuestionWord(item, direction)
 
   useEffect(() => {
-    // list 모드 + 영어 단어 표시(en-to-ko)일 때만 자동 발음
-    if (speak && displayMode !== 'cards' && direction === 'en-to-ko') {
+    // list 모드 + 영어 단어 표시(en-to-ko)일 때만 최초 1회 자동 발음
+    if (speak && displayMode !== 'cards' && direction === 'en-to-ko' && !hasSpokenRef.current) {
+      hasSpokenRef.current = true
       speak(questionWord, 'en-US')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,17 +52,10 @@ export function ImageChoiceQuiz({
   function handleSelect(id: string) {
     if (answered) return
     setSelected(id)
-    if (displayMode === 'cards') {
-      // cards 모드: 선택 후 선택 카드의 영어 단어 발음, 확인 버튼 대기
-      const choice = choices.find(c => c.id === id)
-      if (speak && choice) {
-        const word = isWordItem(choice) ? choice.word : choice.exampleWord
-        speak(word, 'en-US')
-      }
-    } else {
-      // list 모드: 바로 정답 처리
-      setAnswered(true)
-      if (id !== item.id) onWrong?.()
+    const choice = choices.find(c => c.id === id)
+    if (speak && choice) {
+      const word = isWordItem(choice) ? choice.word : choice.exampleWord
+      speak(word, 'en-US')
     }
   }
 
@@ -116,6 +111,14 @@ export function ImageChoiceQuiz({
             answered={answered}
             onSelect={handleSelect}
           />
+          {selected && !answered && (
+            <button
+              onClick={handleConfirm}
+              className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
+            >
+              확인 ✓
+            </button>
+          )}
         </>
       )}
 
@@ -202,7 +205,8 @@ function ListChoices({ choices, item, direction, selected, answered, onSelect }:
             onClick={() => onSelect(choice.id)}
             className={cn(
               'flex items-center gap-4 px-4 py-4 rounded-2xl border-2 transition-colors',
-              !answered && 'border-hairline bg-canvas text-ink',
+              !answered && !isSelected && 'border-hairline bg-canvas text-ink hover:border-primary/50',
+              !answered && isSelected && 'border-primary bg-primary/10 text-ink',
               answered && isCorrect && 'border-green-500 bg-green-50 text-green-800',
               answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
               answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted',
@@ -210,7 +214,8 @@ function ListChoices({ choices, item, direction, selected, answered, onSelect }:
           >
             <span className={cn(
               'w-7 h-7 rounded-full border-2 flex items-center justify-center text-sm font-bold flex-shrink-0',
-              !answered && 'border-steel text-steel',
+              !answered && !isSelected && 'border-steel text-steel',
+              !answered && isSelected && 'border-primary text-primary',
               answered && isCorrect && 'border-green-500 text-green-700',
               answered && isSelected && !isCorrect && 'border-red-400 text-red-600',
               answered && !isSelected && !isCorrect && 'border-hairline text-muted',

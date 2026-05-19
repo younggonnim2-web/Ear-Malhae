@@ -1,10 +1,16 @@
+import { useState, useMemo, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { calcLevelBarPct } from '../utils/xp'
+import { checkAdaptiveDifficulty } from '../utils/difficultyAdaptive'
+import { DifficultyModal } from '../components/DifficultyModal'
+import { SECTIONS } from '../data/sections'
+import { UNITS_MAP } from '../data/units'
 
 interface CompleteState {
   stars: 1 | 2 | 3
   xpGained: number
+  sectionId?: string
 }
 
 function StarDisplay({ stars }: { stars: 1 | 2 | 3 }) {
@@ -18,13 +24,37 @@ function StarDisplay({ stars }: { stars: 1 | 2 | 3 }) {
 export function Complete() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { progress, totalXp, currentLevel, xpToNextLevel } = useApp()
+  const { progress, totalXp, currentLevel, xpToNextLevel, setDifficulty } = useApp()
+
+  function handleDifficultyConfirm(level: import('../types').DifficultyLevel) {
+    setDifficulty(level)
+    setShowDiffModal(false)
+  }
   const state = location.state as CompleteState | null
+  const [showDiffModal, setShowDiffModal] = useState(false)
+
+  const sectionLessonIds = useMemo(() => {
+    if (!state?.sectionId) return []
+    const section = SECTIONS.find(s => s.id === state.sectionId)
+    return section?.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? []) ?? []
+  }, [state?.sectionId])
+
+  // Compute once at mount — progress is stable at the moment of lesson completion
+  const adaptiveSuggestionRef = useRef(checkAdaptiveDifficulty(progress, sectionLessonIds))
+  const adaptiveSuggestion = adaptiveSuggestionRef.current
 
   const barPct = calcLevelBarPct(totalXp, currentLevel)
 
   return (
     <div className="min-h-screen bg-surface max-w-md mx-auto flex flex-col items-center justify-center p-8 text-center">
+      {showDiffModal && (
+        <DifficultyModal
+          currentLevel={progress.difficultyLevel}
+          suggestion={adaptiveSuggestion ?? undefined}
+          onConfirm={handleDifficultyConfirm}
+          onDismiss={() => setShowDiffModal(false)}
+        />
+      )}
       <div className="text-8xl mb-6">🎉</div>
       <h2 className="text-3xl font-bold text-ink mb-2">오늘 학습 완료!</h2>
       <p className="text-steel mb-6">정말 잘했어요 👏</p>
@@ -65,6 +95,29 @@ export function Complete() {
         <div className="text-5xl font-bold text-orange-500">🔥 {progress.streak}일</div>
         <div className="text-steel mt-1">연속 학습 중</div>
       </div>
+
+      {adaptiveSuggestion && (
+        <button
+          data-testid="adaptive-suggestion"
+          onClick={() => setShowDiffModal(true)}
+          className={[
+            'w-full rounded-2xl border-2 p-4 mb-4 text-left transition-all',
+            adaptiveSuggestion.type === 'upgrade'
+              ? 'bg-blue-50 border-blue-200'
+              : 'bg-orange-50 border-orange-200',
+          ].join(' ')}
+        >
+          <p className={`font-bold text-base ${adaptiveSuggestion.type === 'upgrade' ? 'text-blue-700' : 'text-orange-700'}`}>
+            {adaptiveSuggestion.type === 'upgrade' ? '🚀 난이도 올려볼까요?' : '💪 난이도를 조정해볼까요?'}
+          </p>
+          <p className="text-sm text-steel mt-0.5">
+            {adaptiveSuggestion.type === 'upgrade'
+              ? '연속 3번 만점이에요! 더 도전해보세요.'
+              : '조금 더 쉬운 단계로 연습해볼게요.'}
+          </p>
+          <p className="text-xs text-primary font-semibold mt-2">난이도 변경 →</p>
+        </button>
+      )}
 
       <button
         onClick={() => navigate('/')}

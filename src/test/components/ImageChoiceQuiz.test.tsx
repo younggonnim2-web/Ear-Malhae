@@ -24,22 +24,48 @@ describe('ImageChoiceQuiz', () => {
     expect(screen.getByText('banana')).toBeInTheDocument()
   })
 
-  it('정답 선택 후 다음 버튼 클릭 시 onCorrect 호출', () => {
+  it('정답 선택 → 확인 → 다음 순으로 onCorrect 호출', () => {
     const onCorrect = vi.fn()
     render(<ImageChoiceQuiz item={correct} choices={choices} direction="en-to-ko" onCorrect={onCorrect} />)
     fireEvent.click(screen.getByText('사과'))
+    fireEvent.click(screen.getByText('확인 ✓'))
     fireEvent.click(screen.getByText('다음 ▶'))
     expect(onCorrect).toHaveBeenCalledTimes(1)
   })
 
-  it('오답 선택 시 onCorrect 미호출', () => {
+  it('선택만으로는 피드백 없음 (확인 버튼 전)', () => {
     const onCorrect = vi.fn()
     render(<ImageChoiceQuiz item={correct} choices={choices} direction="en-to-ko" onCorrect={onCorrect} />)
     fireEvent.click(screen.getByText('바나나'))
     expect(onCorrect).not.toHaveBeenCalled()
+    expect(screen.queryByText('다음 ▶')).not.toBeInTheDocument()
   })
 
-  it('allowNextOnWrong: 오답 시 다음 버튼 표시 + onNext 호출', () => {
+  it('list 모드: 선택 즉시 speak 호출', () => {
+    const speak = vi.fn()
+    render(
+      <ImageChoiceQuiz
+        item={correct} choices={choices} direction="ko-to-en"
+        onCorrect={vi.fn()} speak={speak} displayMode="list"
+      />
+    )
+    fireEvent.click(screen.getByText('apple'))
+    expect(speak).toHaveBeenCalledWith('apple', 'en-US')
+  })
+
+  it('cards 모드: 선택 즉시 speak 호출', () => {
+    const speak = vi.fn()
+    render(
+      <ImageChoiceQuiz
+        item={correct} choices={choices} direction="ko-to-en"
+        onCorrect={vi.fn()} speak={speak} displayMode="cards"
+      />
+    )
+    fireEvent.click(screen.getAllByRole('radio')[0])
+    expect(speak).toHaveBeenCalled()
+  })
+
+  it('allowNextOnWrong: 오답 확인 후 다음 버튼 → onNext 호출', () => {
     const onNext = vi.fn()
     render(
       <ImageChoiceQuiz
@@ -48,6 +74,7 @@ describe('ImageChoiceQuiz', () => {
       />
     )
     fireEvent.click(screen.getByText('바나나'))
+    fireEvent.click(screen.getByText('확인 ✓'))
     fireEvent.click(screen.getByText('다음 ▶'))
     expect(onNext).toHaveBeenCalledTimes(1)
   })

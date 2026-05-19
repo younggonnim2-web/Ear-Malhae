@@ -15,13 +15,13 @@ interface Props {
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
   if (direction === 'en-to-ko') return item.meaning
-  return isWordItem(item) ? item.word : item.exampleWord
+  return isWordItem(item) ? (item.sentence ?? item.word) : item.exampleWord
 }
 
 export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong, speak, isSpeaking }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
-  const word = isWordItem(item) ? item.word : item.exampleWord
+  const word = isWordItem(item) ? (item.sentence ?? item.word) : item.exampleWord
 
   useEffect(() => {
     speak(word, 'en-US')
@@ -31,10 +31,12 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong,
   function handleSelect(id: string) {
     if (answered) return
     setSelected(id)
+  }
+
+  function handleConfirm() {
+    if (!selected || answered) return
     setAnswered(true)
-    if (id !== item.id) {
-      onWrong?.()
-    }
+    if (selected !== item.id) onWrong?.()
   }
 
   return (
@@ -70,7 +72,8 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong,
               onClick={() => handleSelect(choice.id)}
               className={cn(
                 'px-6 py-3 rounded-full border-2 text-base font-semibold transition-colors',
-                !answered && 'border-hairline bg-canvas text-ink hover:border-primary',
+                !answered && !isSelected && 'border-hairline bg-canvas text-ink hover:border-primary',
+                !answered && isSelected && 'border-primary bg-primary/10 text-ink',
                 answered && isCorrect && 'border-green-500 bg-green-50 text-green-800',
                 answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
                 answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted opacity-50',
@@ -81,6 +84,15 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong,
           )
         })}
       </div>
+
+      {selected && !answered && (
+        <button
+          onClick={handleConfirm}
+          className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
+        >
+          확인 ✓
+        </button>
+      )}
 
       {answered && (
         <p className={`text-lg font-medium ${selected === item.id ? 'text-green-600' : 'text-steel'}`}>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react'
-import type { AppStorage, AppContextValue } from '../types'
+import type { AppStorage, AppContextValue, DifficultyLevel } from '../types'
 import { calculateStreak, getTodayString } from '../utils/streak'
 import { calcXp, calcLevel, calcXpToNext } from '../utils/xp'
 
@@ -13,12 +13,21 @@ const DEFAULT_STORAGE: AppStorage = {
   lessonProgress: [],
   lessonStars: {},
   lessonCompletionCount: {},
+  onboardingDone: false,
+  difficultyLevel: 'beginner',
 }
 
 function loadStorage(): AppStorage {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? { ...DEFAULT_STORAGE, ...JSON.parse(raw) } : DEFAULT_STORAGE
+    if (!raw) return DEFAULT_STORAGE
+    const parsed = JSON.parse(raw)
+    const merged = { ...DEFAULT_STORAGE, ...parsed }
+    // Existing users who already have progress skip onboarding
+    if (!parsed.onboardingDone && merged.lessonProgress.length > 0) {
+      merged.onboardingDone = true
+    }
+    return merged
   } catch {
     return DEFAULT_STORAGE
   }
@@ -93,6 +102,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  function setDifficulty(level: DifficultyLevel) {
+    setProgress(prev => ({ ...prev, difficultyLevel: level, onboardingDone: true }))
+  }
+
   function isPhraseUnlocked() {
     const wordLessonIds = [
       'fruit-1','fruit-2','animal-1','animal-2','animal-3',
@@ -114,6 +127,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       updateStreak,
       isPhraseUnlocked,
       skipToSection,
+      setDifficulty,
       totalXp,
       currentLevel,
       xpToNextLevel,

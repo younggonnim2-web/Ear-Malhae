@@ -49,7 +49,26 @@
 
 ---
 
-## 4. Phase 5 주요 변경사항 (최신 세션)
+## 4. Phase 6 버그픽스 + UX 개선 (2026-05-19 세션)
+
+| 항목 | 변경 내용 |
+|------|----------|
+| Distractor pool 개선 | `allItems`(전체) → `lessonItems`(같은 레슨) 우선 — 의미적 연관성 확보 |
+| 알파벳 시퀀스 셔플 | image-choice·listen-choice를 flash와 다른 순서로 출제 |
+| 말해보기 스킵 기능 | idle 단계에서 "지금은 넘길게요" → 3문제 뒤 재출제 |
+| 녹음 중 파형 애니메이션 | 이퀄라이저 7개 막대 바 (animate-sound-bar) |
+| Speech Recognition 타임아웃 | 8초 후 자동 stop → "소리가 잘 안 들렸어요" 결과 |
+| 마이크 권한 차단 처리 | not-allowed 에러 → "마이크 사용 불가" 안내 화면 (기존: 자동 넘김) |
+| TTS 이중 재생 방지 | StrictMode 이중 effect → `useRef`로 최초 1회만 재생 |
+| 네트워크 접근 허용 | `vite.config.ts` `host: true` → 스마트폰 IP 접속 가능 |
+| GitHub 리모트 연결 | `https://github.com/younggonnim2-web/Ear-Malhae` |
+
+**테스트:** 139개 전체 통과
+**빌드:** 정상 (TypeScript 오류 0)
+
+---
+
+## 5. Phase 5 주요 변경사항
 
 | 항목 | 변경 내용 |
 |------|----------|

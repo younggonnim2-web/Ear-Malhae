@@ -28,10 +28,15 @@ export default {
           '0%, 100%': { transform: 'scale(1)' },
           '50%': { transform: 'scale(1.25)' },
         },
+        soundBar: {
+          '0%, 100%': { transform: 'scaleY(0.25)' },
+          '50%': { transform: 'scaleY(1)' },
+        },
       },
       animation: {
         flash: 'flash 0.4s ease-in-out',
         speaking: 'speaking 0.6s ease-in-out infinite',
+        'sound-bar': 'soundBar 0.7s ease-in-out infinite',
       },
     },
   },

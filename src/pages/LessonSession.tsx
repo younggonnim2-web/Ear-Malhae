@@ -8,6 +8,7 @@ import { WORDS } from '../data/words'
 import { SENTENCES } from '../data/sentences'
 import { LESSONS_MAP } from '../data/lessons'
 import { UNITS_MAP } from '../data/units'
+import { SECTIONS } from '../data/sections'
 import { buildChallengeSequence } from '../utils/lessonSequence'
 import { buildChoices } from '../utils/quizHelpers'
 import { FlashCard } from '../components/FlashCard'
@@ -16,6 +17,7 @@ import { ImageChoiceQuiz } from '../components/quiz/ImageChoiceQuiz'
 import { ListenChoiceQuiz } from '../components/quiz/ListenChoiceQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
 import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
+import { PronunciationQuiz } from '../components/quiz/PronunciationQuiz'
 import { useSpeech } from '../hooks/useSpeech'
 import { STAR_XP } from '../utils/xp'
 import type { LessonChallenge } from '../types/lesson'
@@ -45,8 +47,53 @@ export function LessonSession() {
 
   const completionCount = lessonId ? (progress.lessonCompletionCount[lessonId] ?? 0) : 0
 
-  const [challenges] = useState<LessonChallenge[]>(() =>
-    lesson ? buildChallengeSequence(lesson, lessonIndex, SENTENCES, unit?.type ?? 'words', completionCount) : []
+  const sectionIndex = useMemo(
+    () => SECTIONS.findIndex(s => s.unitIds.includes(lesson?.unitId ?? '')),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [lesson?.unitId],
+  )
+
+  const sectionBaseTier = SECTIONS[sectionIndex]?.baseTier ?? 0
+
+  const difficultyOffset =
+    progress.difficultyLevel === 'advanced' ? 2
+    : progress.difficultyLevel === 'intermediate' ? 1
+    : 0
+
+  const reviewItems = useMemo(() => {
+    if (sectionIndex < 0 || !lesson?.unitId) return []
+    const currentSection = SECTIONS[sectionIndex]
+    if (!currentSection) return []
+
+    // 같은 섹션에서 현재 유닛 앞에 위치한 유닛 → 맥락이 가장 가까운 복습
+    const currentUnitIdx = currentSection.unitIds.indexOf(lesson.unitId)
+    const sameSectionPrev = currentSection.unitIds.slice(0, currentUnitIdx)
+    if (sameSectionPrev.length > 0) {
+      return WORDS.filter(w => sameSectionPrev.includes(w.category))
+    }
+
+    // 섹션의 첫 번째 유닛: 직전 섹션의 마지막 유닛만 복습
+    if (sectionIndex > 0) {
+      const prevSection = SECTIONS[sectionIndex - 1]
+      const lastUnitId = prevSection.unitIds[prevSection.unitIds.length - 1]
+      return WORDS.filter(w => w.category === lastUnitId)
+    }
+
+    return []
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionIndex, lesson?.unitId])
+
+  // 현재 유닛 카테고리에 맞는 문장만 사용 (category 없음 = 범용)
+  const relevantSentences = useMemo(() => {
+    const unitId = lesson?.unitId
+    if (!unitId) return SENTENCES
+    return SENTENCES.filter(s => !s.category || s.category === unitId)
+  }, [lesson?.unitId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const [challenges, setChallenges] = useState<LessonChallenge[]>(() =>
+    lesson
+      ? buildChallengeSequence(lesson, lessonIndex, relevantSentences, unit?.type ?? 'words', completionCount, sectionBaseTier, reviewItems, difficultyOffset)
+      : []
   )
   const [challengeIndex, setChallengeIndex] = useState(0)
   const [retryQueue, setRetryQueue] = useState<LessonChallenge[]>([])
@@ -61,8 +108,9 @@ export function LessonSession() {
     if (!current?.itemId) return []
     const item = allItems.find(i => i.id === current.itemId)
     if (!item) return []
-    // All modes use 3 choices
-    return buildChoices(item, allItems, 3)
+    // Prefer same-lesson items as distractors; fall back to full pool if pool is too small
+    const pool = lessonItems.length >= 3 ? lessonItems : allItems
+    return buildChoices(item, pool, 3)
   // recompute only when the challenge changes, not on isSpeaking re-renders
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [challengeIndex, phase])
@@ -78,6 +126,18 @@ export function LessonSession() {
     setRetryQueue(prev => [...prev, { ...challenge }])
   }, [])
 
+  const handleSpeakSkip = useCallback(() => {
+    if (!current) return
+    // 현재 위치에서 3문제 뒤에 재삽입 (없으면 마지막)
+    setChallenges(prev => {
+      const next = [...prev]
+      const insertAt = Math.min(challengeIndex + 3, next.length)
+      next.splice(insertAt, 0, { ...current })
+      return next
+    })
+    setChallengeIndex(c => c + 1)
+  }, [current, challengeIndex])
+
   function advance() {
     if (challengeIndex + 1 < currentList.length) {
       setChallengeIndex(c => c + 1)
@@ -88,7 +148,8 @@ export function LessonSession() {
       const stars: 1 | 2 | 3 = wrongCount === 0 ? 3 : wrongCount <= 2 ? 2 : 1
       if (lessonId) markLessonDone(lessonId, stars)
       updateStreak()
-      navigate('/complete', { state: { stars, xpGained: STAR_XP[stars] } })
+      const sectionId = SECTIONS[sectionIndex]?.id
+      navigate('/complete', { state: { stars, xpGained: STAR_XP[stars], sectionId } })
     }
   }
 
@@ -186,6 +247,19 @@ export function LessonSession() {
           direction={current.direction ?? 'en-to-ko'}
           tag={current.tag}
           isSpeaking={isSpeaking}
+        />
+      )
+    }
+
+    if (current.kind === 'speak-check' && item) {
+      return (
+        <PronunciationQuiz
+          key={`${phase}-${challengeIndex}`}
+          item={item}
+          onCorrect={advance}
+          onSkip={handleSpeakSkip}
+          speak={speak}
+          tag={current.tag}
         />
       )
     }

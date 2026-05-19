@@ -13,6 +13,7 @@ export interface WordItem {
   meaning: string
   emoji: string
   category: 'fruit' | 'animal' | 'color' | 'body' | 'food' | 'number' | 'daily' | 'place' | 'family' | 'weather' | 'feeling' | 'transport' | 'health'
+  sentence?: string
 }
 
 export type StudyItem = AlphabetItem | WordItem
@@ -20,6 +21,8 @@ export type StudyItem = AlphabetItem | WordItem
 export function isWordItem(item: StudyItem): item is WordItem {
   return 'category' in item
 }
+
+export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced'
 
 export interface AppStorage {
   streak: number
@@ -29,6 +32,8 @@ export interface AppStorage {
   lessonProgress: string[]
   lessonStars: Record<string, 1 | 2 | 3>
   lessonCompletionCount: Record<string, number>
+  onboardingDone: boolean
+  difficultyLevel: DifficultyLevel
 }
 
 export interface AppContextValue {
@@ -39,6 +44,7 @@ export interface AppContextValue {
   updateStreak: () => void
   isPhraseUnlocked: () => boolean
   skipToSection: (lessonIds: string[]) => void
+  setDifficulty: (level: DifficultyLevel) => void
   totalXp: number
   currentLevel: number
   xpToNextLevel: number | null
@@ -54,6 +60,7 @@ export interface SentenceItem {
   distractors: string[]
   englishDistractors: string[]
   englishParts: string[]
+  category?: WordItem['category']
 }
 export type QuizDirection = 'en-to-ko' | 'ko-to-en'
 

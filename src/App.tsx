@@ -9,6 +9,7 @@ import { LessonSession } from './pages/LessonSession'
 import { UnitMap } from './pages/UnitMap'
 import { Complete } from './pages/Complete'
 import { JumpTest } from './pages/JumpTest'
+import { Onboarding } from './pages/Onboarding'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LearningPath />} />
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/units" element={<UnitMap />} />
           <Route path="/section/:sectionId" element={<SectionPath />} />
           <Route path="/lesson/:lessonId" element={<LessonSession />} />

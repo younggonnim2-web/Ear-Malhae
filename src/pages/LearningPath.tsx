@@ -1,38 +1,68 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { SECTIONS, type Section } from '../data/sections'
 import { UNITS_MAP } from '../data/units'
+import { DifficultyModal } from '../components/DifficultyModal'
+import type { DifficultyLevel } from '../types'
 
+const ALPHABET_LESSON_IDS = new Set(UNITS_MAP['alphabet']?.lessonIds ?? [])
 
-function getSectionLessonIds(section: Section): string[] {
-  return section.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
+function getVisibleLessonIds(section: Section, isNonBeginner: boolean): string[] {
+  return section.unitIds
+    .filter(uid => !(isNonBeginner && uid === 'alphabet'))
+    .flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
 }
 
 type SectionState = 'active' | 'locked' | 'completed'
 
 export function LearningPath() {
   const navigate = useNavigate()
-  const { progress } = useApp()
-  const completedSet = new Set(progress.lessonProgress)
+  const { progress, setDifficulty } = useApp()
+  const [showDiffModal, setShowDiffModal] = useState(false)
 
-  const allLessonIds = SECTIONS.flatMap(s => getSectionLessonIds(s))
-  const currentLessonId = allLessonIds.find(id => !completedSet.has(id))
+  const isNonBeginner = progress.difficultyLevel !== 'beginner'
+  // For non-beginners, treat alphabet lessons as transparent (no skip badge, just invisible)
+  const effectiveCompletedSet = isNonBeginner
+    ? new Set([...progress.lessonProgress, ...ALPHABET_LESSON_IDS])
+    : new Set(progress.lessonProgress)
+
+  function handleDifficultyConfirm(level: DifficultyLevel) {
+    setDifficulty(level)
+    setShowDiffModal(false)
+  }
+
+  useEffect(() => {
+    if (!progress.onboardingDone) navigate('/onboarding', { replace: true })
+  }, [progress.onboardingDone, navigate])
+
+  if (!progress.onboardingDone) return null
+
+  const allVisibleIds = SECTIONS.flatMap(s => getVisibleLessonIds(s, isNonBeginner))
+  const currentLessonId = allVisibleIds.find(id => !effectiveCompletedSet.has(id))
 
   function getSectionState(section: Section): SectionState {
-    const ids = getSectionLessonIds(section)
+    const ids = getVisibleLessonIds(section, isNonBeginner)
     if (ids.length === 0) return 'locked'
-    if (ids.every(id => completedSet.has(id))) return 'completed'
-    if (ids.some(id => completedSet.has(id)) || ids[0] === currentLessonId)
+    if (ids.every(id => effectiveCompletedSet.has(id))) return 'completed'
+    if (ids.some(id => effectiveCompletedSet.has(id)) || ids[0] === currentLessonId)
       return 'active'
-    // check if first lesson of section is reachable
     const firstId = ids[0]
-    const firstIdx = allLessonIds.indexOf(firstId)
+    const firstIdx = allVisibleIds.indexOf(firstId)
     if (firstIdx === 0) return 'active'
-    return completedSet.has(allLessonIds[firstIdx - 1]) ? 'active' : 'locked'
+    return effectiveCompletedSet.has(allVisibleIds[firstIdx - 1]) ? 'active' : 'locked'
   }
 
   return (
     <div className="min-h-screen bg-surface">
+      {showDiffModal && (
+        <DifficultyModal
+          currentLevel={progress.difficultyLevel}
+          onConfirm={handleDifficultyConfirm}
+          onDismiss={() => setShowDiffModal(false)}
+        />
+      )}
+
       {/* 헤더 */}
       <div className="sticky top-0 z-10 bg-canvas border-b border-hairline px-4 py-3 max-w-md mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -42,6 +72,13 @@ export function LearningPath() {
         <div className="flex items-center gap-3">
           <span className="text-orange-500 font-bold">🔥 {progress.streak}</span>
           <span className="text-yellow-500 font-bold">⚡ {progress.lessonProgress.length * 10}</span>
+          <button
+            onClick={() => setShowDiffModal(true)}
+            aria-label="난이도 설정"
+            className="text-lg text-steel hover:text-ink transition-colors"
+          >
+            ⚙️
+          </button>
           <button
             onClick={() => { localStorage.clear(); location.reload() }}
             className="text-xs text-gray-400 border border-gray-200 rounded px-2 py-0.5 hover:text-red-400 hover:border-red-300"
@@ -55,8 +92,8 @@ export function LearningPath() {
       <div className="max-w-md mx-auto p-4 flex flex-col gap-4 pb-24">
         {SECTIONS.map((section, idx) => {
           const state = getSectionState(section)
-          const ids = getSectionLessonIds(section)
-          const doneCount = ids.filter(id => completedSet.has(id)).length
+          const ids = getVisibleLessonIds(section, isNonBeginner)
+          const doneCount = ids.filter(id => effectiveCompletedSet.has(id)).length
           const pct = ids.length ? Math.round((doneCount / ids.length) * 100) : 0
 
           return (
@@ -68,10 +105,10 @@ export function LearningPath() {
               pct={pct}
               message={section.message}
               onNavigate={() =>
-            state === 'locked'
-              ? navigate(`/jump/${section.id}`)
-              : navigate(`/section/${section.id}`)
-          }
+                state === 'locked'
+                  ? navigate(`/jump/${section.id}`)
+                  : navigate(`/section/${section.id}`)
+              }
             />
           )
         })}
@@ -101,7 +138,6 @@ function SectionCard({ section, num, state, pct, message, onNavigate }: CardProp
       state === 'completed' && 'bg-green-50 border-green-200',
     ].filter(Boolean).join(' ')}>
 
-      {/* 왼쪽: 텍스트 + 진행률 + 버튼 */}
       <div className="flex-1 flex flex-col gap-3">
         <div>
           <p className="text-xs font-bold text-steel uppercase tracking-widest">섹션 {num}</p>
@@ -110,7 +146,6 @@ function SectionCard({ section, num, state, pct, message, onNavigate }: CardProp
           </p>
         </div>
 
-        {/* 진행률 바 (활성/완료만) */}
         {!isLocked && (
           <div className="flex items-center gap-2">
             <div className="flex-1 h-2 bg-white rounded-full border border-gray-200 overflow-hidden">
@@ -123,14 +158,12 @@ function SectionCard({ section, num, state, pct, message, onNavigate }: CardProp
           </div>
         )}
 
-        {/* 잠긴 섹션: 유닛 수 */}
         {isLocked && (
           <p className="text-sm text-gray-400 flex items-center gap-1">
             🔒 {section.unitIds.length}개 유닛
           </p>
         )}
 
-        {/* 버튼 */}
         <button
           onClick={onNavigate}
           className={[
@@ -146,7 +179,6 @@ function SectionCard({ section, num, state, pct, message, onNavigate }: CardProp
         </button>
       </div>
 
-      {/* 오른쪽: 말풍선 + 부엉이 */}
       <div className="flex flex-col items-center gap-1 min-w-[96px]">
         <div className={[
           'rounded-2xl px-3 py-2 text-xs font-semibold text-center leading-snug max-w-[100px]',

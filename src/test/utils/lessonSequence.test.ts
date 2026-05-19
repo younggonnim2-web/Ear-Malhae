@@ -20,10 +20,10 @@ describe('buildChallengeSequence — words', () => {
     expect(cards.every(c => c.tag === '새로운 단어')).toBe(true)
   })
 
-  it('list choices (ko-to-en): ceil(N/2) + floor(N/2) = N total', () => {
+  it('list choices (ko-to-en): ceil(N/2) only = 3 for N=5', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     const list = seq.filter(c => c.kind === 'image-choice' && c.displayMode === 'list')
-    expect(list).toHaveLength(5)
+    expect(list).toHaveLength(3)
     expect(list.every(c => c.direction === 'ko-to-en')).toBe(true)
   })
 
@@ -36,9 +36,9 @@ describe('buildChallengeSequence — words', () => {
     expect(firstListIdx).toBeGreaterThan(lastCardIdx)
   })
 
-  it('listen-choice count is ceil(N/2) = 3', () => {
+  it('listen-choice covers all N items = 5 (firstHalf + secondHalf)', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
-    expect(seq.filter(c => c.kind === 'listen-choice')).toHaveLength(3)
+    expect(seq.filter(c => c.kind === 'listen-choice')).toHaveLength(5)
   })
 
   it('listen-choice direction is ko-to-en', () => {
@@ -83,12 +83,71 @@ describe('buildChallengeSequence — words', () => {
   })
 
   it('total count for 5-item words lesson is 19', () => {
-    // Stage 1: 5 cards + Stage 2: 3 list + Stage 3: 3 listen
-    // Stage 4: 2 en-to-ko + Stage 5: 2 list + Stage 6: 1 en-to-ko
+    // Stage 1: 5 cards + Stage 2: 3 list + Stage 3: 3 listen(firstHalf)
+    // Stage 4: 2 en-to-ko + Stage 5: 2 listen(secondHalf) + Stage 6: 1 en-to-ko
     // Stage 7: 1 matching + Stage 8: 2 ko-to-en
     // = 5 + 3 + 3 + 2 + 2 + 1 + 1 + 2 = 19
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     expect(seq).toHaveLength(19)
+  })
+})
+
+describe('buildChallengeSequence — section baseTier', () => {
+  it('sectionBaseTier=1 starts at Tier 1 (no cards, has fill-blank)', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 0, 1)
+    const cards = seq.filter(c => c.kind === 'image-choice' && c.displayMode === 'cards')
+    const fillBlanks = seq.filter(c => c.kind === 'fill-blank')
+    expect(cards).toHaveLength(0)
+    expect(fillBlanks.length).toBeGreaterThan(0)
+  })
+
+  it('sectionBaseTier=2 starts at Tier 2 (en-to-ko list exists, fill-blank exists)', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 0, 2)
+    const enToKoList = seq.filter(c => c.kind === 'image-choice' && c.direction === 'en-to-ko' && c.displayMode === 'list')
+    expect(enToKoList).toHaveLength(5)
+  })
+
+  it('clamps at Tier 3 when baseTier+completionCount exceeds 3', () => {
+    const seqA = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 0, 3)
+    const seqB = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 5, 2)
+    expect(seqA.filter(c => c.kind === 'flash')).toHaveLength(0)
+    expect(seqB.filter(c => c.kind === 'flash')).toHaveLength(0)
+    expect(seqA.filter(c => c.kind === 'image-choice' && c.displayMode === 'cards')).toHaveLength(0)
+    expect(seqB.filter(c => c.kind === 'image-choice' && c.displayMode === 'cards')).toHaveLength(0)
+  })
+})
+
+describe('buildChallengeSequence — review items', () => {
+  const mockReview = [
+    { id: 'apple', word: 'apple', meaning: '사과', emoji: '🍎', category: 'fruit' as const },
+    { id: 'cat', word: 'cat', meaning: '고양이', emoji: '🐱', category: 'animal' as const },
+  ]
+
+  it('inserts up to 2 review listen-choice challenges tagged 복습', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 0, 0, mockReview)
+    const reviews = seq.filter(c => c.tag === '복습')
+    expect(reviews).toHaveLength(2)
+    expect(reviews.every(c => c.kind === 'listen-choice')).toBe(true)
+    expect(reviews.every(c => c.direction === 'ko-to-en')).toBe(true)
+  })
+
+  it('review challenges appear immediately before matching', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 0, 0, mockReview)
+    const matchIdx = seq.findIndex(c => c.kind === 'matching')
+    const beforeMatch = seq[matchIdx - 1]
+    const beforeBeforeMatch = seq[matchIdx - 2]
+    expect(beforeMatch?.tag).toBe('복습')
+    expect(beforeBeforeMatch?.tag).toBe('복습')
+  })
+
+  it('no review challenges when reviewItems is empty', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
+    expect(seq.filter(c => c.tag === '복습')).toHaveLength(0)
+  })
+
+  it('total count is 19+2=21 with 2 review items', () => {
+    const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 0, 0, mockReview)
+    expect(seq).toHaveLength(21)
   })
 })
 
