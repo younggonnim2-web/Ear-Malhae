@@ -68,7 +68,6 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
     let settled = false
 
     recognition.onstart = () => {
-      console.log('[STT] 시작')
       setIsListening(true)
       setError(null)
       setTranscript('')
@@ -77,23 +76,19 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
     recognition.onresult = (event) => {
       settled = true
       clearAutoStop()
-      const text = event.results[0][0].transcript
-      console.log('[STT] 인식됨:', text)
-      setTranscript(text)
+      setTranscript(event.results[0][0].transcript)
       setIsListening(false)
     }
 
     recognition.onerror = (event) => {
       settled = true
       clearAutoStop()
-      console.log('[STT] 에러:', event.error)
       setError(event.error)
       setIsListening(false)
     }
 
     recognition.onend = () => {
       clearAutoStop()
-      console.log('[STT] 종료 (settled:', settled, ')')
       // result도 error도 없이 ended → no-speech로 처리
       if (!settled) setError('no-speech')
       setIsListening(false)
