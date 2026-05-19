@@ -15,6 +15,7 @@ import { MatchingQuiz } from '../components/quiz/MatchingQuiz'
 import { ImageChoiceQuiz } from '../components/quiz/ImageChoiceQuiz'
 import { ListenChoiceQuiz } from '../components/quiz/ListenChoiceQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
+import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { useSpeech } from '../hooks/useSpeech'
 import { STAR_XP } from '../utils/xp'
 import type { LessonChallenge } from '../types/lesson'
@@ -23,7 +24,7 @@ import type { StudyItem } from '../types'
 export function LessonSession() {
   const { lessonId } = useParams<{ lessonId: string }>()
   const navigate = useNavigate()
-  const { markLessonDone, updateStreak } = useApp()
+  const { markLessonDone, updateStreak, progress } = useApp()
   const { speak, isSpeaking } = useSpeech()
 
   const lesson = lessonId ? LESSONS_MAP[lessonId] : null
@@ -42,8 +43,10 @@ export function LessonSession() {
     [unit?.id, lessonId],
   )
 
+  const completionCount = lessonId ? (progress.lessonCompletionCount[lessonId] ?? 0) : 0
+
   const [challenges] = useState<LessonChallenge[]>(() =>
-    lesson ? buildChallengeSequence(lesson, lessonIndex, SENTENCES, unit?.type ?? 'words') : []
+    lesson ? buildChallengeSequence(lesson, lessonIndex, SENTENCES, unit?.type ?? 'words', completionCount) : []
   )
   const [challengeIndex, setChallengeIndex] = useState(0)
   const [retryQueue, setRetryQueue] = useState<LessonChallenge[]>([])
@@ -178,10 +181,27 @@ export function LessonSession() {
           key={`${phase}-${challengeIndex}`}
           sentence={sentence}
           onCorrect={advance}
+          onWrong={() => handleWrong(current)}
           speak={speak}
           direction={current.direction ?? 'en-to-ko'}
           tag={current.tag}
           isSpeaking={isSpeaking}
+        />
+      )
+    }
+
+    if (current.kind === 'fill-blank') {
+      const sentence = SENTENCES.find(s => s.id === current.sentenceId) ?? SENTENCES[0]
+      return (
+        <FillBlankQuiz
+          key={`${phase}-${challengeIndex}`}
+          sentence={sentence}
+          blankIndex={current.blankIndex ?? 0}
+          onCorrect={advance}
+          onWrong={() => handleWrong(current)}
+          speak={speak}
+          isSpeaking={isSpeaking}
+          tag={current.tag}
         />
       )
     }

@@ -12,6 +12,7 @@ const DEFAULT_STORAGE: AppStorage = {
   wordProgress: [],
   lessonProgress: [],
   lessonStars: {},
+  lessonCompletionCount: {},
 }
 
 function loadStorage(): AppStorage {
@@ -58,12 +59,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setProgress(prev => {
       const prevStars = (prev.lessonStars[id] ?? 0) as 0 | 1 | 2 | 3
       const newStars = Math.max(prevStars, stars) as 1 | 2 | 3
+      const prevCount = prev.lessonCompletionCount[id] ?? 0
       return {
         ...prev,
         lessonProgress: prev.lessonProgress.includes(id)
           ? prev.lessonProgress
           : [...prev.lessonProgress, id],
         lessonStars: { ...prev.lessonStars, [id]: newStars },
+        lessonCompletionCount: { ...prev.lessonCompletionCount, [id]: prevCount + 1 },
       }
     })
   }
@@ -74,6 +77,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
       streak: calculateStreak(prev.lastStudiedDate, prev.streak),
       lastStudiedDate: getTodayString(),
     }))
+  }
+
+  function skipToSection(lessonIds: string[]) {
+    setProgress(prev => {
+      const newProgress = [...prev.lessonProgress]
+      const newStars = { ...prev.lessonStars }
+      const newCount = { ...prev.lessonCompletionCount }
+      lessonIds.forEach(id => {
+        if (!newProgress.includes(id)) newProgress.push(id)
+        if (!newStars[id]) newStars[id] = 1
+        newCount[id] = (newCount[id] ?? 0) + 1
+      })
+      return { ...prev, lessonProgress: newProgress, lessonStars: newStars, lessonCompletionCount: newCount }
+    })
   }
 
   function isPhraseUnlocked() {
@@ -96,6 +113,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       markLessonDone,
       updateStreak,
       isPhraseUnlocked,
+      skipToSection,
       totalXp,
       currentLevel,
       xpToNextLevel,

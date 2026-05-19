@@ -12,7 +12,7 @@ export interface WordItem {
   word: string
   meaning: string
   emoji: string
-  category: 'fruit' | 'animal' | 'color' | 'body' | 'food' | 'number' | 'daily' | 'place'
+  category: 'fruit' | 'animal' | 'color' | 'body' | 'food' | 'number' | 'daily' | 'place' | 'family' | 'weather' | 'feeling' | 'transport' | 'health'
 }
 
 export type StudyItem = AlphabetItem | WordItem
@@ -28,6 +28,7 @@ export interface AppStorage {
   wordProgress: string[]
   lessonProgress: string[]
   lessonStars: Record<string, 1 | 2 | 3>
+  lessonCompletionCount: Record<string, number>
 }
 
 export interface AppContextValue {
@@ -37,6 +38,7 @@ export interface AppContextValue {
   markLessonDone: (id: string, stars: 1 | 2 | 3) => void
   updateStreak: () => void
   isPhraseUnlocked: () => boolean
+  skipToSection: (lessonIds: string[]) => void
   totalXp: number
   currentLevel: number
   xpToNextLevel: number | null
@@ -51,6 +53,7 @@ export interface SentenceItem {
   parts: string[]
   distractors: string[]
   englishDistractors: string[]
+  englishParts: string[]
 }
 export type QuizDirection = 'en-to-ko' | 'ko-to-en'
 

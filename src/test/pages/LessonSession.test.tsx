@@ -32,7 +32,7 @@ vi.mock('../../components/quiz/SentenceBuilderQuiz', () => ({
   ),
 }))
 vi.mock('../../hooks/useSpeech', () => ({
-  useSpeech: () => ({ speak: vi.fn() }),
+  useSpeech: () => ({ speak: vi.fn(), isSpeaking: false }),
 }))
 
 beforeEach(() => {

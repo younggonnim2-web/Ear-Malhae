@@ -51,7 +51,7 @@ export const WORDS: WordItem[] = [
   { id: 'arm', word: 'arm', meaning: '팔', emoji: '💪', category: 'body' },
   { id: 'leg', word: 'leg', meaning: '다리', emoji: '🦵', category: 'body' },
   { id: 'finger', word: 'finger', meaning: '손가락', emoji: '☝️', category: 'body' },
-  { id: 'toe', word: 'toe', meaning: '발가락', emoji: '🦶', category: 'body' },
+  { id: 'toe', word: 'toe', meaning: '발가락', emoji: '🦵', category: 'body' },
   // 음식 (12)
   { id: 'milk', word: 'milk', meaning: '우유', emoji: '🥛', category: 'food' },
   { id: 'egg', word: 'egg', meaning: '달걀', emoji: '🥚', category: 'food' },
@@ -99,9 +99,57 @@ export const WORDS: WordItem[] = [
   { id: 'shop', word: 'shop', meaning: '가게', emoji: '🏪', category: 'place' },
   { id: 'hospital', word: 'hospital', meaning: '병원', emoji: '🏥', category: 'place' },
   { id: 'library', word: 'library', meaning: '도서관', emoji: '📚', category: 'place' },
+  // 가족 (8) ← 신규
+  { id: 'mother', word: 'mother', meaning: '엄마', emoji: '👩', category: 'family' },
+  { id: 'father', word: 'father', meaning: '아빠', emoji: '👨', category: 'family' },
+  { id: 'sister', word: 'sister', meaning: '언니/누나', emoji: '👧', category: 'family' },
+  { id: 'brother', word: 'brother', meaning: '오빠/형', emoji: '👦', category: 'family' },
+  { id: 'baby', word: 'baby', meaning: '아기', emoji: '👶', category: 'family' },
+  { id: 'family', word: 'family', meaning: '가족', emoji: '👨‍👩‍👧‍👦', category: 'family' },
+  { id: 'grandpa', word: 'grandpa', meaning: '할아버지', emoji: '👴', category: 'family' },
+  { id: 'grandma', word: 'grandma', meaning: '할머니', emoji: '👵', category: 'family' },
+  // 날씨 (8) ← 신규
+  { id: 'sunny', word: 'sunny', meaning: '맑아요', emoji: '☀️', category: 'weather' },
+  { id: 'cloudy', word: 'cloudy', meaning: '흐려요', emoji: '☁️', category: 'weather' },
+  { id: 'rainy', word: 'rainy', meaning: '비 와요', emoji: '🌧️', category: 'weather' },
+  { id: 'snowy', word: 'snowy', meaning: '눈 와요', emoji: '🌨️', category: 'weather' },
+  { id: 'windy', word: 'windy', meaning: '바람 불어요', emoji: '💨', category: 'weather' },
+  { id: 'warm', word: 'warm', meaning: '따뜻해요', emoji: '🌤️', category: 'weather' },
+  { id: 'cool', word: 'cool', meaning: '시원해요', emoji: '🌬️', category: 'weather' },
+  { id: 'foggy', word: 'foggy', meaning: '안개 끼었어요', emoji: '🌫️', category: 'weather' },
+  // 감정 (8) ← 신규
+  { id: 'angry', word: 'angry', meaning: '화났어요', emoji: '😠', category: 'feeling' },
+  { id: 'tired', word: 'tired', meaning: '피곤해요', emoji: '😴', category: 'feeling' },
+  { id: 'excited', word: 'excited', meaning: '신나요', emoji: '🤩', category: 'feeling' },
+  { id: 'scared', word: 'scared', meaning: '무서워요', emoji: '😨', category: 'feeling' },
+  { id: 'surprised', word: 'surprised', meaning: '놀랐어요', emoji: '😲', category: 'feeling' },
+  { id: 'bored', word: 'bored', meaning: '지루해요', emoji: '😒', category: 'feeling' },
+  { id: 'worried', word: 'worried', meaning: '걱정돼요', emoji: '😟', category: 'feeling' },
+  { id: 'nervous', word: 'nervous', meaning: '긴장돼요', emoji: '😰', category: 'feeling' },
+  // 교통 (8) ← 신규
+  { id: 'bus', word: 'bus', meaning: '버스', emoji: '🚌', category: 'transport' },
+  { id: 'car', word: 'car', meaning: '자동차', emoji: '🚗', category: 'transport' },
+  { id: 'train', word: 'train', meaning: '기차', emoji: '🚂', category: 'transport' },
+  { id: 'subway', word: 'subway', meaning: '지하철', emoji: '🚇', category: 'transport' },
+  { id: 'taxi', word: 'taxi', meaning: '택시', emoji: '🚕', category: 'transport' },
+  { id: 'bike', word: 'bike', meaning: '자전거', emoji: '🚲', category: 'transport' },
+  { id: 'airplane', word: 'airplane', meaning: '비행기', emoji: '✈️', category: 'transport' },
+  { id: 'ship', word: 'ship', meaning: '배', emoji: '🚢', category: 'transport' },
+  // 건강 (8) ← 신규
+  { id: 'sick', word: 'sick', meaning: '아파요', emoji: '🤒', category: 'health' },
+  { id: 'doctor', word: 'doctor', meaning: '의사', emoji: '👨‍⚕️', category: 'health' },
+  { id: 'medicine', word: 'medicine', meaning: '약', emoji: '💊', category: 'health' },
+  { id: 'sleep', word: 'sleep', meaning: '잠', emoji: '😴', category: 'health' },
+  { id: 'exercise', word: 'exercise', meaning: '운동', emoji: '🏃', category: 'health' },
+  { id: 'healthy', word: 'healthy', meaning: '건강해요', emoji: '💪', category: 'health' },
+  { id: 'fever', word: 'fever', meaning: '열이 나요', emoji: '🌡️', category: 'health' },
+  { id: 'rest', word: 'rest', meaning: '쉬어요', emoji: '🛌', category: 'health' },
 ]
 
-export const WORD_CATEGORIES = ['fruit', 'animal', 'color', 'body', 'food', 'number', 'daily', 'place'] as const
+export const WORD_CATEGORIES = [
+  'fruit', 'animal', 'color', 'body', 'food', 'number', 'daily', 'place',
+  'family', 'weather', 'feeling', 'transport', 'health',
+] as const
 export type WordCategory = typeof WORD_CATEGORIES[number]
 
 export const CATEGORY_LABELS: Record<WordCategory, string> = {
@@ -113,6 +161,11 @@ export const CATEGORY_LABELS: Record<WordCategory, string> = {
   number: '숫자',
   daily: '일상',
   place: '장소',
+  family: '가족',
+  weather: '날씨',
+  feeling: '감정',
+  transport: '교통',
+  health: '건강',
 }
 
 export function getWordsByCategory(category: WordCategory): WordItem[] {

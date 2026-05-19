@@ -3,11 +3,6 @@ import { useApp } from '../context/AppContext'
 import { SECTIONS, type Section } from '../data/sections'
 import { UNITS_MAP } from '../data/units'
 
-const SECTION_MESSAGES: Record<string, string> = {
-  beginner:     '안녕하세요! 알파벳과 기초 단어를 배워요.',
-  basic:        '과일·동물·색깔·신체를 말할 수 있어요!',
-  intermediate: '일상 표현을 자신 있게 말해봐요.',
-}
 
 function getSectionLessonIds(section: Section): string[] {
   return section.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
@@ -44,9 +39,15 @@ export function LearningPath() {
           <span className="text-2xl">🦉</span>
           <span className="font-black text-ink text-lg">쉬운 영어</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <span className="text-orange-500 font-bold">🔥 {progress.streak}</span>
           <span className="text-yellow-500 font-bold">⚡ {progress.lessonProgress.length * 10}</span>
+          <button
+            onClick={() => { localStorage.clear(); location.reload() }}
+            className="text-xs text-gray-400 border border-gray-200 rounded px-2 py-0.5 hover:text-red-400 hover:border-red-300"
+          >
+            초기화
+          </button>
         </div>
       </div>
 
@@ -65,8 +66,12 @@ export function LearningPath() {
               num={idx + 1}
               state={state}
               pct={pct}
-              message={SECTION_MESSAGES[section.id] ?? ''}
-              onNavigate={() => navigate(`/section/${section.id}`)}
+              message={section.message}
+              onNavigate={() =>
+            state === 'locked'
+              ? navigate(`/jump/${section.id}`)
+              : navigate(`/section/${section.id}`)
+          }
             />
           )
         })}
@@ -136,7 +141,7 @@ function SectionCard({ section, num, state, pct, message, onNavigate }: CardProp
           ].filter(Boolean).join(' ')}
         >
           {isActive  && '계속하기'}
-          {isLocked  && `섹션 ${num}(으)로 이동하기`}
+          {isLocked  && '여기까지 건너뛰기 테스트'}
           {state === 'completed' && '다시 연습하기'}
         </button>
       </div>

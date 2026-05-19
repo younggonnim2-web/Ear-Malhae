@@ -1,80 +1,144 @@
 import type { Lesson, LessonChallenge } from '../types/lesson'
 import type { SentenceItem } from '../types'
+import { shuffle } from './quizHelpers'
 
 export function buildChallengeSequence(
   lesson: Lesson,
   lessonIndex: number,
   allSentences: SentenceItem[],
   unitType: 'alphabet' | 'words' = 'words',
+  completionCount = 0,
 ): LessonChallenge[] {
   return unitType === 'alphabet'
     ? buildAlphabetSequence(lesson.itemIds)
-    : buildWordsSequence(lesson.itemIds, lessonIndex, allSentences)
+    : buildWordsSequence(lesson.itemIds, lessonIndex, allSentences, completionCount)
 }
 
 /**
- * 단어 레슨 시퀀스 (듀오링고 스타일)
- * Stage 1: image-choice(cards, ko-to-en) × N        [tag: 새로운 단어]
- * Stage 2: image-choice(list, ko-to-en) × ceil(N/2) (first half of items)
- * Stage 3: listen-choice(ko-to-en) × ceil(N/2)      (first half)
- * Stage 4: sentence-builder(en-to-ko) × 2           [tag: 새로운 단어]
- * Stage 5: image-choice(list, ko-to-en) × floor(N/2)(second half of items)
- * Stage 6: sentence-builder(en-to-ko) × 1           [tag: 새로운 단어]
- * Stage 7: matching × 1
- * Stage 8: sentence-builder(ko-to-en) × 2           [tag: 어려운 연습]
+ * 단어 레슨 시퀀스 — 완료 횟수에 따라 4단계 난이도 티어
  *
- * For N=5: 5+3+3+2+2+1+1+2 = 19 total
+ * Tier 0 (첫 학습): 카드+이미지 중심, 문장 입문
+ *   cards(ko-to-en)×N | list(ko-to-en)×⌈N/2⌉ | listen×⌈N/2⌉ |
+ *   sb(en-to-ko)×2 | list(ko-to-en)×⌊N/2⌋ | sb(en-to-ko)×1 | matching | sb(ko-to-en)×2  = 19
+ *
+ * Tier 1 (2회차): 카드 제거, 역방향 이미지 추가, 듣기 전체 아이템, 문장 +1
+ *   list(ko-to-en)×N | listen×N | list(en-to-ko)×⌈N/2⌉ |
+ *   sb(en-to-ko)×3 | matching | sb(ko-to-en)×3  = 20
+ *
+ * Tier 2 (3회차): 이미지 양방향 전체, 문장 강화
+ *   list(ko-to-en)×N | list(en-to-ko)×N | listen×N |
+ *   sb(en-to-ko)×3 | matching | sb(ko-to-en)×4  = 23
+ *
+ * Tier 3 (4회차+): 듣기+문장 중심, 시각 단서 최소화
+ *   listen(ko-to-en)×N | listen(en-to-ko)×N |
+ *   sb(en-to-ko)×4 | matching | sb(ko-to-en)×5  = 20
  */
 function buildWordsSequence(
   itemIds: string[],
   lessonIndex: number,
   allSentences: SentenceItem[],
+  completionCount: number,
 ): LessonChallenge[] {
+  const tier = Math.min(completionCount, 3)
   const seq: LessonChallenge[] = []
   const N = itemIds.length
   const half = Math.ceil(N / 2)
-  const firstHalf = itemIds.slice(0, half)
-  const secondHalf = itemIds.slice(half)
 
-  // Stage 1: image-choice cards (ko-to-en) per item [tag: 새로운 단어]
-  for (const itemId of itemIds) {
-    seq.push({ kind: 'image-choice', itemId, direction: 'ko-to-en', displayMode: 'cards', tag: '새로운 단어' })
+  function pickSentences(count: number, offset: number): SentenceItem[] {
+    return Array.from({ length: count }, (_, i) =>
+      allSentences[(lessonIndex * 5 + offset + i) % allSentences.length]
+    )
   }
 
-  // Stage 2: image-choice list (ko-to-en) first half
-  for (const itemId of firstHalf) {
-    seq.push({ kind: 'image-choice', itemId, direction: 'ko-to-en', displayMode: 'list' })
+  if (tier === 0) {
+    const firstHalf = itemIds.slice(0, half)
+    const secondHalf = itemIds.slice(half)
+
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'cards', tag: '새로운 단어' })
+
+    for (const id of shuffle([...firstHalf]))
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
+
+    for (const id of shuffle([...firstHalf]))
+      seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
+
+    for (const s of pickSentences(2, 0))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+
+    for (const id of shuffle([...secondHalf]))
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
+
+    for (const s of pickSentences(1, 2))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+
+    seq.push({ kind: 'matching' })
+
+    for (const s of pickSentences(2, 3))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
   }
 
-  // Stage 3: listen-choice (ko-to-en) first half
-  for (const itemId of firstHalf) {
-    seq.push({ kind: 'listen-choice', itemId, direction: 'ko-to-en' })
+  if (tier === 1) {
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
+
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
+
+    for (const id of shuffle([...itemIds.slice(0, half)]))
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'en-to-ko', displayMode: 'list' })
+
+    for (const s of pickSentences(2, 0))
+      seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
+
+    for (const s of pickSentences(3, 2))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+
+    seq.push({ kind: 'matching' })
+
+    for (const s of pickSentences(3, 5))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
   }
 
-  // Stage 4: sentence-builder (en-to-ko) × 2 [tag: 새로운 단어]
-  for (let i = 0; i < 2; i++) {
-    const idx = (lessonIndex * 3 + i) % allSentences.length
-    seq.push({ kind: 'sentence-builder', sentenceId: allSentences[idx].id, direction: 'en-to-ko', tag: '새로운 단어' })
+  if (tier === 2) {
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
+
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'en-to-ko', displayMode: 'list' })
+
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
+
+    for (const s of pickSentences(3, 0))
+      seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
+
+    for (const s of pickSentences(3, 3))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+
+    seq.push({ kind: 'matching' })
+
+    for (const s of pickSentences(4, 6))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
   }
 
-  // Stage 5: image-choice list (ko-to-en) second half
-  for (const itemId of secondHalf) {
-    seq.push({ kind: 'image-choice', itemId, direction: 'ko-to-en', displayMode: 'list' })
-  }
+  if (tier === 3) {
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
 
-  // Stage 6: sentence-builder (en-to-ko) × 1 [tag: 새로운 단어]
-  {
-    const idx = (lessonIndex * 3 + 2) % allSentences.length
-    seq.push({ kind: 'sentence-builder', sentenceId: allSentences[idx].id, direction: 'en-to-ko', tag: '새로운 단어' })
-  }
+    for (const id of shuffle([...itemIds]))
+      seq.push({ kind: 'listen-choice', itemId: id, direction: 'en-to-ko' })
 
-  // Stage 7: matching × 1
-  seq.push({ kind: 'matching' })
+    for (const s of pickSentences(3, 0))
+      seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
 
-  // Stage 8: sentence-builder (ko-to-en) × 2 [tag: 어려운 연습]
-  for (let i = 0; i < 2; i++) {
-    const idx = (lessonIndex * 2 + i) % allSentences.length
-    seq.push({ kind: 'sentence-builder', sentenceId: allSentences[idx].id, direction: 'ko-to-en', tag: '어려운 연습' })
+    for (const s of pickSentences(4, 3))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+
+    seq.push({ kind: 'matching' })
+
+    for (const s of pickSentences(5, 7))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
   }
 
   return seq

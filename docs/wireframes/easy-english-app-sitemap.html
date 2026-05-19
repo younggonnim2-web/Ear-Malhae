@@ -4,108 +4,206 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Easy English App — 사이트맵 & 와이어프레임</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
+  /* ── Mintlify Design Tokens ── */
   :root {
-    --primary: #2196F3;
-    --primary-dark: #1976D2;
-    --primary-light: #BBDEFB;
-    --success: #4CAF50;
-    --error: #F44336;
-    --warning: #FF9800;
-    --neutral: #374151;
-    --bg: #F9FAFB;
-    --card-bg: #FFFFFF;
-    --text: #212121;
-    --text-sub: #757575;
-    --divider: #E0E0E0;
-    --streak: #FF5722;
+    --ink:       #0a0a0a;
+    --steel:     #5a5a5c;
+    --muted:     #8a8a8d;
+    --canvas:    #ffffff;
+    --surface:   #f7f7f7;
+    --hairline:  #e5e5e5;
+    --green:     #00d4a4;
+    --green-dim: #e6faf6;
+    --blue:      #3b82f6;
+    --blue-dim:  #eff6ff;
+    --red:       #ef4444;
+    --red-dim:   #fef2f2;
+    --orange:    #f97316;
+    --orange-dim:#fff7ed;
+    --amber:     #f59e0b;
+    --emerald:   #10b981;
+    --emerald-dim:#f0fdf4;
+
+    --radius-pill: 9999px;
+    --radius-card: 12px;
+    --radius-sm:   8px;
+    --radius-xs:   6px;
+
+    --shadow-card: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px var(--hairline);
+    --shadow-phone: 0 4px 24px rgba(0,0,0,0.10), 0 0 0 1.5px var(--hairline);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 24px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    min-height: 100vh;
   }
 
-  h1 {
-    font-size: 22px;
+  /* ── Atmospheric Hero Band ── */
+  .hero-band {
+    background: var(--ink);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 10% 50%, rgba(0,212,164,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 90% 30%, rgba(59,130,246,0.12) 0%, transparent 55%);
+    padding: 40px 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-band::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0.5;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+  }
+  .hero-title {
+    font-size: 32px;
     font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--text);
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 8px;
   }
-
-  .subtitle {
+  .hero-sub {
     font-size: 13px;
-    color: var(--text-sub);
-    margin-bottom: 24px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: 0.01em;
   }
 
+  /* ── Page wrapper ── */
+  .page-body {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 32px 64px;
+  }
+
+  /* ── Legend ── */
   .legend {
     display: flex;
-    gap: 20px;
+    gap: 6px;
     flex-wrap: wrap;
-    margin-bottom: 24px;
-    padding: 12px 16px;
-    background: #fff;
-    border-radius: 10px;
-    border: 1px solid var(--divider);
-    font-size: 12px;
+    margin-bottom: 28px;
+    padding: 10px 14px;
+    background: var(--canvas);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    font-size: 11.5px;
+    color: var(--steel);
   }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+  }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .legend-sep { width: 1px; height: 16px; background: var(--hairline); margin: 0 4px; align-self: center; }
+  .legend-badge {
+    display: inline-block;
+    width: 20px; height: 3px;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
 
+  /* ── Section label ── */
   .section-label {
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--text-sub);
-    margin: 28px 0 12px;
-    padding-left: 2px;
+    color: var(--muted);
+    margin: 36px 0 14px;
+    padding-left: 1px;
   }
 
-  /* ── 화면 카드 그리드 ── */
+  /* ── Click hint ── */
+  .click-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--steel);
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    padding: 6px 14px;
+    margin-bottom: 24px;
+  }
+  .click-hint::before {
+    content: '↗';
+    font-size: 13px;
+    color: var(--green);
+  }
+
+  /* ── Screen Row ── */
   .screen-row {
     display: flex;
-    gap: 20px;
+    gap: 18px;
     flex-wrap: wrap;
     align-items: flex-start;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 
   .screen-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: opacity 0.18s, transform 0.18s;
     user-select: none;
   }
-  .screen-card.source .phone { outline: 3px solid #F59E0B; border-radius: 26px; }
-  .screen-card.highlighted .phone { outline: 3px solid #10B981; border-radius: 26px; }
+  .screen-card.source   .phone { outline: 2.5px solid var(--amber); border-radius: 26px; }
+  .screen-card.highlighted .phone { outline: 2.5px solid var(--green); border-radius: 26px; }
   .screen-card.highlighted { transform: scale(1.04); }
-  .screen-card.dimmed { opacity: 0.28; }
+  .screen-card.dimmed   { opacity: 0.22; }
 
-  /* ── 폰 프레임 ── */
+  /* ── Phone frame ── */
   .phone {
     width: 130px;
     height: 230px;
-    background: #fff;
+    background: var(--canvas);
     border-radius: 24px;
-    border: 2.5px solid #374151;
+    border: 1.5px solid var(--hairline);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    box-shadow: var(--shadow-phone);
     position: relative;
   }
   .phone-top {
     height: 10px;
-    background: #374151;
+    background: var(--ink);
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -113,72 +211,80 @@
   }
   .phone-top::after {
     content: '';
-    width: 28px;
-    height: 3px;
-    background: #6B7280;
+    width: 24px; height: 2.5px;
+    background: rgba(255,255,255,0.25);
     border-radius: 2px;
   }
-  .phone.primary { border-color: var(--primary-dark); }
-  .phone.primary .phone-top { background: var(--primary-dark); }
-  .phone.success { border-color: #2E7D32; }
-  .phone.success .phone-top { background: #2E7D32; }
-  .phone.session { border-color: #5C6BC0; }
-  .phone.session .phone-top { background: #5C6BC0; }
+  /* Colour variants */
+  .phone.nav   { border-color: rgba(59,130,246,0.35); }
+  .phone.nav   .phone-top { background: #1d4ed8; }
+  .phone.session { border-color: rgba(124,58,237,0.3); }
+  .phone.session .phone-top { background: #5b21b6; }
+  .phone.sentence { border-color: rgba(0,212,164,0.4); }
+  .phone.sentence .phone-top { background: #065f46; }
+  .phone.success { border-color: rgba(16,185,129,0.35); }
+  .phone.success .phone-top { background: #065f46; }
+  .phone.review  { border-color: rgba(249,115,22,0.35); }
+  .phone.review  .phone-top { background: #c2410c; }
 
   .screen-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink);
     text-align: center;
-    max-width: 130px;
+    max-width: 134px;
+    letter-spacing: -0.01em;
   }
   .screen-path {
-    font-size: 9.5px;
-    color: var(--text-sub);
-    font-family: monospace;
+    font-size: 9px;
+    color: var(--muted);
+    font-family: 'Geist Mono', monospace;
     text-align: center;
-    max-width: 130px;
+    max-width: 134px;
   }
 
-  /* ── 상태 탭 ── */
+  /* ── State tabs inside phone ── */
   .screen-states { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
   .state-tabs {
     display: flex;
-    background: #F3F4F6;
-    border-bottom: 1px solid #E5E7EB;
+    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
     flex-shrink: 0;
   }
   .state-tab {
     flex: 1;
-    font-size: 5.5px;
+    font-size: 5px;
     padding: 3px 0;
     border: none;
     background: none;
     cursor: pointer;
-    color: #9CA3AF;
+    color: var(--muted);
     font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.02em;
   }
   .state-tab.active {
-    color: var(--primary);
-    border-bottom: 2px solid var(--primary);
-    background: #fff;
+    color: var(--green);
+    border-bottom: 1.5px solid var(--green);
+    background: var(--canvas);
   }
   .state-content { display: none; flex-direction: column; gap: 3px; padding: 5px; flex: 1; overflow: hidden; }
   .state-content.active { display: flex; }
 
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.45; } }
-  .skeleton { background: #E5E7EB; border-radius: 4px; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  .skeleton { background: var(--hairline); border-radius: 4px; animation: pulse 1.6s infinite; }
 
-  /* ── 와이어프레임 요소 ── */
+  /* ── Wireframe elements ── */
   .wf-header {
-    background: var(--primary);
+    background: var(--ink);
     color: #fff;
     font-size: 7px;
     font-weight: 700;
     padding: 5px 6px;
     text-align: center;
-    border-radius: 3px;
+    border-radius: var(--radius-xs);
     flex-shrink: 0;
+    letter-spacing: -0.01em;
   }
   .wf-header.back {
     display: flex;
@@ -186,78 +292,93 @@
     gap: 3px;
     text-align: left;
   }
+  .wf-header.session { background: #5b21b6; }
+  .wf-header.review  { background: #c2410c; }
+  .wf-header.success { background: #065f46; }
+  .wf-header.sentence { background: #0a0a0a; }
+  .wf-header.nav     { background: #1d4ed8; }
+
   .wf-card {
-    background: #fff;
-    border: 1px solid var(--divider);
-    border-radius: 6px;
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-xs);
     padding: 5px 6px;
     font-size: 6px;
-    color: var(--text);
+    color: var(--ink);
   }
-  .wf-card.highlight {
-    border-color: var(--primary);
-    background: #E3F2FD;
+  .wf-card.accent {
+    border-color: rgba(0,212,164,0.4);
+    background: var(--green-dim);
   }
   .wf-card.streak-card {
-    background: linear-gradient(135deg, #FF5722, #FF8A65);
+    background: linear-gradient(135deg, var(--orange) 0%, #fb923c 100%);
     color: #fff;
     border: none;
   }
   .wf-card.locked {
-    background: #F5F5F5;
-    border-color: #E0E0E0;
-    color: #BDBDBD;
+    background: var(--surface);
+    border-color: var(--hairline);
+    color: var(--muted);
   }
+
+  /* Pill buttons */
   .wf-btn {
     width: 100%;
     padding: 4px 0;
-    border-radius: 5px;
+    border-radius: var(--radius-pill);
     font-size: 6.5px;
     font-weight: 700;
     text-align: center;
     flex-shrink: 0;
+    letter-spacing: -0.01em;
   }
-  .wf-btn.primary { background: var(--primary); color: #fff; }
-  .wf-btn.secondary { background: #fff; color: var(--primary); border: 1px solid var(--primary); }
-  .wf-btn.gray { background: #E0E0E0; color: #9E9E9E; }
-  .wf-btn.success { background: var(--success); color: #fff; }
-  .wf-btn.danger { background: var(--error); color: #fff; }
-  .wf-divider { height: 1px; background: var(--divider); flex-shrink: 0; }
+  .wf-btn.primary   { background: var(--green);   color: var(--ink); }
+  .wf-btn.secondary { background: var(--canvas);  color: var(--ink); border: 1px solid var(--hairline); }
+  .wf-btn.gray      { background: var(--hairline); color: var(--muted); }
+  .wf-btn.success   { background: var(--emerald);  color: #fff; }
+  .wf-btn.danger    { background: var(--red);      color: #fff; }
+  .wf-btn.orange    { background: var(--orange);   color: #fff; }
+  .wf-btn.session   { background: #7c3aed;         color: #fff; }
+
+  .wf-divider { height: 1px; background: var(--hairline); flex-shrink: 0; }
   .wf-row { display: flex; align-items: center; gap: 3px; }
+
   .wf-badge {
-    padding: 1px 4px;
-    border-radius: 8px;
+    padding: 1px 5px;
+    border-radius: var(--radius-pill);
     font-size: 5px;
-    font-weight: 700;
+    font-weight: 600;
   }
-  .wf-badge.blue { background: var(--primary-light); color: var(--primary-dark); }
-  .wf-badge.green { background: #C8E6C9; color: #2E7D32; }
-  .wf-badge.orange { background: #FFE0B2; color: #E65100; }
-  .wf-badge.red { background: #FFCDD2; color: #C62828; }
-  .wf-emoji { font-size: 14px; text-align: center; padding: 4px 0; }
+  .wf-badge.green  { background: var(--emerald-dim); color: #065f46; }
+  .wf-badge.blue   { background: var(--blue-dim);    color: #1d4ed8; }
+  .wf-badge.orange { background: var(--orange-dim);  color: #c2410c; }
+  .wf-badge.red    { background: var(--red-dim);     color: #b91c1c; }
+  .wf-badge.mint   { background: var(--green-dim);   color: #065f46; }
+
+  .wf-emoji { font-size: 14px; text-align: center; padding: 3px 0; }
   .wf-big-text {
     font-size: 11px;
     font-weight: 900;
     text-align: center;
-    color: var(--primary-dark);
-    letter-spacing: 0.05em;
+    color: var(--ink);
+    letter-spacing: -0.04em;
   }
   .wf-sub-text {
-    font-size: 6.5px;
+    font-size: 6px;
     text-align: center;
-    color: var(--text-sub);
+    color: var(--steel);
   }
   .wf-progress-bar {
-    height: 5px;
-    background: var(--divider);
-    border-radius: 3px;
+    height: 4px;
+    background: var(--hairline);
+    border-radius: var(--radius-pill);
     overflow: hidden;
     flex-shrink: 0;
   }
   .wf-progress-fill {
     height: 100%;
-    background: var(--primary);
-    border-radius: 3px;
+    background: var(--green);
+    border-radius: var(--radius-pill);
   }
   .wf-step-indicator {
     display: flex;
@@ -266,171 +387,195 @@
     padding: 2px 0;
   }
   .wf-step-dot {
-    width: 5px;
-    height: 5px;
+    width: 5px; height: 5px;
     border-radius: 50%;
-    background: var(--divider);
+    background: var(--hairline);
   }
-  .wf-step-dot.active { background: var(--primary); }
-  .wf-step-dot.done { background: var(--success); }
+  .wf-step-dot.active { background: var(--green); }
+  .wf-step-dot.done   { background: var(--emerald); }
 
   .wf-quiz-option {
     padding: 3px 5px;
-    border: 1px solid var(--divider);
-    border-radius: 4px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-xs);
     font-size: 6px;
     text-align: center;
+    background: var(--canvas);
   }
-  .wf-quiz-option.correct { background: #E8F5E9; border-color: var(--success); color: #2E7D32; }
-  .wf-quiz-option.wrong { background: #FFEBEE; border-color: var(--error); color: #C62828; }
+  .wf-quiz-option.correct { background: var(--emerald-dim); border-color: var(--emerald); color: #065f46; }
+  .wf-quiz-option.wrong   { background: var(--red-dim);     border-color: var(--red);     color: #b91c1c; }
 
-  .wf-match-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3px;
-  }
+  .wf-match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
   .wf-match-card {
     padding: 3px 4px;
-    border: 1px solid var(--divider);
-    border-radius: 4px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-xs);
     font-size: 5.5px;
     text-align: center;
-    background: #F5F5F5;
+    background: var(--surface);
   }
-  .wf-match-card.selected { background: var(--primary-light); border-color: var(--primary); }
-  .wf-match-card.matched { background: #E8F5E9; border-color: var(--success); }
+  .wf-match-card.selected { background: var(--green-dim);   border-color: var(--green); }
+  .wf-match-card.matched  { background: var(--emerald-dim); border-color: var(--emerald); }
 
-  .wf-speaker {
-    font-size: 20px;
-    text-align: center;
-    padding: 4px 0;
-  }
+  .wf-speaker { font-size: 20px; text-align: center; padding: 4px 0; }
+
   .wf-list-item {
     display: flex;
     align-items: center;
     gap: 4px;
     padding: 4px 5px;
-    border-radius: 4px;
-    background: #F5F5F5;
+    border-radius: var(--radius-xs);
+    background: var(--surface);
     font-size: 6px;
+    border: 1px solid var(--hairline);
   }
   .wf-list-item .emoji { font-size: 10px; }
-  .wf-list-item.done { background: #E8F5E9; }
-  .wf-congrats { font-size: 20px; text-align: center; }
-  .wf-score { font-size: 9px; font-weight: 700; color: var(--primary); text-align: center; }
-  .wf-streak-big { font-size: 18px; text-align: center; }
-  .flex-1 { flex: 1; }
-  .text-right { text-align: right; }
-  .mt-auto { margin-top: auto; }
+  .wf-list-item.done { background: var(--emerald-dim); border-color: rgba(16,185,129,0.3); }
 
-  /* ── 흐름 요약 섹션 ── */
-  .flow-section {
-    background: #fff;
-    border: 1px solid var(--divider);
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 28px;
+  .wf-congrats { font-size: 20px; text-align: center; }
+  .wf-score    { font-size: 9px; font-weight: 700; color: var(--green); text-align: center; letter-spacing: -0.02em; }
+  .wf-streak-big { font-size: 18px; text-align: center; }
+
+  .flex-1    { flex: 1; }
+  .text-right { text-align: right; }
+  .mt-auto   { margin-top: auto; }
+
+  /* ── Arrow connector ── */
+  .arrow-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    align-self: center;
+    margin-top: -44px;
   }
-  .flow-section h2 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
-  .flow-scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-  .flow-scenario { background: var(--bg); border-radius: 8px; padding: 14px; }
-  .flow-scenario h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: var(--primary-dark); }
-  .flow-steps { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+  /* ── Flow summary section ── */
+  .flow-section {
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    margin-top: 32px;
+    box-shadow: var(--shadow-card);
+  }
+  .flow-section h2 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .flow-scenarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .flow-scenario {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+  }
+  .flow-scenario h3 {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .flow-scenario h3 .tag {
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 11px;
+  }
+  .flow-steps { list-style: none; display: flex; flex-direction: column; gap: 5px; counter-reset: step; }
   .flow-steps li {
     font-size: 11.5px;
-    color: var(--text);
-    padding-left: 16px;
+    color: var(--steel);
+    padding-left: 20px;
     position: relative;
     line-height: 1.5;
+    counter-increment: step;
   }
   .flow-steps li::before {
-    content: counter(step-counter);
-    counter-increment: step-counter;
+    content: counter(step);
     position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 9px;
+    left: 0; top: 1px;
+    font-size: 8.5px;
     font-weight: 700;
-    color: var(--primary);
-    background: var(--primary-light);
-    width: 13px;
-    height: 13px;
+    color: var(--green);
+    background: var(--green-dim);
+    width: 14px; height: 14px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 1px;
+    font-family: 'Inter', sans-serif;
   }
-  .flow-scenarios { counter-reset: step-counter; }
-  .flow-scenario { counter-reset: step-counter; }
 
-  /* ── 파일 구조 섹션 ── */
+  /* ── File tree section ── */
   .file-section {
-    background: #1E1E1E;
-    border-radius: 12px;
-    padding: 20px;
+    background: var(--ink);
+    border-radius: var(--radius-card);
+    padding: 24px;
     margin-top: 20px;
-    color: #D4D4D4;
-    font-family: monospace;
-    font-size: 11.5px;
-    line-height: 1.7;
+    color: #c9d1d9;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    line-height: 1.75;
     overflow-x: auto;
+    border: 1px solid rgba(255,255,255,0.07);
   }
-  .file-section h2 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-  .file-dir { color: #6A9955; }
-  .file-ts { color: #4EC9B0; }
-  .file-test { color: #CE9178; }
-
-  .arrow-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 4px;
-    font-size: 14px;
-    color: var(--text-sub);
-    align-self: center;
-    margin-top: -40px;
+  .file-section h2 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 14px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.01em;
   }
-
-  /* ── 클릭 안내 ── */
-  .click-hint {
-    font-size: 11px;
-    color: var(--text-sub);
-    background: #fff;
-    border: 1px solid var(--divider);
-    border-radius: 8px;
-    padding: 8px 12px;
-    margin-bottom: 20px;
-    display: inline-block;
-  }
+  .file-dir  { color: #00d4a4; }
+  .file-ts   { color: #79c0ff; }
+  .file-test { color: #ffa657; }
 </style>
 </head>
 <body>
 
-<h1>Easy English App — 화면 구조 & 와이어프레임</h1>
-<p class="subtitle">설계 문서: docs/superpowers/specs/2026-04-15-easy-english-app-design.md | 플랜: docs/plans/easy-english-app.md</p>
-
-<div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#374151"></span>일반 화면</span>
-  <span class="legend-item"><span class="legend-dot" style="background:var(--primary-dark)"></span>목록 화면</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#5C6BC0"></span>학습 세션</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#2E7D32"></span>완료 화면</span>
-  <span style="border-left:1px solid var(--divider);margin:0 4px"></span>
-  <span class="legend-item"><span style="display:inline-block;width:12px;height:3px;background:#F59E0B;border-radius:2px"></span>클릭한 화면 (출발)</span>
-  <span class="legend-item"><span style="display:inline-block;width:12px;height:3px;background:#10B981;border-radius:2px"></span>이동 대상 화면</span>
+<!-- ── Hero Band ── -->
+<div class="hero-band">
+  <div class="hero-eyebrow">Easy English App</div>
+  <h1 class="hero-title">화면 구조 &amp; 와이어프레임</h1>
+  <p class="hero-sub">docs/plans/easy-english-app.md · React 18 + Vite 5 + TypeScript 5</p>
 </div>
 
-<p class="click-hint">💡 화면 카드를 클릭하면 연결된 다음 화면이 강조 표시됩니다.</p>
+<div class="page-body">
 
-<!-- ────────────────────────────────────────────
-     섹션 1 : 메인 진입 화면
-──────────────────────────────────────────── -->
+<!-- Legend -->
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot" style="background:var(--ink)"></span>일반</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#1d4ed8"></span>목록</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#5b21b6"></span>세션</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#065f46"></span>완료/문장</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#c2410c"></span>복습</span>
+  <div class="legend-sep"></div>
+  <span class="legend-item"><span class="legend-badge" style="background:var(--amber)"></span>클릭한 화면</span>
+  <span class="legend-item"><span class="legend-badge" style="background:var(--green)"></span>이동 대상</span>
+</div>
+
+<p class="click-hint">화면 카드를 클릭하면 연결된 다음 화면이 강조됩니다</p>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1 — 진입 화면
+══════════════════════════════════════════════ -->
 <div class="section-label">진입 화면</div>
 <div class="screen-row">
 
   <!-- HOME -->
   <div class="screen-card" data-id="home" data-connects-to="alphabet-list,word-list,study-session-a,study-session-w">
-    <div class="phone primary">
+    <div class="phone nav">
       <div class="phone-top"></div>
       <div class="screen-states">
         <div class="state-tabs">
@@ -441,41 +586,37 @@
 
         <!-- DEFAULT -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header">🔤 Easy English</div>
-          <!-- 스트릭 카드 -->
+          <div class="wf-header nav">🔤 Easy English</div>
           <div class="wf-card streak-card">
             <div class="wf-row">
               <span style="font-size:8px">🔥</span>
               <span style="font-size:7px;font-weight:700;flex:1">3일째 연속 학습!</span>
             </div>
           </div>
-          <!-- 알파벳 진도 카드 -->
-          <div class="wf-card highlight">
+          <div class="wf-card accent">
             <div class="wf-row">
               <span style="font-size:8px">🔡</span>
-              <span style="font-size:6.5px;font-weight:700;flex:1">알파벳</span>
-              <span class="wf-badge blue">12/26</span>
+              <span style="font-size:6px;font-weight:600;flex:1">알파벳</span>
+              <span class="wf-badge mint">12/26</span>
             </div>
             <div class="wf-progress-bar" style="margin-top:3px">
               <div class="wf-progress-fill" style="width:46%"></div>
             </div>
           </div>
-          <!-- 단어 진도 카드 -->
           <div class="wf-card">
             <div class="wf-row">
               <span style="font-size:8px">📚</span>
-              <span style="font-size:6.5px;font-weight:700;flex:1">단어</span>
-              <span class="wf-badge orange">20/100</span>
+              <span style="font-size:6px;font-weight:600;flex:1">단어</span>
+              <span class="wf-badge orange">20/90</span>
             </div>
             <div class="wf-progress-bar" style="margin-top:3px">
-              <div class="wf-progress-fill" style="width:20%"></div>
+              <div class="wf-progress-fill" style="width:22%"></div>
             </div>
           </div>
-          <!-- 회화 카드 (잠금) -->
           <div class="wf-card locked">
             <div class="wf-row">
               <span style="font-size:8px">🔒</span>
-              <span style="font-size:6.5px;flex:1">회화 (단어 50개↑ 해제)</span>
+              <span style="font-size:6px;flex:1">회화 (단어 50개↑ 해제)</span>
             </div>
           </div>
           <div class="wf-btn primary mt-auto">오늘 학습 시작 ▶</div>
@@ -483,20 +624,20 @@
 
         <!-- LOADING -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header">🔤 Easy English</div>
-          <div class="skeleton" style="height:28px;border-radius:6px"></div>
-          <div class="skeleton" style="height:40px;border-radius:6px"></div>
-          <div class="skeleton" style="height:40px;border-radius:6px"></div>
-          <div class="skeleton" style="height:40px;border-radius:6px"></div>
-          <div class="skeleton mt-auto" style="height:24px;border-radius:5px"></div>
+          <div class="wf-header nav">🔤 Easy English</div>
+          <div class="skeleton" style="height:24px;border-radius:6px"></div>
+          <div class="skeleton" style="height:36px;border-radius:6px"></div>
+          <div class="skeleton" style="height:36px;border-radius:6px"></div>
+          <div class="skeleton" style="height:36px;border-radius:6px"></div>
+          <div class="skeleton mt-auto" style="height:22px;border-radius:999px"></div>
         </div>
 
-        <!-- EMPTY (첫 방문) -->
+        <!-- EMPTY -->
         <div class="screen state-content" data-state="empty">
-          <div class="wf-header">🔤 Easy English</div>
+          <div class="wf-header nav">🔤 Easy English</div>
           <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px">
-            <div style="font-size:24px">👋</div>
-            <div style="font-size:6.5px;text-align:center;color:var(--text-sub)">처음 오셨군요!<br>알파벳부터 시작해봐요</div>
+            <div style="font-size:22px">👋</div>
+            <div style="font-size:6px;text-align:center;color:var(--steel)">처음 오셨군요!<br>알파벳부터 시작해봐요</div>
           </div>
           <div class="wf-btn primary">알파벳 시작하기 ▶</div>
         </div>
@@ -510,33 +651,31 @@
 
   <!-- ALPHABET LIST -->
   <div class="screen-card" data-id="alphabet-list" data-connects-to="study-session-a">
-    <div class="phone primary">
+    <div class="phone nav">
       <div class="phone-top"></div>
       <div class="screen-states">
         <div class="state-tabs">
           <button class="state-tab active" data-state="default">Default</button>
           <button class="state-tab" data-state="loading">Loading</button>
         </div>
-        <!-- DEFAULT -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div class="wf-sub-text" style="font-size:6px;padding:2px 0">12 / 26 완료</div>
+          <div class="wf-header back nav">← 알파벳 학습</div>
+          <div class="wf-sub-text" style="font-size:5.5px;padding:2px 0;color:var(--steel)">12 / 26 완료</div>
           <div class="wf-progress-bar"><div class="wf-progress-fill" style="width:46%"></div></div>
           <div class="wf-list-item done"><span class="emoji">✅</span><span>A — Apple 사과</span></div>
           <div class="wf-list-item done"><span class="emoji">✅</span><span>B — Ball 공</span></div>
           <div class="wf-list-item"><span class="emoji">🔡</span><span>C — Cat 고양이</span></div>
           <div class="wf-list-item"><span class="emoji">🔡</span><span>D — Dog 개</span></div>
           <div class="wf-list-item"><span class="emoji">🔡</span><span>E — Egg 달걀</span></div>
-          <div class="wf-sub-text" style="font-size:5px;color:var(--text-sub)">⋯ 26개 전체</div>
+          <div class="wf-sub-text" style="font-size:5px">⋯ 26개 전체</div>
         </div>
-        <!-- LOADING -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div class="skeleton" style="height:5px;border-radius:3px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
+          <div class="wf-header back nav">← 알파벳 학습</div>
+          <div class="skeleton" style="height:4px;border-radius:999px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
         </div>
       </div>
     </div>
@@ -548,33 +687,31 @@
 
   <!-- WORD LIST -->
   <div class="screen-card" data-id="word-list" data-connects-to="study-session-w">
-    <div class="phone primary">
+    <div class="phone nav">
       <div class="phone-top"></div>
       <div class="screen-states">
         <div class="state-tabs">
           <button class="state-tab active" data-state="default">Default</button>
           <button class="state-tab" data-state="loading">Loading</button>
         </div>
-        <!-- DEFAULT -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 단어 학습</div>
-          <div class="wf-sub-text" style="font-size:6px;padding:2px 0">20 / 100 완료</div>
-          <div class="wf-progress-bar"><div class="wf-progress-fill" style="width:20%"></div></div>
+          <div class="wf-header back nav">← 단어 학습</div>
+          <div class="wf-sub-text" style="font-size:5.5px;padding:2px 0">20 / 90 완료</div>
+          <div class="wf-progress-bar"><div class="wf-progress-fill" style="width:22%"></div></div>
           <div class="wf-list-item done"><span class="emoji">✅</span><span>🍎 apple 사과</span></div>
           <div class="wf-list-item done"><span class="emoji">✅</span><span>🐱 cat 고양이</span></div>
           <div class="wf-list-item"><span class="emoji">📖</span><span>🐶 dog 개</span></div>
           <div class="wf-list-item"><span class="emoji">📖</span><span>🍌 banana 바나나</span></div>
           <div class="wf-list-item"><span class="emoji">📖</span><span>🔴 red 빨강</span></div>
-          <div class="wf-sub-text" style="font-size:5px;color:var(--text-sub)">⋯ 100개 전체</div>
+          <div class="wf-sub-text" style="font-size:5px">⋯ 90개 전체</div>
         </div>
-        <!-- LOADING -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 단어 학습</div>
-          <div class="skeleton" style="height:5px;border-radius:3px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
-          <div class="skeleton" style="height:22px;border-radius:4px"></div>
+          <div class="wf-header back nav">← 단어 학습</div>
+          <div class="skeleton" style="height:4px;border-radius:999px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
+          <div class="skeleton" style="height:20px;border-radius:6px"></div>
         </div>
       </div>
     </div>
@@ -582,16 +719,17 @@
     <div class="screen-path">pages/WordList.tsx · /words</div>
   </div>
 
-</div><!-- end screen-row -->
+</div>
 
 
-<!-- ────────────────────────────────────────────
-     섹션 2 : 학습 세션 — 알파벳
-──────────────────────────────────────────── -->
-<div class="section-label">학습 세션 — 알파벳 (/alphabet/:id) · pages/StudySession.tsx</div>
+<!-- ═══════════════════════════════════════════
+     SECTION 2 — 학습 세션: 알파벳
+     스텝 2단계: 보기(자동TTS) → 풀기(정답시TTS)
+══════════════════════════════════════════════ -->
+<div class="section-label">학습 세션 — 알파벳 (/alphabet/:id) · 2단계: 보기 → 풀기</div>
 <div class="screen-row">
 
-  <!-- STEP 1 : 카드 보기 -->
+  <!-- STEP 1 : 카드 보기 (자동 TTS) -->
   <div class="screen-card" data-id="study-session-a" data-connects-to="quiz-a-img,quiz-a-match,quiz-a-listen">
     <div class="phone session">
       <div class="phone-top"></div>
@@ -600,37 +738,33 @@
           <button class="state-tab active" data-state="default">Step 1</button>
           <button class="state-tab" data-state="loading">Loading</button>
         </div>
-        <!-- DEFAULT -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <!-- 진행 바 -->
+          <div class="wf-header back session">← 알파벳 학습</div>
           <div style="display:flex;align-items:center;gap:3px;padding:0 1px">
-            <div style="font-size:5.5px;color:var(--text-sub);white-space:nowrap">3 / 26</div>
+            <div style="font-size:5px;color:var(--steel);white-space:nowrap">3 / 26</div>
             <div class="wf-progress-bar" style="flex:1"><div class="wf-progress-fill" style="width:11%"></div></div>
-            <div style="font-size:5.5px;color:var(--primary)">Step 1</div>
+            <div style="font-size:5px;color:var(--green)">보기</div>
           </div>
           <div class="wf-step-indicator">
             <div class="wf-step-dot active"></div>
             <div class="wf-step-dot"></div>
-            <div class="wf-step-dot"></div>
           </div>
-          <!-- 카드 -->
+          <div style="font-size:4.5px;text-align:center;color:var(--green);background:var(--green-dim);border-radius:4px;padding:1px 4px">🔊 자동 재생</div>
           <div class="wf-emoji">🍎</div>
           <div class="wf-big-text">A</div>
-          <div class="wf-sub-text" style="font-size:7px;color:var(--text-sub)">에이</div>
+          <div class="wf-sub-text" style="font-size:6.5px;color:var(--steel)">에이</div>
           <div class="wf-divider"></div>
-          <div class="wf-sub-text" style="font-size:7px;font-weight:700;color:var(--text)">apple · 사과</div>
-          <div class="wf-btn secondary" style="margin-top:3px">🔊 발음 듣기</div>
+          <div class="wf-sub-text" style="font-size:7px;font-weight:700;color:var(--ink)">apple · 사과</div>
+          <div class="wf-btn secondary" style="margin-top:3px">🔊 발음 다시 듣기</div>
           <div class="wf-btn primary mt-auto">다음 ▶</div>
         </div>
-        <!-- LOADING -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 알파벳</div>
-          <div class="skeleton" style="height:5px;border-radius:3px"></div>
-          <div class="skeleton" style="height:30px;width:50%;align-self:center;border-radius:6px;margin-top:10px"></div>
-          <div class="skeleton" style="height:15px;border-radius:4px;margin-top:5px"></div>
+          <div class="wf-header back session">← 알파벳</div>
+          <div class="skeleton" style="height:4px;border-radius:999px"></div>
+          <div class="skeleton" style="height:28px;width:48%;align-self:center;border-radius:8px;margin-top:8px"></div>
+          <div class="skeleton" style="height:12px;border-radius:4px;margin-top:4px"></div>
           <div class="skeleton" style="height:10px;border-radius:4px"></div>
-          <div class="skeleton mt-auto" style="height:20px;border-radius:5px"></div>
+          <div class="skeleton mt-auto" style="height:18px;border-radius:999px"></div>
         </div>
       </div>
     </div>
@@ -640,8 +774,8 @@
 
   <div class="arrow-row">→</div>
 
-  <!-- STEP 2-A : 그림 보고 선택 -->
-  <div class="screen-card" data-id="quiz-a-img" data-connects-to="pronun-a">
+  <!-- STEP 2-A : 그림 선택 -->
+  <div class="screen-card" data-id="quiz-a-img" data-connects-to="study-session-a,review-round,sentence-phase">
     <div class="phone session">
       <div class="phone-top"></div>
       <div class="screen-states">
@@ -650,17 +784,20 @@
           <button class="state-tab" data-state="loading">정답 후</button>
           <button class="state-tab" data-state="empty">오답</button>
         </div>
-        <!-- DEFAULT : 미답변 -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 알파벳 학습</div>
+          <div class="wf-header back session">← 알파벳 학습</div>
           <div style="display:flex;align-items:center;gap:3px;padding:0 1px">
-            <div style="font-size:5.5px;color:var(--text-sub)">3/26</div>
+            <div style="font-size:5px;color:var(--steel)">3/26</div>
             <div class="wf-progress-bar" style="flex:1"><div class="wf-progress-fill" style="width:11%"></div></div>
-            <div style="font-size:5.5px;color:var(--primary)">Step 2</div>
+            <div style="font-size:5px;color:var(--green)">풀기</div>
           </div>
-          <div class="wf-sub-text" style="font-size:5.5px">유형 A — 그림 보고 선택</div>
+          <div class="wf-step-indicator">
+            <div class="wf-step-dot done"></div>
+            <div class="wf-step-dot active"></div>
+          </div>
+          <div class="wf-sub-text" style="font-size:5px">유형 A — 그림 보고 선택</div>
           <div class="wf-emoji">🍎</div>
-          <div style="font-size:5.5px;text-align:center;color:var(--text-sub)">이 그림의 뜻은?</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">이 그림의 뜻을 고르세요</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option">사과</div>
             <div class="wf-quiz-option">고양이</div>
@@ -669,32 +806,30 @@
           </div>
           <div class="wf-btn gray mt-auto">다음 ▶</div>
         </div>
-        <!-- LOADING : 정답 후 -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 알파벳 학습</div>
+          <div class="wf-header back session">← 알파벳 학습</div>
           <div class="wf-emoji">🍎</div>
-          <div style="font-size:5.5px;text-align:center;color:var(--text-sub)">이 그림의 뜻은?</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">이 그림의 뜻을 고르세요</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option correct">✓ 사과</div>
             <div class="wf-quiz-option">고양이</div>
             <div class="wf-quiz-option">개</div>
             <div class="wf-quiz-option">바나나</div>
           </div>
-          <div style="font-size:5.5px;color:var(--success);text-align:center;font-weight:700">✓ 정답이에요! 잘했어요 👍</div>
+          <div style="font-size:5px;color:var(--emerald);text-align:center;font-weight:700">✓ 정답이에요! 잘했어요 👍</div>
           <div class="wf-btn primary mt-auto">다음 ▶</div>
         </div>
-        <!-- EMPTY : 오답 -->
         <div class="screen state-content" data-state="empty">
-          <div class="wf-header back">← 알파벳 학습</div>
+          <div class="wf-header back session">← 알파벳 학습</div>
           <div class="wf-emoji">🍎</div>
-          <div style="font-size:5.5px;text-align:center;color:var(--text-sub)">이 그림의 뜻은?</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">이 그림의 뜻을 고르세요</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option correct">✓ 사과</div>
             <div class="wf-quiz-option wrong">❌ 바나나</div>
             <div class="wf-quiz-option">고양이</div>
             <div class="wf-quiz-option">개</div>
           </div>
-          <div style="font-size:5.5px;color:var(--error);text-align:center">괜찮아요! 다시 도전해봐요 💪</div>
+          <div style="font-size:5px;color:var(--red);text-align:center">괜찮아요! 다시 도전해봐요 💪</div>
           <div class="wf-btn primary mt-auto">정답 확인 후 다음 ▶</div>
         </div>
       </div>
@@ -703,8 +838,8 @@
     <div class="screen-path">quiz/ImageChoiceQuiz.tsx</div>
   </div>
 
-  <!-- STEP 2-B : 단어 매칭 -->
-  <div class="screen-card" data-id="quiz-a-match" data-connects-to="pronun-a">
+  <!-- STEP 2-B : 매칭 -->
+  <div class="screen-card" data-id="quiz-a-match" data-connects-to="study-session-a,review-round,sentence-phase">
     <div class="phone session">
       <div class="phone-top"></div>
       <div class="screen-states">
@@ -712,11 +847,10 @@
           <button class="state-tab active" data-state="default">진행 중</button>
           <button class="state-tab" data-state="loading">완료</button>
         </div>
-        <!-- DEFAULT -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div class="wf-sub-text" style="font-size:5.5px">유형 B — 단어 매칭</div>
-          <div class="wf-sub-text" style="font-size:5px;color:var(--text-sub)">영어↔한글 짝을 맞추세요</div>
+          <div class="wf-header back session">← 알파벳 학습</div>
+          <div class="wf-sub-text" style="font-size:5px">유형 B — 단어 매칭</div>
+          <div class="wf-sub-text" style="font-size:4.5px;color:var(--muted)">영어↔한글 짝을 맞추세요</div>
           <div class="wf-match-grid" style="margin-top:4px">
             <div class="wf-match-card selected">apple</div>
             <div class="wf-match-card">개</div>
@@ -725,13 +859,12 @@
             <div class="wf-match-card">dog</div>
             <div class="wf-match-card">고양이</div>
           </div>
-          <div style="font-size:5px;text-align:center;color:var(--text-sub);margin-top:3px">apple 선택됨 — 한글 짝을 누르세요</div>
+          <div style="font-size:4.5px;text-align:center;color:var(--steel);margin-top:3px">apple 선택됨 — 한글 짝을 누르세요</div>
           <div class="wf-btn gray mt-auto">다음 ▶</div>
         </div>
-        <!-- LOADING : 모두 완료 -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div class="wf-sub-text" style="font-size:5.5px">유형 B — 단어 매칭</div>
+          <div class="wf-header back session">← 알파벳 학습</div>
+          <div class="wf-sub-text" style="font-size:5px">유형 B — 단어 매칭</div>
           <div class="wf-match-grid" style="margin-top:4px">
             <div class="wf-match-card matched">apple</div>
             <div class="wf-match-card matched">개</div>
@@ -740,7 +873,7 @@
             <div class="wf-match-card matched">dog</div>
             <div class="wf-match-card matched">고양이</div>
           </div>
-          <div style="font-size:6px;color:var(--success);text-align:center;font-weight:700;margin-top:4px">🎉 모두 맞췄어요!</div>
+          <div style="font-size:6px;color:var(--emerald);text-align:center;font-weight:700;margin-top:4px">🎉 모두 맞췄어요!</div>
           <div class="wf-btn primary mt-auto">다음 ▶</div>
         </div>
       </div>
@@ -750,7 +883,7 @@
   </div>
 
   <!-- STEP 2-C : 소리 듣고 선택 -->
-  <div class="screen-card" data-id="quiz-a-listen" data-connects-to="pronun-a">
+  <div class="screen-card" data-id="quiz-a-listen" data-connects-to="study-session-a,review-round,sentence-phase">
     <div class="phone session">
       <div class="phone-top"></div>
       <div class="screen-states">
@@ -758,13 +891,12 @@
           <button class="state-tab active" data-state="default">정답 전</button>
           <button class="state-tab" data-state="loading">정답 후</button>
         </div>
-        <!-- DEFAULT -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div class="wf-sub-text" style="font-size:5.5px">유형 C — 소리 듣고 선택</div>
+          <div class="wf-header back session">← 알파벳 학습</div>
+          <div class="wf-sub-text" style="font-size:5px">유형 C — 소리 듣고 선택</div>
           <div class="wf-speaker">🔊</div>
           <div class="wf-btn secondary" style="margin-top:-2px">🔊 다시 듣기</div>
-          <div style="font-size:5.5px;text-align:center;color:var(--text-sub);margin-top:3px">들은 단어의 뜻은?</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel);margin-top:3px">들은 단어의 뜻은?</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option">사과</div>
             <div class="wf-quiz-option">고양이</div>
@@ -773,9 +905,8 @@
           </div>
           <div class="wf-btn gray mt-auto">다음 ▶</div>
         </div>
-        <!-- LOADING : 정답 -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 알파벳 학습</div>
+          <div class="wf-header back session">← 알파벳 학습</div>
           <div class="wf-speaker">🔊</div>
           <div class="wf-btn secondary">🔊 다시 듣기</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px">
@@ -784,7 +915,7 @@
             <div class="wf-quiz-option">개</div>
             <div class="wf-quiz-option">바나나</div>
           </div>
-          <div style="font-size:5.5px;color:var(--success);text-align:center;font-weight:700">✓ 정답이에요! 잘했어요 👍</div>
+          <div style="font-size:5px;color:var(--emerald);text-align:center;font-weight:700">✓ 정답이에요! 잘했어요 👍</div>
           <div class="wf-btn primary mt-auto">다음 ▶</div>
         </div>
       </div>
@@ -793,122 +924,17 @@
     <div class="screen-path">quiz/ListenChoiceQuiz.tsx</div>
   </div>
 
-  <div class="arrow-row">→</div>
-
-  <!-- STEP 2-D : 문장 조합 (타일 + 타이핑) -->
-  <div class="screen-card" data-id="quiz-a-sentence" data-connects-to="pronun-a">
-    <div class="phone session">
-      <div class="phone-top"></div>
-      <div class="screen-states">
-        <div class="state-tabs">
-          <button class="state-tab active" data-state="default">타일</button>
-          <button class="state-tab" data-state="loading">타이핑 정답</button>
-          <button class="state-tab" data-state="empty">유사 정답</button>
-        </div>
-        <!-- DEFAULT: 타일 선택 모드 -->
-        <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div class="wf-sub-text" style="font-size:5.5px">유형 D — 문장 조합</div>
-          <div style="background:#E3F2FD;border-radius:5px;padding:3px 5px;text-align:center;font-size:7px;font-weight:700;color:#1976D2">Coffee, please.</div>
-          <div style="min-height:16px;border:1px dashed #BDBDBD;border-radius:4px;padding:2px 4px;background:#FAFAFA">
-            <span style="padding:1px 4px;background:#BBDEFB;border-radius:3px;font-size:6px;color:#1976D2">커피</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:2px;margin:1px 0">
-            <div style="flex:1;height:1px;background:#E0E0E0"></div>
-            <span style="font-size:4.5px;color:#9E9E9E">또는 직접 입력</span>
-            <div style="flex:1;height:1px;background:#E0E0E0"></div>
-          </div>
-          <div style="border:1.5px solid #E0E0E0;border-radius:5px;padding:3px 5px;font-size:5.5px;color:#9E9E9E">직접 입력해보세요</div>
-          <div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">
-            <div style="padding:2px 5px;border:1px solid #E0E0E0;border-radius:4px;font-size:6px;background:#fff">주세요</div>
-            <div style="padding:2px 5px;border:1px solid #E0E0E0;border-radius:4px;font-size:6px;background:#fff">설탕</div>
-            <div style="padding:2px 5px;border:1px solid #E0E0E0;border-radius:4px;font-size:6px;background:#fff">물</div>
-          </div>
-          <div class="wf-btn primary mt-auto">확인</div>
-        </div>
-        <!-- LOADING: 타이핑 완벽 정답 -->
-        <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div style="background:#E3F2FD;border-radius:5px;padding:3px 5px;text-align:center;font-size:7px;font-weight:700;color:#1976D2">Coffee, please.</div>
-          <div style="min-height:16px;border:1px dashed #BDBDBD;border-radius:4px;opacity:0.4;background:#FAFAFA"></div>
-          <div style="display:flex;align-items:center;gap:2px;margin:1px 0">
-            <div style="flex:1;height:1px;background:#E0E0E0"></div>
-            <span style="font-size:4.5px;color:#9E9E9E">또는 직접 입력</span>
-            <div style="flex:1;height:1px;background:#E0E0E0"></div>
-          </div>
-          <div style="border:1.5px solid #4CAF50;border-radius:5px;padding:3px 5px;font-size:5.5px;color:#212121;background:#E8F5E9">Coffee, please.</div>
-          <div style="font-size:5.5px;color:var(--success);text-align:center;font-weight:700">✓ 완벽해요! 👍</div>
-          <div class="wf-btn primary mt-auto">다음 ▶</div>
-        </div>
-        <!-- EMPTY: 유사 정답 (퍼지 매칭 75%↑) -->
-        <div class="screen state-content" data-state="empty">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div style="background:#E3F2FD;border-radius:5px;padding:3px 5px;text-align:center;font-size:7px;font-weight:700;color:#1976D2">Coffee, please.</div>
-          <div style="min-height:16px;border:1px dashed #BDBDBD;border-radius:4px;opacity:0.4;background:#FAFAFA"></div>
-          <div style="display:flex;align-items:center;gap:2px;margin:1px 0">
-            <div style="flex:1;height:1px;background:#E0E0E0"></div>
-            <span style="font-size:4.5px;color:#9E9E9E">또는 직접 입력</span>
-            <div style="flex:1;height:1px;background:#E0E0E0"></div>
-          </div>
-          <div style="border:1.5px solid var(--primary);border-radius:5px;padding:3px 5px;font-size:5.5px;color:#212121;background:#E3F2FD">Coffe please</div>
-          <div style="background:#E3F2FD;border-radius:4px;padding:3px 5px;margin-top:2px">
-            <div style="font-size:5px;color:var(--primary);font-weight:700">거의 맞아요! 정확한 표현:</div>
-            <div style="font-size:5.5px;color:var(--primary-dark);font-weight:700">Coffee, please.</div>
-          </div>
-          <div class="wf-btn primary mt-auto">다음 ▶</div>
-        </div>
-      </div>
-    </div>
-    <div class="screen-label">Step 2 — 유형 D: 문장 조합</div>
-    <div class="screen-path">quiz/SentenceBuilderQuiz.tsx</div>
-  </div>
-
-  <div class="arrow-row">→</div>
-
-  <!-- STEP 3 : 발음 -->
-  <div class="screen-card" data-id="pronun-a" data-connects-to="study-session-a,review-round,complete">
-    <div class="phone session">
-      <div class="phone-top"></div>
-      <div class="screen-states">
-        <div class="state-tabs">
-          <button class="state-tab active" data-state="default">Step 3</button>
-        </div>
-        <!-- DEFAULT -->
-        <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 알파벳 학습</div>
-          <div style="display:flex;align-items:center;gap:3px;padding:0 1px">
-            <div style="font-size:5.5px;color:var(--text-sub)">3/26</div>
-            <div class="wf-progress-bar" style="flex:1"><div class="wf-progress-fill" style="width:11%"></div></div>
-            <div style="font-size:5.5px;color:var(--primary)">Step 3</div>
-          </div>
-          <div class="wf-step-indicator">
-            <div class="wf-step-dot done"></div>
-            <div class="wf-step-dot done"></div>
-            <div class="wf-step-dot active"></div>
-          </div>
-          <div class="wf-emoji">🍎</div>
-          <div class="wf-big-text">A</div>
-          <div class="wf-sub-text" style="font-size:7px;color:var(--text-sub)">에이 · apple · 사과</div>
-          <div class="wf-btn secondary" style="margin-top:3px">🔊 발음 다시 듣기</div>
-          <div class="wf-btn success mt-auto">완료 ✓</div>
-        </div>
-      </div>
-    </div>
-    <div class="screen-label">Step 3 — 발음 확인</div>
-    <div class="screen-path">components/PronunciationStep.tsx</div>
-  </div>
-
-</div><!-- end screen-row: 알파벳 세션 -->
+</div>
 
 
-<!-- ────────────────────────────────────────────
-     섹션 3 : 학습 세션 — 단어
-     (동일한 StudySession 컴포넌트, URL 경로만 다름)
-──────────────────────────────────────────── -->
+<!-- ═══════════════════════════════════════════
+     SECTION 3 — 학습 세션: 단어
+     스텝 2단계: 보기(자동TTS) → 풀기(정답시TTS)
+══════════════════════════════════════════════ -->
 <div class="section-label">학습 세션 — 단어 (/words/:id) · 동일한 pages/StudySession.tsx 재사용</div>
 <div class="screen-row">
 
-  <!-- STEP 1 : 단어 카드 보기 -->
+  <!-- STEP 1 : 단어 카드 (자동 TTS) -->
   <div class="screen-card" data-id="study-session-w" data-connects-to="quiz-w">
     <div class="phone session">
       <div class="phone-top"></div>
@@ -917,22 +943,22 @@
           <button class="state-tab active" data-state="default">Step 1</button>
         </div>
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 단어 학습</div>
+          <div class="wf-header back session">← 단어 학습</div>
           <div style="display:flex;align-items:center;gap:3px;padding:0 1px">
-            <div style="font-size:5.5px;color:var(--text-sub)">5/100</div>
+            <div style="font-size:5px;color:var(--steel)">5/90</div>
             <div class="wf-progress-bar" style="flex:1"><div class="wf-progress-fill" style="width:5%"></div></div>
-            <div style="font-size:5.5px;color:var(--primary)">Step 1</div>
+            <div style="font-size:5px;color:var(--green)">보기</div>
           </div>
           <div class="wf-step-indicator">
             <div class="wf-step-dot active"></div>
             <div class="wf-step-dot"></div>
-            <div class="wf-step-dot"></div>
           </div>
+          <div style="font-size:4.5px;text-align:center;color:var(--green);background:var(--green-dim);border-radius:4px;padding:1px 4px">🔊 자동 재생</div>
           <div class="wf-emoji">🍎</div>
           <div class="wf-big-text" style="font-size:13px">apple</div>
           <div class="wf-divider" style="margin:3px 0"></div>
-          <div class="wf-sub-text" style="font-size:8px;font-weight:700;color:var(--text)">사과</div>
-          <div class="wf-btn secondary" style="margin-top:3px">🔊 발음 듣기</div>
+          <div class="wf-sub-text" style="font-size:8px;font-weight:700;color:var(--ink)">사과</div>
+          <div class="wf-btn secondary" style="margin-top:3px">🔊 발음 다시 듣기</div>
           <div class="wf-btn primary mt-auto">다음 ▶</div>
         </div>
       </div>
@@ -943,21 +969,26 @@
 
   <div class="arrow-row">→</div>
 
-  <!-- STEP 2 : 퀴즈 (방향: 한글→영어 예시) -->
-  <div class="screen-card" data-id="quiz-w" data-connects-to="pronun-w">
+  <!-- STEP 2 : 퀴즈 (3종 순환) -->
+  <div class="screen-card" data-id="quiz-w" data-connects-to="study-session-w,review-round,sentence-phase">
     <div class="phone session">
       <div class="phone-top"></div>
       <div class="screen-states">
         <div class="state-tabs">
-          <button class="state-tab active" data-state="default">en→ko</button>
-          <button class="state-tab" data-state="loading">ko→en</button>
+          <button class="state-tab active" data-state="default">유형A</button>
+          <button class="state-tab" data-state="loading">유형B</button>
+          <button class="state-tab" data-state="empty">유형C</button>
         </div>
-        <!-- DEFAULT: 영어→한글 -->
+        <!-- 유형 A: 그림 선택 -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 단어 학습</div>
-          <div class="wf-sub-text" style="font-size:5.5px">유형 A — 그림 보고 선택 (영어→한글)</div>
+          <div class="wf-header back session">← 단어 학습</div>
+          <div class="wf-step-indicator">
+            <div class="wf-step-dot done"></div>
+            <div class="wf-step-dot active"></div>
+          </div>
+          <div class="wf-sub-text" style="font-size:5px">index%3=0 → 그림 선택 (en→ko)</div>
           <div class="wf-emoji">🍎</div>
-          <div style="font-size:5.5px;text-align:center;color:var(--text-sub)">이 그림에 맞는 뜻은?</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">이 그림에 맞는 뜻은?</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option">사과</div>
             <div class="wf-quiz-option">바나나</div>
@@ -966,94 +997,77 @@
           </div>
           <div class="wf-btn gray mt-auto">다음 ▶</div>
         </div>
-        <!-- LOADING: 한글→영어 방향 -->
+        <!-- 유형 B: 매칭 -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header back">← 단어 학습</div>
-          <div class="wf-sub-text" style="font-size:5.5px">유형 A — 그림 보고 선택 (한글→영어)</div>
-          <div class="wf-emoji">🍎</div>
-          <div style="font-size:5.5px;text-align:center;color:var(--text-sub)">이 그림에 맞는 영어는?</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
-            <div class="wf-quiz-option">apple</div>
-            <div class="wf-quiz-option">banana</div>
-            <div class="wf-quiz-option">grape</div>
-            <div class="wf-quiz-option">mango</div>
+          <div class="wf-header back session">← 단어 학습</div>
+          <div class="wf-sub-text" style="font-size:5px">index%3=1 → 매칭 (ko→en)</div>
+          <div class="wf-match-grid" style="margin-top:4px">
+            <div class="wf-match-card selected">apple</div>
+            <div class="wf-match-card">개</div>
+            <div class="wf-match-card">cat</div>
+            <div class="wf-match-card matched">사과</div>
+            <div class="wf-match-card">dog</div>
+            <div class="wf-match-card">고양이</div>
+          </div>
+          <div style="font-size:4.5px;text-align:center;color:var(--steel);margin-top:3px">짝을 맞추세요</div>
+          <div class="wf-btn gray mt-auto">다음 ▶</div>
+        </div>
+        <!-- 유형 C: 소리 선택 -->
+        <div class="screen state-content" data-state="empty">
+          <div class="wf-header back session">← 단어 학습</div>
+          <div class="wf-sub-text" style="font-size:5px">index%3=2 → 소리 선택 (en→ko)</div>
+          <div class="wf-speaker">🔊</div>
+          <div class="wf-btn secondary" style="margin-top:-2px">🔊 다시 듣기</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px">
+            <div class="wf-quiz-option">사과</div>
+            <div class="wf-quiz-option">바나나</div>
+            <div class="wf-quiz-option">포도</div>
+            <div class="wf-quiz-option">딸기</div>
           </div>
           <div class="wf-btn gray mt-auto">다음 ▶</div>
         </div>
       </div>
     </div>
-    <div class="screen-label">Step 2 — 퀴즈 (방향 교차)</div>
+    <div class="screen-label">Step 2 — 퀴즈 (3종 순환)</div>
     <div class="screen-path">quiz/QuizStep.tsx (분기)</div>
   </div>
 
-  <div class="arrow-row">→</div>
-
-  <!-- STEP 3 : 발음 -->
-  <div class="screen-card" data-id="pronun-w" data-connects-to="study-session-w,review-round,complete">
-    <div class="phone session">
-      <div class="phone-top"></div>
-      <div class="screen-states">
-        <div class="state-tabs">
-          <button class="state-tab active" data-state="default">Step 3</button>
-        </div>
-        <div class="screen state-content active" data-state="default">
-          <div class="wf-header back">← 단어 학습</div>
-          <div class="wf-step-indicator" style="margin-top:3px">
-            <div class="wf-step-dot done"></div>
-            <div class="wf-step-dot done"></div>
-            <div class="wf-step-dot active"></div>
-          </div>
-          <div class="wf-emoji">🍎</div>
-          <div class="wf-big-text" style="font-size:13px">apple</div>
-          <div class="wf-sub-text" style="font-size:7px;color:var(--text-sub)">사과</div>
-          <div class="wf-btn secondary" style="margin-top:3px">🔊 발음 다시 듣기</div>
-          <div class="wf-btn success mt-auto">완료 ✓</div>
-        </div>
-      </div>
-    </div>
-    <div class="screen-label">Step 3 — 발음 확인</div>
-    <div class="screen-path">components/PronunciationStep.tsx</div>
-  </div>
-
-</div><!-- end screen-row: 단어 세션 -->
+</div>
 
 
-<!-- ────────────────────────────────────────────
-     섹션 4 : 오답 복습 라운드
-──────────────────────────────────────────── -->
+<!-- ═══════════════════════════════════════════
+     SECTION 4 — 오답 복습 라운드
+══════════════════════════════════════════════ -->
 <div class="section-label">오답 복습 라운드 — 세션 완료 후 자동 진입 (틀린 항목 있을 때)</div>
 <div class="screen-row">
 
-  <!-- 복습 라운드 -->
-  <div class="screen-card" data-id="review-round" data-connects-to="complete">
-    <div class="phone" style="border-color:#E65100">
-      <div class="phone-top" style="background:#E65100"></div>
+  <div class="screen-card" data-id="review-round" data-connects-to="sentence-phase">
+    <div class="phone review">
+      <div class="phone-top"></div>
       <div class="screen-states">
         <div class="state-tabs">
           <button class="state-tab active" data-state="default">진행 중</button>
           <button class="state-tab" data-state="loading">정답</button>
           <button class="state-tab" data-state="empty">오답</button>
         </div>
-        <!-- DEFAULT: 복습 문제 풀기 -->
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header" style="background:#E65100">🔁 틀린 문제 다시 풀기</div>
-          <div style="font-size:5.5px;text-align:center;color:#BF360C;padding:2px 0">3개를 틀렸어요. 다시 한 번 풀어봐요!</div>
-          <div style="font-size:5px;text-align:center;color:var(--text-sub)">복습 1 / 3</div>
-          <div class="wf-progress-bar"><div class="wf-progress-fill" style="background:#E65100;width:33%"></div></div>
+          <div class="wf-header review">🔁 틀린 문제 다시 풀기</div>
+          <div style="font-size:5px;text-align:center;color:var(--orange);padding:2px 0">3개를 틀렸어요. 다시 한 번 풀어봐요!</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">복습 1 / 3</div>
+          <div class="wf-progress-bar"><div class="wf-progress-fill" style="background:var(--orange);width:33%"></div></div>
           <div class="wf-emoji">🍎</div>
-          <div style="font-size:5.5px;text-align:center;color:var(--text-sub)">이 그림의 뜻은?</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">이 그림의 뜻은?</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option">사과</div>
             <div class="wf-quiz-option">바나나</div>
             <div class="wf-quiz-option">포도</div>
             <div class="wf-quiz-option">딸기</div>
           </div>
-          <div class="wf-btn" style="background:#E65100;color:#fff;margin-top:auto">다음 ▶</div>
+          <div class="wf-btn orange mt-auto">다음 ▶</div>
         </div>
-        <!-- LOADING: 복습 정답 -->
         <div class="screen state-content" data-state="loading">
-          <div class="wf-header" style="background:#E65100">🔁 틀린 문제 다시 풀기</div>
-          <div style="font-size:5px;text-align:center;color:var(--text-sub)">복습 1 / 3</div>
+          <div class="wf-header review">🔁 틀린 문제 다시 풀기</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">복습 1 / 3</div>
           <div class="wf-emoji">🍎</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option correct">✓ 사과</div>
@@ -1061,13 +1075,12 @@
             <div class="wf-quiz-option">포도</div>
             <div class="wf-quiz-option">딸기</div>
           </div>
-          <div style="font-size:5.5px;color:var(--success);text-align:center;font-weight:700">✓ 잘했어요! 👍</div>
-          <div class="wf-btn" style="background:#E65100;color:#fff;margin-top:auto">다음 ▶</div>
+          <div style="font-size:5px;color:var(--emerald);text-align:center;font-weight:700">✓ 잘했어요! 👍</div>
+          <div class="wf-btn orange mt-auto">다음 ▶</div>
         </div>
-        <!-- EMPTY: 복습 오답 -->
         <div class="screen state-content" data-state="empty">
-          <div class="wf-header" style="background:#E65100">🔁 틀린 문제 다시 풀기</div>
-          <div style="font-size:5px;text-align:center;color:var(--text-sub)">복습 1 / 3</div>
+          <div class="wf-header review">🔁 틀린 문제 다시 풀기</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel)">복습 1 / 3</div>
           <div class="wf-emoji">🍎</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:2px">
             <div class="wf-quiz-option correct">✓ 사과</div>
@@ -1075,31 +1088,30 @@
             <div class="wf-quiz-option">포도</div>
             <div class="wf-quiz-option">딸기</div>
           </div>
-          <div style="font-size:5px;color:var(--error);text-align:center">괜찮아요! 정답을 확인해요 💪</div>
-          <div class="wf-btn" style="background:#E65100;color:#fff;margin-top:auto">다음 ▶</div>
+          <div style="font-size:5px;color:var(--red);text-align:center">괜찮아요! 정답을 확인해요 💪</div>
+          <div class="wf-btn orange mt-auto">다음 ▶</div>
         </div>
       </div>
     </div>
     <div class="screen-label">오답 복습 라운드</div>
-    <div class="screen-path">pages/StudySession.tsx (phase=review)</div>
+    <div class="screen-path">StudySession.tsx (phase=review)</div>
   </div>
 
-  <!-- 복습 없을 때 표시 -->
-  <div class="screen-card" data-id="no-review" data-connects-to="complete">
-    <div class="phone" style="border-color:#4CAF50">
-      <div class="phone-top" style="background:#4CAF50"></div>
+  <div class="screen-card" data-id="no-review" data-connects-to="sentence-phase">
+    <div class="phone success">
+      <div class="phone-top"></div>
       <div class="screen-states">
         <div class="state-tabs">
           <button class="state-tab active" data-state="default">전부 정답</button>
         </div>
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header" style="background:#2E7D32">✓ 오늘 학습 완료!</div>
+          <div class="wf-header success">✓ 오늘 학습 완료!</div>
           <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
             <div style="font-size:20px">🎉</div>
-            <div style="font-size:6.5px;font-weight:700;color:#2E7D32;text-align:center">모두 정답!<br>복습 없이 바로 완료</div>
-            <div class="wf-badge green" style="font-size:5.5px">오답 0개</div>
+            <div style="font-size:6px;font-weight:700;color:var(--emerald);text-align:center">모두 정답!<br>복습 없이 문장 연습으로</div>
+            <div class="wf-badge green" style="font-size:5px">오답 0개</div>
           </div>
-          <div class="wf-btn success">완료 화면으로 ▶</div>
+          <div class="wf-btn success">문장 연습으로 ▶</div>
         </div>
       </div>
     </div>
@@ -1107,14 +1119,73 @@
     <div class="screen-path">조건: wrongItems.length === 0</div>
   </div>
 
-</div><!-- end review section -->
+</div>
 
-<!-- ────────────────────────────────────────────
-     섹션 4 : 완료 화면
-──────────────────────────────────────────── -->
-<div class="section-label">완료 화면</div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5 — 문장 연습 단계
+     세션 마지막: 복습 후 → 문장 3문제 → 완료
+══════════════════════════════════════════════ -->
+<div class="section-label">문장 연습 단계 — 세션 마지막 (phase=sentence) · SENTENCE_COUNT=3</div>
 <div class="screen-row">
 
+  <!-- 문장 연습 -->
+  <div class="screen-card" data-id="sentence-phase" data-connects-to="complete">
+    <div class="phone sentence">
+      <div class="phone-top"></div>
+      <div class="screen-states">
+        <div class="state-tabs">
+          <button class="state-tab active" data-state="default">타일</button>
+          <button class="state-tab" data-state="loading">정답</button>
+          <button class="state-tab" data-state="empty">유사 정답</button>
+        </div>
+        <!-- 타일 모드 -->
+        <div class="screen state-content active" data-state="default">
+          <div class="wf-header sentence">📝 문장 연습</div>
+          <div style="font-size:5px;text-align:center;color:var(--steel);padding:2px 0">배운 단어로 문장을 완성해봐요!</div>
+          <div style="font-size:5px;text-align:center;color:var(--muted)">1 / 3</div>
+          <div style="background:var(--green-dim);border-radius:6px;padding:3px 5px;text-align:center;font-size:7px;font-weight:700;color:var(--ink);border:1px solid rgba(0,212,164,0.3)">Coffee, please.</div>
+          <div style="min-height:14px;border:1px dashed var(--hairline);border-radius:6px;padding:2px 4px;background:var(--surface)">
+            <span style="padding:1px 5px;background:var(--green-dim);border-radius:999px;font-size:5.5px;color:var(--ink);border:1px solid rgba(0,212,164,0.3)">커피</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">
+            <div style="padding:2px 6px;border:1px solid var(--hairline);border-radius:999px;font-size:5.5px;background:var(--canvas)">주세요</div>
+            <div style="padding:2px 6px;border:1px solid var(--hairline);border-radius:999px;font-size:5.5px;background:var(--canvas)">설탕</div>
+            <div style="padding:2px 6px;border:1px solid var(--hairline);border-radius:999px;font-size:5.5px;background:var(--canvas)">물</div>
+          </div>
+          <div class="wf-btn primary mt-auto">확인</div>
+        </div>
+        <!-- 정답 -->
+        <div class="screen state-content" data-state="loading">
+          <div class="wf-header sentence">📝 문장 연습</div>
+          <div style="font-size:5px;text-align:center;color:var(--muted)">1 / 3</div>
+          <div style="background:var(--green-dim);border-radius:6px;padding:3px 5px;text-align:center;font-size:7px;font-weight:700;color:var(--ink)">Coffee, please.</div>
+          <div style="min-height:14px;border:1px dashed var(--hairline);border-radius:6px;opacity:0.3;background:var(--surface)"></div>
+          <div style="border:1.5px solid var(--emerald);border-radius:6px;padding:3px 5px;font-size:5px;color:var(--ink);background:var(--emerald-dim)">Coffee, please.</div>
+          <div style="font-size:5px;color:var(--emerald);text-align:center;font-weight:700">✓ 완벽해요! 👍</div>
+          <div class="wf-btn primary mt-auto">다음 ▶</div>
+        </div>
+        <!-- 유사 정답 -->
+        <div class="screen state-content" data-state="empty">
+          <div class="wf-header sentence">📝 문장 연습</div>
+          <div style="font-size:5px;text-align:center;color:var(--muted)">1 / 3</div>
+          <div style="background:var(--green-dim);border-radius:6px;padding:3px 5px;text-align:center;font-size:7px;font-weight:700;color:var(--ink)">Coffee, please.</div>
+          <div style="border:1.5px solid var(--green);border-radius:6px;padding:3px 5px;font-size:5px;color:var(--ink);background:var(--green-dim)">Coffe please</div>
+          <div style="background:var(--green-dim);border-radius:6px;padding:3px 5px;margin-top:2px;border:1px solid rgba(0,212,164,0.3)">
+            <div style="font-size:4.5px;color:var(--steel);font-weight:600">거의 맞아요! 정확한 표현:</div>
+            <div style="font-size:5.5px;color:var(--ink);font-weight:700">Coffee, please.</div>
+          </div>
+          <div class="wf-btn primary mt-auto">다음 ▶</div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-label">문장 연습 (3문제)</div>
+    <div class="screen-path">StudySession.tsx (phase=sentence)</div>
+  </div>
+
+  <div class="arrow-row">→</div>
+
+  <!-- 완료 화면 -->
   <div class="screen-card" data-id="complete" data-connects-to="home">
     <div class="phone success">
       <div class="phone-top"></div>
@@ -1123,13 +1194,13 @@
           <button class="state-tab active" data-state="default">Default</button>
         </div>
         <div class="screen state-content active" data-state="default">
-          <div class="wf-header" style="background:#2E7D32">✓ 오늘 학습 완료!</div>
+          <div class="wf-header success">✓ 오늘 학습 완료!</div>
           <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
             <div class="wf-congrats">🎉</div>
             <div class="wf-score">오늘 3개 완료!</div>
             <div class="wf-streak-big">🔥</div>
-            <div style="font-size:6.5px;color:var(--text);font-weight:700">4일째 연속 학습 중!</div>
-            <div class="wf-badge green" style="font-size:6px">🏅 5일 배지 획득까지 1일</div>
+            <div style="font-size:6.5px;color:var(--ink);font-weight:700;letter-spacing:-0.01em">4일째 연속 학습 중!</div>
+            <div class="wf-badge green" style="font-size:5.5px">🏅 5일 배지까지 1일</div>
           </div>
           <div class="wf-btn primary">홈으로</div>
         </div>
@@ -1139,7 +1210,7 @@
     <div class="screen-path">pages/Complete.tsx · /complete</div>
   </div>
 
-  <!-- 에러 처리 (TTS 미지원) -->
+  <!-- TTS 에러 -->
   <div class="screen-card" data-id="tts-error" data-connects-to="">
     <div class="phone">
       <div class="phone-top"></div>
@@ -1151,7 +1222,7 @@
           <div class="wf-header">🔤 Easy English</div>
           <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:4px">
             <div style="font-size:16px">⚠️</div>
-            <div style="font-size:5.5px;text-align:center;color:var(--text-sub)">
+            <div style="font-size:5.5px;text-align:center;color:var(--steel)">
               이 브라우저는 발음 기능을<br>지원하지 않습니다.<br>학습은 계속 진행 가능해요.
             </div>
             <div class="wf-btn secondary" style="margin-top:4px">확인</div>
@@ -1163,97 +1234,108 @@
     <div class="screen-path">hooks/useSpeech.ts (fallback)</div>
   </div>
 
-</div><!-- end screen-row: 완료 -->
+</div>
 
 
-<!-- ────────────────────────────────────────────
+<!-- ═══════════════════════════════════════════
      핵심 흐름 요약
-──────────────────────────────────────────── -->
+══════════════════════════════════════════════ -->
 <div class="flow-section">
   <h2>핵심 흐름 요약</h2>
   <div class="flow-scenarios">
 
     <div class="flow-scenario">
-      <h3>🆕 첫 방문 흐름</h3>
+      <h3><span class="tag">🆕</span>첫 방문 흐름</h3>
       <ol class="flow-steps">
-        <li>홈 진입 → localStorage 없음 → 첫 방문 Empty 상태 표시</li>
+        <li>홈 진입 → localStorage 없음 → Empty 상태</li>
         <li>"알파벳 시작하기" → <code>/alphabet</code> 목록</li>
         <li>A 선택 → <code>/alphabet/A</code> 학습 세션</li>
-        <li>Step 1 카드 보기 → 발음 듣기 → "다음"</li>
-        <li>Step 2 유형 A 퀴즈 (wordIndex%3=0 → image-choice, wordIndex%2=0 → en→ko)</li>
-        <li>Step 3 발음 확인 → "완료" → A 진도 저장</li>
-        <li>다음 항목(B) 자동 이동 또는 오늘 세션 종료 → 완료 화면</li>
-        <li>완료 화면 → "홈으로" → 스트릭 업데이트 확인</li>
+        <li>Step 1: 카드 보기 + 자동 TTS → "다음"</li>
+        <li>Step 2: 퀴즈 (index%3 유형, index%2 방향)</li>
+        <li>정답 시 TTS 자동 재생 → 다음 항목(B) 이동</li>
+        <li>마지막 항목 완료 → 복습 or 문장 연습 단계</li>
+        <li>문장 연습 3문제 → 완료 화면 → 스트릭 업데이트</li>
       </ol>
     </div>
 
     <div class="flow-scenario">
-      <h3>📚 단어 학습 흐름 (퀴즈 순환)</h3>
+      <h3><span class="tag">📚</span>단어 학습 (퀴즈 순환)</h3>
       <ol class="flow-steps">
-        <li>홈 → 알파벳 완료 → 단어 카드 클릭 → <code>/words</code></li>
-        <li>단어 선택(예: apple, index=0) → 학습 세션</li>
-        <li>Step 1 FlashCard: apple / 🍎 / 사과 / 발음</li>
-        <li>Step 2: index%3=0 → ImageChoiceQuiz, index%2=0 → en→ko 방향</li>
-        <li>dog(index=1): MatchingQuiz + ko→en 방향</li>
-        <li>bird(index=2): ListenChoiceQuiz + en→ko 방향</li>
-        <li>fish(index=3): ImageChoiceQuiz + ko→en 방향 (순환)</li>
-        <li>각 완료 → localStorage 저장 → 다음 단어 자동 진행</li>
+        <li>홈 → 단어 카드 → <code>/words</code></li>
+        <li>단어 선택(apple, index=0) → 세션 진입</li>
+        <li>index%3=0 → ImageChoiceQuiz, index%2=0 → en→ko</li>
+        <li>dog(1): MatchingQuiz + ko→en 방향</li>
+        <li>bird(2): ListenChoiceQuiz + en→ko 방향</li>
+        <li>fish(3): ImageChoiceQuiz + ko→en (3번째 순환)</li>
+        <li>각 완료 → localStorage 저장 → 다음 진행</li>
       </ol>
     </div>
 
     <div class="flow-scenario">
-      <h3>🔁 오답 복습 라운드 흐름</h3>
+      <h3><span class="tag">🔁</span>오답 복습 라운드</h3>
       <ol class="flow-steps">
-        <li>세션 진행 중 퀴즈에서 틀린 항목 → <code>wrongItems[]</code>에 추가</li>
-        <li>세션 마지막 항목 Step 3 완료 → <code>wrongItems.length &gt; 0</code> 체크</li>
-        <li>오답 있음 → 복습 라운드 진입 (헤더 주황색으로 변경)</li>
-        <li>오답 없음 → 바로 완료 화면으로 이동</li>
-        <li>복습: 유형 A(그림 선택) 고정, en→ko 방향, 1회만</li>
-        <li>복습에서 또 틀려도 정답 확인 후 다음 진행 (재복습 없음)</li>
-        <li>복습 마지막 항목 완료 → 완료 화면</li>
+        <li>퀴즈 틀린 항목 → <code>wrongItems[]</code>에 추가</li>
+        <li>마지막 항목 Step 2 완료 → 개수 체크</li>
+        <li>오답 있음 → 복습 라운드 (헤더 주황)</li>
+        <li>오답 없음 → 문장 연습 단계 바로 이동</li>
+        <li>복습: 유형 A 고정, en→ko, 1회만</li>
+        <li>또 틀려도 정답 확인 후 진행 (재복습 없음)</li>
+        <li>복습 마지막 완료 → 문장 연습 단계</li>
       </ol>
     </div>
 
     <div class="flow-scenario">
-      <h3>🔥 스트릭 업데이트 로직</h3>
+      <h3><span class="tag">📝</span>문장 연습 단계</h3>
+      <ol class="flow-steps">
+        <li>복습 완료 후 (or 오답 없으면 바로) 진입</li>
+        <li>SENTENCE_COUNT=3 문제 순서대로 진행</li>
+        <li>sentences.ts에서 sentenceIndex % 20 문장 선택</li>
+        <li>타일 클릭 or 직접 입력으로 한글 문장 조합</li>
+        <li>정답: onCorrect → 다음 문장 또는 완료</li>
+        <li>3문제 완료 → updateStreak() → /complete</li>
+      </ol>
+    </div>
+
+    <div class="flow-scenario">
+      <h3><span class="tag">🔥</span>스트릭 업데이트 로직</h3>
       <ol class="flow-steps">
         <li>앱 로드 시 <code>lastStudiedDate</code> 확인</li>
-        <li>오늘 날짜와 비교 → 어제 학습했으면 streak+1</li>
-        <li>이틀 이상 공백 → streak 0으로 리셋</li>
-        <li>학습 완료 후 <code>lastStudiedDate</code> = 오늘로 갱신</li>
+        <li>어제 학습했으면 streak + 1</li>
+        <li>이틀 이상 공백 → streak 0 리셋</li>
+        <li>문장 연습 완료 시 <code>updateStreak()</code> 호출</li>
         <li>완료 화면에서 업데이트된 streak 표시</li>
       </ol>
     </div>
 
     <div class="flow-scenario">
-      <h3>🔒 회화 잠금 해제 조건</h3>
+      <h3><span class="tag">🔡</span>퀴즈 방향 & 유형 규칙</h3>
       <ol class="flow-steps">
-        <li>홈에서 회화 카드 → <code>wordProgress.length &lt; 50</code>이면 잠금 표시</li>
-        <li>단어 50개 완료 시 → <code>isPhraseUnlocked()</code> = true</li>
-        <li>회화 카드 잠금 해제 → <code>/phrases</code> 접근 가능</li>
-        <li>(Phase 2 구현 시 활성화, MVP에선 잠금 상태 유지)</li>
+        <li>type = ['image','matching','listen'][index % 3]</li>
+        <li>direction = index % 2 === 0 ? 'en→ko' : 'ko→en'</li>
+        <li>index 0 → 그림선택 en→ko</li>
+        <li>index 1 → 매칭 ko→en</li>
+        <li>index 2 → 소리선택 en→ko</li>
+        <li>index 3 → 그림선택 ko→en (2번째 순환)</li>
       </ol>
     </div>
 
     <div class="flow-scenario">
-      <h3>⚠️ 오류 처리</h3>
+      <h3><span class="tag">🔒</span>회화 잠금 해제</h3>
       <ol class="flow-steps">
-        <li>Web Speech API <code>window.speechSynthesis</code> 미지원 감지</li>
-        <li><code>useSpeech.ts</code>: supported=false → speak() 호출 시 안내 모달</li>
-        <li>학습은 발음 없이 계속 진행 가능 (버튼 비활성화)</li>
-        <li>localStorage 쓰기 실패 → catch → 세션 메모리로 폴백</li>
+        <li>홈 회화 카드 → wordProgress &lt; 50이면 잠금</li>
+        <li>단어 50개 완료 시 isPhraseUnlocked() = true</li>
+        <li>회화 카드 잠금 해제 → <code>/phrases</code> 접근</li>
+        <li>(Phase 2 구현, MVP는 잠금 상태 유지)</li>
       </ol>
     </div>
 
     <div class="flow-scenario">
-      <h3>🔡 퀴즈 방향 & 유형 규칙</h3>
+      <h3><span class="tag">⚠️</span>오류 처리</h3>
       <ol class="flow-steps">
-        <li><code>type = ['image-choice','matching','listen-choice','sentence-builder'][index % 4]</code></li>
-        <li><code>direction = index % 2 === 0 ? 'en-to-ko' : 'ko-to-en'</code></li>
-        <li>index 0 → 그림선택 + en→ko / index 1 → 매칭 + ko→en</li>
-        <li>index 2 → 소리선택 + en→ko / index 3 → 문장조합 + ko→en</li>
-        <li>문장조합: 영어 목표 문장 표시 → 한글 타일 탭하여 순서대로 조합</li>
-        <li>틀려도 정답 확인 후 진행 (막지 않음)</li>
+        <li>window.speechSynthesis 미지원 감지</li>
+        <li>supported=false → 자동 TTS 스킵</li>
+        <li>발음 없이 학습 계속 진행 가능</li>
+        <li>localStorage 쓰기 실패 → 세션 메모리 폴백</li>
       </ol>
     </div>
 
@@ -1261,47 +1343,50 @@
 </div>
 
 
-<!-- ────────────────────────────────────────────
+<!-- ═══════════════════════════════════════════
      파일 구조
-──────────────────────────────────────────── -->
+══════════════════════════════════════════════ -->
 <div class="file-section">
   <h2>파일 구조</h2>
   <pre><span class="file-dir">src/</span>
-├── <span class="file-ts">main.tsx</span>             ← 진입점
-├── <span class="file-ts">App.tsx</span>             ← React Router v6 라우터 설정
+├── <span class="file-ts">main.tsx</span>              ← 진입점 (StrictMode + createRoot)
+├── <span class="file-ts">App.tsx</span>               ← React Router v6 BrowserRouter
 ├── <span class="file-dir">types/</span>
-│   └── <span class="file-ts">index.ts</span>         ← AlphabetItem, WordItem, QuizAssignment 등 타입 정의
+│   └── <span class="file-ts">index.ts</span>          ← AlphabetItem, WordItem, QuizAssignment 등
 ├── <span class="file-dir">context/</span>
-│   └── <span class="file-ts">AppContext.tsx</span>   ← localStorage 기반 진도·스트릭 전역 상태
+│   └── <span class="file-ts">AppContext.tsx</span>     ← localStorage 진도·스트릭 전역 상태
 ├── <span class="file-dir">data/</span>
-│   ├── <span class="file-ts">alphabet.ts</span>      ← 알파벳 26개 데이터
-│   └── <span class="file-ts">words.ts</span>        ← 단어 100개 데이터
-    ├── <span class="file-ts">sentences.ts</span>    ← 기초 문장 20개 데이터 (유형 D)
+│   ├── <span class="file-ts">alphabet.ts</span>        ← 26개 알파벳 데이터
+│   ├── <span class="file-ts">words.ts</span>           ← 90개 단어 데이터
+│   └── <span class="file-ts">sentences.ts</span>       ← 20개 기초 문장 (세션 끝 문장 연습)
 ├── <span class="file-dir">hooks/</span>
-│   └── <span class="file-ts">useSpeech.ts</span>    ← Web Speech API TTS 훅
+│   └── <span class="file-ts">useSpeech.ts</span>       ← Web Speech API TTS 훅
 ├── <span class="file-dir">utils/</span>
-│   ├── <span class="file-ts">streak.ts</span>        ← 스트릭 계산 로직
-│   ├── <span class="file-ts">quizAssignment.ts</span>← index % 3 유형, index % 2 방향 결정
-│   └── <span class="file-ts">quizHelpers.ts</span>  ← 오답 보기 생성 헬퍼
+│   ├── <span class="file-ts">streak.ts</span>          ← 스트릭 계산 (timezone-safe)
+│   ├── <span class="file-ts">quizAssignment.ts</span>  ← index%3 유형, index%2 방향
+│   ├── <span class="file-ts">quizHelpers.ts</span>     ← Fisher-Yates 셔플, 오답 보기 생성
+│   └── <span class="file-ts">fuzzyMatch.ts</span>      ← Levenshtein distance (≥75% = fuzzy)
 ├── <span class="file-dir">pages/</span>
-│   ├── <span class="file-ts">Home.tsx</span>         ← / (홈, 스트릭+진도+시작 버튼)
-│   ├── <span class="file-ts">AlphabetList.tsx</span>← /alphabet (알파벳 목록)
-│   ├── <span class="file-ts">WordList.tsx</span>     ← /words (단어 목록)
-│   ├── <span class="file-ts">StudySession.tsx</span>← /alphabet/:id, /words/:id (공용 세션)
-│   └── <span class="file-ts">Complete.tsx</span>     ← /complete (완료 화면)
+│   ├── <span class="file-ts">Home.tsx</span>            ← / (홈)
+│   ├── <span class="file-ts">AlphabetList.tsx</span>   ← /alphabet
+│   ├── <span class="file-ts">WordList.tsx</span>        ← /words
+│   ├── <span class="file-ts">StudySession.tsx</span>   ← /alphabet/:id, /words/:id (공용)
+│   │                          phase: study → review? → sentence → complete
+│   └── <span class="file-ts">Complete.tsx</span>        ← /complete
 └── <span class="file-dir">components/</span>
-    ├── <span class="file-ts">ProgressBar.tsx</span>  ← 상단 진행 표시줄
-    ├── <span class="file-ts">StreakCard.tsx</span>   ← 홈 스트릭 카드
-    ├── <span class="file-ts">ProgressCard.tsx</span>← 홈 진도 카드 (잠금 포함)
-    ├── <span class="file-ts">FlashCard.tsx</span>   ← Step 1 카드 보기
-    ├── <span class="file-ts">PronunciationStep.tsx</span>← Step 3 발음 확인
+    ├── <span class="file-ts">ProgressBar.tsx</span>     ← 상단 진행 표시줄 (view | quiz)
+    ├── <span class="file-ts">StreakCard.tsx</span>      ← 홈 스트릭 카드
+    ├── <span class="file-ts">ProgressCard.tsx</span>   ← 홈 진도 카드 (잠금 포함)
+    ├── <span class="file-ts">FlashCard.tsx</span>      ← Step 1 카드 보기 (마운트 시 자동 TTS)
     └── <span class="file-dir">quiz/</span>
-        ├── <span class="file-ts">QuizStep.tsx</span>     ← Step 2 퀴즈 유형 분기 오케스트레이터
-        ├── <span class="file-ts">ImageChoiceQuiz.tsx</span>← 유형 A — 그림 보고 4지선다
-        ├── <span class="file-ts">MatchingQuiz.tsx</span>← 유형 B — 영↔한 짝 맞추기
-        └── <span class="file-ts">ListenChoiceQuiz.tsx</span>← 유형 C — 소리 듣고 4지선다</pre>
+        ├── <span class="file-ts">QuizStep.tsx</span>       ← 퀴즈 유형 분기 오케스트레이터
+        ├── <span class="file-ts">ImageChoiceQuiz.tsx</span>← 유형 A — 그림 4지선다
+        ├── <span class="file-ts">MatchingQuiz.tsx</span>   ← 유형 B — 영↔한 짝 맞추기
+        ├── <span class="file-ts">ListenChoiceQuiz.tsx</span>← 유형 C — 소리 4지선다
+        └── <span class="file-ts">SentenceBuilderQuiz.tsx</span>← 문장 연습 (세션 끝 3문제)</pre>
 </div>
 
+</div><!-- end page-body -->
 
 <script>
   // ── 상태 탭 전환 ──
@@ -1321,39 +1406,30 @@
   document.querySelectorAll('.screen-card').forEach(card => {
     card.addEventListener('click', () => {
       const allCards = document.querySelectorAll('.screen-card');
-      const isAlreadySource = card.classList.contains('source');
-
-      // 이미 선택된 카드 클릭 시 초기화
-      if (isAlreadySource) {
+      if (card.classList.contains('source')) {
         allCards.forEach(c => c.classList.remove('highlighted', 'source', 'dimmed'));
         return;
       }
-
       allCards.forEach(c => c.classList.remove('highlighted', 'source', 'dimmed'));
-
       const targets = (card.dataset.connectsTo || '').split(',').filter(Boolean);
-      if (targets.length === 0) return;
-
+      if (!targets.length) return;
       card.classList.add('source');
       targets.forEach(id => {
-        const target = document.querySelector(`[data-id="${id.trim()}"]`);
-        if (target) target.classList.add('highlighted');
+        const t = document.querySelector(`[data-id="${id.trim()}"]`);
+        if (t) t.classList.add('highlighted');
       });
       allCards.forEach(c => {
-        if (!c.classList.contains('source') && !c.classList.contains('highlighted')) {
+        if (!c.classList.contains('source') && !c.classList.contains('highlighted'))
           c.classList.add('dimmed');
-        }
       });
     });
   });
 
-  // 배경 클릭 시 초기화
+  // 배경 클릭 초기화
   document.addEventListener('click', e => {
-    if (!e.target.closest('.screen-card')) {
-      document.querySelectorAll('.screen-card').forEach(c => {
-        c.classList.remove('highlighted', 'source', 'dimmed');
-      });
-    }
+    if (!e.target.closest('.screen-card'))
+      document.querySelectorAll('.screen-card').forEach(c =>
+        c.classList.remove('highlighted', 'source', 'dimmed'));
   });
 </script>
 </body>

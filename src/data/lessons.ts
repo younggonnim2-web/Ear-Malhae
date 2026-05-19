@@ -8,6 +8,13 @@ export const LESSONS_MAP: Record<string, Lesson> = {
   'alphabet-3': { id: 'alphabet-3', unitId: 'alphabet', title: 'K ~ O', itemIds: ['K','L','M','N','O'] },
   'alphabet-4': { id: 'alphabet-4', unitId: 'alphabet', title: 'P ~ T', itemIds: ['P','Q','R','S','T'] },
   'alphabet-5': { id: 'alphabet-5', unitId: 'alphabet', title: 'U ~ Z', itemIds: ['U','V','W','X','Y','Z'] },
+  // ── 일상 표현 ──
+  'daily-1': { id: 'daily-1', unitId: 'daily', title: '인사하기', itemIds: ['hello','bye','yes','no','good'] },
+  'daily-2': { id: 'daily-2', unitId: 'daily', title: '형용사', itemIds: ['bad','big','small','hot','cold'] },
+  'daily-3': { id: 'daily-3', unitId: 'daily', title: '감사·사과', itemIds: ['happy','sad','thank-you','sorry','please'] },
+  // ── 숫자 ──
+  'number-1': { id: 'number-1', unitId: 'number', title: '숫자 1~5', itemIds: ['one','two','three','four','five'] },
+  'number-2': { id: 'number-2', unitId: 'number', title: '숫자 6~10', itemIds: ['six','seven','eight','nine','ten'] },
   // ── 과일 ──
   'fruit-1': { id: 'fruit-1', unitId: 'fruit', title: '과일 1', itemIds: ['apple','banana','grape','orange','strawberry'] },
   'fruit-2': { id: 'fruit-2', unitId: 'fruit', title: '과일 2', itemIds: ['watermelon','lemon','peach','mango','cherry'] },
@@ -24,13 +31,21 @@ export const LESSONS_MAP: Record<string, Lesson> = {
   // ── 음식 ──
   'food-1': { id: 'food-1', unitId: 'food', title: '음식 1', itemIds: ['milk','egg','rice','bread','cake','juice'] },
   'food-2': { id: 'food-2', unitId: 'food', title: '음식 2', itemIds: ['water','soup','pizza','cookie','cheese','carrot'] },
-  // ── 숫자 ──
-  'number-1': { id: 'number-1', unitId: 'number', title: '숫자 1', itemIds: ['one','two','three','four','five'] },
-  'number-2': { id: 'number-2', unitId: 'number', title: '숫자 2', itemIds: ['six','seven','eight','nine','ten'] },
-  // ── 일상 표현 ──
-  'daily-1': { id: 'daily-1', unitId: 'daily', title: '일상 표현 1', itemIds: ['hello','bye','yes','no','good'] },
-  'daily-2': { id: 'daily-2', unitId: 'daily', title: '일상 표현 2', itemIds: ['bad','big','small','hot','cold'] },
-  'daily-3': { id: 'daily-3', unitId: 'daily', title: '일상 표현 3', itemIds: ['happy','sad','thank-you','sorry','please'] },
   // ── 장소 ──
   'place-1': { id: 'place-1', unitId: 'place', title: '장소', itemIds: ['home','school','park','shop','hospital','library'] },
+  // ── 가족 ── (신규)
+  'family-1': { id: 'family-1', unitId: 'family', title: '가족 1', itemIds: ['mother','father','sister','brother','baby'] },
+  'family-2': { id: 'family-2', unitId: 'family', title: '가족 2', itemIds: ['family','grandpa','grandma'] },
+  // ── 날씨 ── (신규)
+  'weather-1': { id: 'weather-1', unitId: 'weather', title: '날씨 1', itemIds: ['sunny','cloudy','rainy','snowy','windy'] },
+  'weather-2': { id: 'weather-2', unitId: 'weather', title: '날씨 2', itemIds: ['warm','cool','foggy'] },
+  // ── 감정 ── (신규)
+  'feeling-1': { id: 'feeling-1', unitId: 'feeling', title: '감정 1', itemIds: ['angry','tired','excited','scared'] },
+  'feeling-2': { id: 'feeling-2', unitId: 'feeling', title: '감정 2', itemIds: ['surprised','bored','worried','nervous'] },
+  // ── 교통 ── (신규)
+  'transport-1': { id: 'transport-1', unitId: 'transport', title: '교통 1', itemIds: ['bus','car','train','subway','taxi'] },
+  'transport-2': { id: 'transport-2', unitId: 'transport', title: '교통 2', itemIds: ['bike','airplane','ship'] },
+  // ── 건강 ── (신규)
+  'health-1': { id: 'health-1', unitId: 'health', title: '건강 1', itemIds: ['sick','doctor','medicine','fever'] },
+  'health-2': { id: 'health-2', unitId: 'health', title: '건강 2', itemIds: ['sleep','exercise','healthy','rest'] },
 }

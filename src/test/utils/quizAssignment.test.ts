@@ -14,15 +14,15 @@ describe('getQuizAssignment', () => {
     expect(getQuizAssignment(2)).toEqual({ type: 'listen-choice', direction: 'en-to-ko' })
   })
 
-  it('index 3: sentence-builder, ko-to-en', () => {
-    expect(getQuizAssignment(3)).toEqual({ type: 'sentence-builder', direction: 'ko-to-en' })
+  it('index 3: 다시 image-choice, ko-to-en (3개 순환)', () => {
+    expect(getQuizAssignment(3)).toEqual({ type: 'image-choice', direction: 'ko-to-en' })
   })
 
-  it('index 4: 다시 image-choice, en-to-ko (순환)', () => {
-    expect(getQuizAssignment(4)).toEqual({ type: 'image-choice', direction: 'en-to-ko' })
+  it('index 6: 세 번째 순환 시작, en-to-ko', () => {
+    expect(getQuizAssignment(6)).toEqual({ type: 'image-choice', direction: 'en-to-ko' })
   })
 
-  it('index 8: 두 번째 순환 시작, en-to-ko', () => {
-    expect(getQuizAssignment(8)).toEqual({ type: 'image-choice', direction: 'en-to-ko' })
+  it('index 9: 네 번째 순환 시작, ko-to-en', () => {
+    expect(getQuizAssignment(9)).toEqual({ type: 'image-choice', direction: 'ko-to-en' })
   })
 })

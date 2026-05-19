@@ -1,21 +1,21 @@
 interface Props {
   current: number
   total: number
-  step: 'view' | 'quiz' | 'speak'
+  step: 'view' | 'quiz'
 }
 
-const STEP_LABELS = { view: '보기', quiz: '풀기', speak: '발음' } as const
+const STEP_LABELS = { view: '보기', quiz: '풀기' } as const
 
 export function ProgressBar({ current, total, step }: Props) {
   const pct = total === 0 ? 0 : Math.round((current / total) * 100)
   return (
     <div className="px-4 pt-4 pb-2">
-      <div className="flex justify-between text-sm text-gray-500 mb-1">
+      <div className="flex justify-between text-sm text-steel mb-1">
         <span>{current} / {total}</span>
         <span className="text-primary font-semibold">Step {STEP_LABELS[step]}</span>
       </div>
       <div
-        className="h-2 bg-blue-100 rounded-full overflow-hidden"
+        className="h-2 bg-hairline rounded-full overflow-hidden"
         role="progressbar"
         aria-valuenow={pct}
         aria-valuemin={0}

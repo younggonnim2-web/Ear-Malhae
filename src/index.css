@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: 'Noto Sans KR', sans-serif;
+  /* Inter for UI; Noto Sans KR as Korean fallback; system stack as final fallback */
+  font-family: 'Inter', 'Noto Sans KR', -apple-system, sans-serif;
 }

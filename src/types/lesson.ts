@@ -7,8 +7,9 @@ export type ChallengeKind =
   | 'image-choice'
   | 'listen-choice'
   | 'sentence-builder'
+  | 'fill-blank'
 
-export type ChallengeTag = '새로운 단어' | '어려운 연습'
+export type ChallengeTag = '새로운 단어' | '어려운 연습' | '새로운 패턴'
 
 export interface LessonChallenge {
   kind: ChallengeKind
@@ -17,6 +18,7 @@ export interface LessonChallenge {
   sentenceId?: string
   displayMode?: 'cards' | 'list'
   tag?: ChallengeTag
+  blankIndex?: number
 }
 
 export interface Lesson {

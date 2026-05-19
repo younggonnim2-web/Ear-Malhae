@@ -9,13 +9,14 @@ import { TagBadge } from '../TagBadge'
 interface Props {
   sentence: SentenceItem
   onCorrect: () => void
+  onWrong?: () => void
   speak?: (text: string, lang?: string, rate?: number) => void
   direction?: 'en-to-ko' | 'ko-to-en'
   tag?: ChallengeTag
   isSpeaking?: boolean
 }
 
-export function SentenceBuilderQuiz({ sentence, onCorrect, speak, direction = 'en-to-ko', tag, isSpeaking }: Props) {
+export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direction = 'en-to-ko', tag, isSpeaking }: Props) {
   const isEnToKo = direction === 'en-to-ko'
 
   // en-to-ko: Korean tile bank (parts + distractors)
@@ -42,6 +43,15 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, speak, direction = 'e
   const handleTileClick = (tile: string) => {
     if (checked) return
     setSelected(prev => [...prev, tile])
+    if (speak) {
+      if (isEnToKo) {
+        const idx = sentence.parts.indexOf(tile)
+        const word = idx >= 0 ? sentence.englishParts[idx] : null
+        if (word) speak(word, 'en-US')
+      } else {
+        speak(tile, 'en-US')
+      }
+    }
   }
 
   const handleSlotClick = (index: number) => {
@@ -50,14 +60,12 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, speak, direction = 'e
   }
 
   const handleCheck = () => {
-    if (isEnToKo) {
-      const correct = JSON.stringify(selected) === JSON.stringify(sentence.parts)
-      setResult(correct ? 'correct' : 'wrong')
-    } else {
-      const correct = JSON.stringify(selected) === JSON.stringify(englishTiles)
-      setResult(correct ? 'correct' : 'wrong')
-    }
+    const correct = isEnToKo
+      ? JSON.stringify(selected) === JSON.stringify(sentence.parts)
+      : JSON.stringify(selected) === JSON.stringify(englishTiles)
+    setResult(correct ? 'correct' : 'wrong')
     setChecked(true)
+    if (!correct) onWrong?.()
     setTimeout(onCorrect, 1200)
   }
 
