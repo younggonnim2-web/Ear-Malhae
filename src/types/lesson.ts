@@ -9,6 +9,7 @@ export type ChallengeKind =
   | 'sentence-builder'
   | 'fill-blank'
   | 'speak-check'
+  | 'sentence-pick'
 
 export type ChallengeTag = '새로운 단어' | '어려운 연습' | '새로운 패턴' | '복습'
 
@@ -20,6 +21,7 @@ export interface LessonChallenge {
   displayMode?: 'cards' | 'list'
   tag?: ChallengeTag
   blankIndex?: number
+  listenBuild?: boolean
 }
 
 export interface Lesson {

@@ -103,7 +103,11 @@ function buildWordsSequence(
     for (const id of shuffle([...itemIds.slice(0, half)]))
       seq.push({ kind: 'image-choice', itemId: id, direction: 'en-to-ko', displayMode: 'list' })
 
-    for (const s of pickSentences(2, 0))
+    // 문장 번역 선택형 1문제 (en-to-ko: 영어 보고 한국어 선택)
+    for (const s of pickSentences(1, 0))
+      seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 패턴' })
+
+    for (const s of pickSentences(1, 1))
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
 
     for (const s of pickSentences(3, 2))
@@ -126,15 +130,25 @@ function buildWordsSequence(
     for (const id of shuffle([...itemIds]).slice(0, 2))
       seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })
 
-    for (const s of pickSentences(3, 0))
+    // 문장 번역 선택형 2문제 (양방향)
+    for (const s of pickSentences(1, 0))
+      seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 패턴' })
+    for (const s of pickSentences(1, 1))
+      seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'ko-to-en', tag: '새로운 패턴' })
+
+    for (const s of pickSentences(3, 2))
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
 
-    for (const s of pickSentences(3, 3))
+    for (const s of pickSentences(2, 5))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+
+    // Listen & Build: 오디오만 듣고 영어 타일 배열 (텍스트 힌트 없음)
+    for (const s of pickSentences(1, 7))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습' })
 
     seq.push({ kind: 'matching' })
 
-    for (const s of pickSentences(4, 6))
+    for (const s of pickSentences(4, 8))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
   }
 
@@ -154,9 +168,13 @@ function buildWordsSequence(
     for (const s of pickSentences(4, 3))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
 
+    // Listen & Build 2문제 — 텍스트 힌트 없이 오디오만
+    for (const s of pickSentences(2, 7))
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습' })
+
     seq.push({ kind: 'matching' })
 
-    for (const s of pickSentences(5, 7))
+    for (const s of pickSentences(5, 9))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
   }
 

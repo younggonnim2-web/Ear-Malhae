@@ -36,12 +36,12 @@ describe('data integrity', () => {
     }
   })
 
-  it('모든 문장: distractors.length === englishDistractors.length (오답 타일 음성 매핑 평행)', () => {
+  it('모든 문장: englishDistractors.length >= distractors.length (앞 N개는 TTS 매핑, 나머지는 고급 오답)', () => {
     for (const s of SENTENCES) {
       expect(
-        s.distractors.length,
-        `sentence "${s.id}": distractors.length(${s.distractors.length}) !== englishDistractors.length(${s.englishDistractors.length})`,
-      ).toBe(s.englishDistractors.length)
+        s.englishDistractors.length,
+        `sentence "${s.id}": englishDistractors(${s.englishDistractors.length}) < distractors(${s.distractors.length})`,
+      ).toBeGreaterThanOrEqual(s.distractors.length)
     }
   })
 

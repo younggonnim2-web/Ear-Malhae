@@ -16,6 +16,7 @@ import { MatchingQuiz } from '../components/quiz/MatchingQuiz'
 import { ImageChoiceQuiz } from '../components/quiz/ImageChoiceQuiz'
 import { ListenChoiceQuiz } from '../components/quiz/ListenChoiceQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
+import { SentencePickQuiz } from '../components/quiz/SentencePickQuiz'
 import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { PronunciationQuiz } from '../components/quiz/PronunciationQuiz'
 import { useSpeech } from '../hooks/useSpeech'
@@ -263,6 +264,22 @@ export function LessonSession() {
           direction={current.direction ?? 'en-to-ko'}
           tag={current.tag}
           isSpeaking={isSpeaking}
+          listenBuild={current.listenBuild}
+        />
+      )
+    }
+
+    if (current.kind === 'sentence-pick') {
+      const sentence = SENTENCES.find(s => s.id === current.sentenceId) ?? SENTENCES[0]
+      return (
+        <SentencePickQuiz
+          key={`${phase}-${challengeIndex}`}
+          sentence={sentence}
+          allSentences={SENTENCES}
+          direction={(current.direction as 'en-to-ko' | 'ko-to-en') ?? 'en-to-ko'}
+          onCorrect={advance}
+          onWrong={() => handleWrong(current)}
+          tag={current.tag}
         />
       )
     }

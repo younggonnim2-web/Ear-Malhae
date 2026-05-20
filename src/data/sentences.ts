@@ -7,7 +7,8 @@ import type { SentenceItem } from '../types'
 //   - parts[i]: 한국어 자연 어순 기준 (fill-blank 화면에 표시되는 순서)
 //   - englishParts[i]: 영어 자연 어순 기준 (영어 fill-blank 화면에 표시되는 순서)
 //   - 두 배열은 어순이 다를 수 있음 (한국어 SOV vs 영어 SVO)
-//   - distractors[i] ↔ englishDistractors[i] 는 평행 매핑 유지 (오답 음성 출력용)
+//   - distractors[i] ↔ englishDistractors[i]: 앞 distractors.length 개는 TTS 매핑 유지 (오답 음성 출력용)
+//   - englishDistractors는 distractors보다 많을 수 있음: 초과분은 고급 티어용 문법/철자 유사 오답
 export const SENTENCES: SentenceItem[] = [
   // ── 범용 (일상·기초) ─────────────────────────────────────────────────
   { id: 'its-hot',       english: "It's hot.",           korean: '더워요',                 parts: ['더워요'],                      englishParts: ['hot'],                      distractors: ['추워요', '좋아요', '싫어요'],    englishDistractors: ['cold', 'good', 'dislike'] },
@@ -45,22 +46,22 @@ export const SENTENCES: SentenceItem[] = [
   { id: 'my-brother',   english: 'He is my brother.',   korean: '그는 우리 오빠예요',      parts: ['그는 우리', '오빠예요'],      englishParts: ['He is my', 'brother'],      distractors: ['언니예요', '할머니예요'],        englishDistractors: ['sister', 'grandmother'], category: 'family' },
 
   // ── 날씨 (weather) ────────────────────────────────────────────────────
-  { id: 'its-sunny',    english: "It's sunny today.",   korean: '오늘은 맑아요',           parts: ['오늘은', '맑아요'],            englishParts: ["It's sunny", 'today'],      distractors: ['흐려요', '추워요'],             englishDistractors: ['cloudy', 'cold'], category: 'weather' },
-  { id: 'its-raining',  english: "It's raining.",       korean: '오늘 비가 와요',          parts: ['오늘', '비가 와요'],           englishParts: ["It's", 'raining'],          distractors: ['맑아요', '눈이 와요'],          englishDistractors: ['sunny', 'snowing'], category: 'weather' },
-  { id: 'its-windy',    english: "It's very windy.",    korean: '바람이 많이 불어요',       parts: ['바람이 많이', '불어요'],       englishParts: ["It's very", 'windy'],       distractors: ['내려요', '쏟아져요'],           englishDistractors: ['falls', 'pours'], category: 'weather' },
+  { id: 'its-sunny',    english: "It's sunny today.",   korean: '오늘은 맑아요',           parts: ['오늘은', '맑아요'],            englishParts: ["It's sunny", 'today'],      distractors: ['흐려요', '추워요'],             englishDistractors: ['cloudy', 'cold', 'sunnier', 'yesterday'], category: 'weather' },
+  { id: 'its-raining',  english: "It's raining.",       korean: '오늘 비가 와요',          parts: ['오늘', '비가 와요'],           englishParts: ["It's", 'raining'],          distractors: ['맑아요', '눈이 와요'],          englishDistractors: ['sunny', 'snowing', 'rained', 'rains'], category: 'weather' },
+  { id: 'its-windy',    english: "It's very windy.",    korean: '바람이 많이 불어요',       parts: ['바람이 많이', '불어요'],       englishParts: ["It's very", 'windy'],       distractors: ['내려요', '쏟아져요'],           englishDistractors: ['falls', 'pours', 'winding', 'winded'], category: 'weather' },
 
   // ── 감정 (feeling) ────────────────────────────────────────────────────
-  { id: 'im-angry',     english: "I'm angry.",          korean: '나는 화가 났어요',         parts: ['나는', '화가 났어요'],         englishParts: ['I am', 'angry'],            distractors: ['짜증이 났어요', '걱정이에요'],   englishDistractors: ['annoyed', 'worried'], category: 'feeling' },
-  { id: 'im-tired',     english: "I'm tired.",          korean: '나는 피곤해요',            parts: ['나는', '피곤해요'],            englishParts: ['I am', 'tired'],            distractors: ['신나요', '화났어요'],           englishDistractors: ['excited', 'angry'], category: 'feeling' },
-  { id: 'im-excited',   english: "I'm excited!",        korean: '신나요!',                 parts: ['신나요'],                      englishParts: ['excited'],                  distractors: ['무서워요', '지루해요'],         englishDistractors: ['scared', 'bored'], category: 'feeling' },
+  { id: 'im-angry',     english: "I'm angry.",          korean: '나는 화가 났어요',         parts: ['나는', '화가 났어요'],         englishParts: ['I am', 'angry'],            distractors: ['짜증이 났어요', '걱정이에요'],   englishDistractors: ['annoyed', 'worried', 'angrily', 'angrier'], category: 'feeling' },
+  { id: 'im-tired',     english: "I'm tired.",          korean: '나는 피곤해요',            parts: ['나는', '피곤해요'],            englishParts: ['I am', 'tired'],            distractors: ['신나요', '화났어요'],           englishDistractors: ['excited', 'angry', 'tiring', 'tried'], category: 'feeling' },
+  { id: 'im-excited',   english: "I'm excited!",        korean: '신나요!',                 parts: ['신나요'],                      englishParts: ['excited'],                  distractors: ['무서워요', '지루해요'],         englishDistractors: ['scared', 'bored', 'exciting', 'excites'], category: 'feeling' },
 
   // ── 교통 (transport) ──────────────────────────────────────────────────
-  { id: 'take-the-bus', english: 'I go by bus.',        korean: '버스를 타고 가요',         parts: ['버스를 타고', '가요'],         englishParts: ['I go by', 'bus'],           distractors: ['와요', '달려요'],               englishDistractors: ['come', 'run'],    category: 'transport' },
-  { id: 'take-subway',  english: 'Take the subway.',    korean: '지하철을 타요',            parts: ['지하철을', '타요'],            englishParts: ['Take', 'the subway'],       distractors: ['이용해요', '내려요'],           englishDistractors: ['Use', 'Get off'], category: 'transport' },
-  { id: 'train-is-fast',english: 'The train is fast.',  korean: '기차는 빨라요',            parts: ['기차는', '빨라요'],            englishParts: ['The train', 'is fast'],     distractors: ['느려요', '좋아요'],             englishDistractors: ['slow', 'good'],   category: 'transport' },
+  { id: 'take-the-bus', english: 'I go by bus.',        korean: '버스를 타고 가요',         parts: ['버스를 타고', '가요'],         englishParts: ['I go by', 'bus'],           distractors: ['와요', '달려요'],               englishDistractors: ['come', 'run', 'goes', 'went'],    category: 'transport' },
+  { id: 'take-subway',  english: 'Take the subway.',    korean: '지하철을 타요',            parts: ['지하철을', '타요'],            englishParts: ['Take', 'the subway'],       distractors: ['이용해요', '내려요'],           englishDistractors: ['Use', 'Get off', 'Took', 'Taking'], category: 'transport' },
+  { id: 'train-is-fast',english: 'The train is fast.',  korean: '기차는 빨라요',            parts: ['기차는', '빨라요'],            englishParts: ['The train', 'is fast'],     distractors: ['느려요', '좋아요'],             englishDistractors: ['slow', 'good', 'faster', 'fastest'],   category: 'transport' },
 
   // ── 건강 (health) ─────────────────────────────────────────────────────
-  { id: 'i-feel-sick',  english: 'I feel sick.',        korean: '몸이 아파요',              parts: ['몸이', '아파요'],              englishParts: ['I feel', 'sick'],           distractors: ['건강해요', '피곤해요'],         englishDistractors: ['healthy', 'tired'], category: 'health' },
-  { id: 'see-doctor',   english: 'See a doctor.',       korean: '의사를 만나요',            parts: ['의사를', '만나요'],            englishParts: ['See', 'a doctor'],          distractors: ['불러요', '찾아요'],             englishDistractors: ['Call', 'Find'], category: 'health' },
-  { id: 'take-medicine',english: 'Take your medicine.', korean: '약을 먹어요',              parts: ['약을', '먹어요'],              englishParts: ['Take', 'your medicine'],    distractors: ['사요', '버려요'],               englishDistractors: ['Buy', 'Throw'], category: 'health' },
+  { id: 'i-feel-sick',  english: 'I feel sick.',        korean: '몸이 아파요',              parts: ['몸이', '아파요'],              englishParts: ['I feel', 'sick'],           distractors: ['건강해요', '피곤해요'],         englishDistractors: ['healthy', 'tired', 'sicker', 'sickly'], category: 'health' },
+  { id: 'see-doctor',   english: 'See a doctor.',       korean: '의사를 만나요',            parts: ['의사를', '만나요'],            englishParts: ['See', 'a doctor'],          distractors: ['불러요', '찾아요'],             englishDistractors: ['Call', 'Find', 'Saw', 'Seeing'], category: 'health' },
+  { id: 'take-medicine',english: 'Take your medicine.', korean: '약을 먹어요',              parts: ['약을', '먹어요'],              englishParts: ['Take', 'your medicine'],    distractors: ['사요', '버려요'],               englishDistractors: ['Buy', 'Throw', 'Takes', 'Took'], category: 'health' },
 ]

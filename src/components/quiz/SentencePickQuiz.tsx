@@ -1,0 +1,90 @@
+import { useState } from 'react'
+import type { SentenceItem } from '../../types'
+import type { ChallengeTag } from '../../types/lesson'
+import { shuffle } from '../../utils/quizHelpers'
+import { cn } from '../../utils/cn'
+import { TagBadge } from '../TagBadge'
+
+interface Props {
+  sentence: SentenceItem
+  allSentences: SentenceItem[]
+  direction: 'en-to-ko' | 'ko-to-en'
+  onCorrect: () => void
+  onWrong?: () => void
+  tag?: ChallengeTag
+}
+
+export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect, onWrong, tag }: Props) {
+  const isEnToKo = direction === 'en-to-ko'
+  const answer = isEnToKo ? sentence.korean : sentence.english
+  const prompt = isEnToKo ? sentence.english : sentence.korean
+  const label = isEnToKo ? '올바른 한국어 번역을 고르세요' : '올바른 영어 번역을 고르세요'
+
+  const [choices] = useState(() => {
+    const wrong = shuffle(allSentences.filter(s => s.id !== sentence.id))
+      .slice(0, 3)
+      .map(s => isEnToKo ? s.korean : s.english)
+    return shuffle([answer, ...wrong])
+  })
+  const [selected, setSelected] = useState<string | null>(null)
+  const [answered, setAnswered] = useState(false)
+
+  function handleSelect(choice: string) {
+    if (answered) return
+    setSelected(choice)
+  }
+
+  function handleConfirm() {
+    if (!selected || answered) return
+    setAnswered(true)
+    if (selected !== answer) onWrong?.()
+  }
+
+  return (
+    <div className="flex flex-col gap-5 p-6">
+      {tag && <div><TagBadge tag={tag} /></div>}
+      <p className="text-2xl font-bold text-ink">{label}</p>
+      <div className="bg-surface rounded-2xl px-5 py-5 border-2 border-hairline">
+        <p className="text-lg font-semibold text-ink leading-relaxed">{prompt}</p>
+      </div>
+      <div className="flex flex-col gap-2">
+        {choices.map((choice, idx) => {
+          const isCorrect = choice === answer
+          const isSelected = choice === selected
+          return (
+            <button
+              key={idx}
+              onClick={() => handleSelect(choice)}
+              disabled={answered}
+              className={cn(
+                'px-4 py-4 rounded-2xl border-2 text-base font-semibold text-left transition-colors',
+                !answered && !isSelected && 'border-hairline bg-canvas text-ink hover:border-primary',
+                !answered && isSelected && 'border-primary bg-primary/10 text-ink',
+                answered && isCorrect && 'border-green-500 bg-green-50 text-green-800',
+                answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
+                answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted opacity-50',
+              )}
+            >
+              {choice}
+            </button>
+          )
+        })}
+      </div>
+      {selected && !answered && (
+        <button onClick={handleConfirm} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
+          확인 ✓
+        </button>
+      )}
+      {answered && (
+        <p className={`text-base font-medium ${selected === answer ? 'text-green-600' : 'text-steel'}`}>
+          {selected === answer ? '✓ 정답이에요! 👍' : `정답: "${answer}"`}
+        </p>
+      )}
+      {answered && (
+        <button onClick={onCorrect} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
+          다음 ▶
+        </button>
+      )}
+    </div>
+  )
+}

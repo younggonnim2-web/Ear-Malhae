@@ -14,10 +14,12 @@ interface Props {
   direction?: 'en-to-ko' | 'ko-to-en'
   tag?: ChallengeTag
   isSpeaking?: boolean
+  listenBuild?: boolean
 }
 
-export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direction = 'en-to-ko', tag, isSpeaking }: Props) {
-  const isEnToKo = direction === 'en-to-ko'
+export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direction = 'en-to-ko', tag, isSpeaking, listenBuild }: Props) {
+  // listenBuild: 한국어 텍스트 숨기고 오디오만 듣고 영어 타일 배열 (Dictation 모드)
+  const isEnToKo = direction === 'en-to-ko' && !listenBuild
 
   // en-to-ko: Korean tile bank (parts + distractors)
   // ko-to-en: English tile bank (english words + englishDistractors)
@@ -37,8 +39,8 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
   useEffect(() => {
     if (lastSpokenIdRef.current === sentence.id) return
     lastSpokenIdRef.current = sentence.id
-    // auto-speak only for en-to-ko (read the English sentence aloud)
-    if (isEnToKo && speak) {
+    // en-to-ko: 영어 문장 자동 발음 / listenBuild: 힌트 없이 오디오만
+    if ((isEnToKo || listenBuild) && speak) {
       speak(sentence.english, 'en-US')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,7 +93,9 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
     return true
   })
 
-  const questionLabel = isEnToKo ? '한국어로 작성하세요' : '영어로 작성하세요'
+  const questionLabel = listenBuild
+    ? '들리는 문장을 영어로 만드세요'
+    : (isEnToKo ? '한국어로 작성하세요' : '영어로 작성하세요')
   const displayWord = isEnToKo ? sentence.english : sentence.korean
 
   return (
@@ -104,11 +108,26 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
 
       <p className="text-2xl font-bold text-ink">{questionLabel}</p>
 
-      <CharacterBubble
-        word={displayWord}
-        onSpeak={isEnToKo && speak ? () => speak(sentence.english, 'en-US') : undefined}
-        isSpeaking={isSpeaking}
-      />
+      {listenBuild ? (
+        <button
+          onClick={() => speak?.(sentence.english, 'en-US')}
+          className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          aria-label="다시 듣기"
+        >
+          <span className="text-7xl select-none">🦉</span>
+          <div className="relative bg-brand-green-dim rounded-2xl px-6 py-3 shadow-sm">
+            <span className={cn('text-2xl font-bold text-ink', isSpeaking && 'animate-speaking inline-block')}>
+              🔊 다시 듣기
+            </span>
+          </div>
+        </button>
+      ) : (
+        <CharacterBubble
+          word={displayWord}
+          onSpeak={isEnToKo && speak ? () => speak(sentence.english, 'en-US') : undefined}
+          isSpeaking={isSpeaking}
+        />
+      )}
 
       <div className="flex-1 h-px bg-hairline my-1" />
 

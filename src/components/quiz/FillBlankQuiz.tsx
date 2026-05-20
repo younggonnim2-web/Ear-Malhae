@@ -24,7 +24,8 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
     : (sentence.parts[blankIndex] ?? sentence.parts[0])
 
   const [choices] = useState(() => {
-    const wrong = isEn ? sentence.englishDistractors.slice(0, 2) : sentence.distractors.slice(0, 2)
+    const pool = isEn ? sentence.englishDistractors : sentence.distractors
+    const wrong = shuffle([...pool]).slice(0, 2)
     return shuffle([correctAnswer, ...wrong])
   })
   const [selected, setSelected] = useState<string | null>(null)

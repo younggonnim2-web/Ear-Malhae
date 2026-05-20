@@ -11,6 +11,7 @@ import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
 import { cn } from '../utils/cn'
 import { buildChoices } from '../utils/quizHelpers'
+import { SentencePickQuiz } from '../components/quiz/SentencePickQuiz'
 import type { WordItem, SentenceItem } from '../types'
 
 // 섹션 인덱스(1~4) → 난이도 설정
@@ -26,7 +27,7 @@ const DEFAULT_DIFFICULTY = DIFFICULTY_BY_IDX[1]
 
 // ── 문제 타입 ─────────────────────────────────────────────
 type WordChoiceQ   = { type: 'word-choice';    item: WordItem; choices: WordItem[]; direction: 'en-to-ko' | 'ko-to-en' }
-type SentencePickQ = { type: 'sentence-pick';  sentence: SentenceItem; choices: string[]; answer: string; direction: 'en-to-ko' | 'ko-to-en' }
+type SentencePickQ = { type: 'sentence-pick';  sentence: SentenceItem; direction: 'en-to-ko' | 'ko-to-en' }
 type FillBlankQ    = { type: 'fill-blank';     sentence: SentenceItem; blankIndex: number; direction: 'ko' | 'en' }
 type SentenceBuildQ = { type: 'sentence-build'; sentence: SentenceItem; direction: 'en-to-ko' | 'ko-to-en' }
 type QuestionDef   = WordChoiceQ | SentencePickQ | FillBlankQ | SentenceBuildQ
@@ -55,14 +56,12 @@ function buildWordChoiceQs(words: WordItem[], count: number): WordChoiceQ[] {
   }))
 }
 
-function buildSentencePickQs(pool: SentenceItem[], all: SentenceItem[], count: number): SentencePickQ[] {
-  return pool.slice(0, count).map((sentence, idx) => {
-    const d = dir(idx)
-    const answer = d === 'en-to-ko' ? sentence.korean : sentence.english
-    const wrong  = shuffle(all.filter(s => s.id !== sentence.id)).slice(0, 3)
-                     .map(s => d === 'en-to-ko' ? s.korean : s.english)
-    return { type: 'sentence-pick', sentence, choices: shuffle([answer, ...wrong]), answer, direction: d }
-  })
+function buildSentencePickQs(pool: SentenceItem[], count: number): SentencePickQ[] {
+  return pool.slice(0, count).map((sentence, idx) => ({
+    type: 'sentence-pick',
+    sentence,
+    direction: dir(idx),
+  }))
 }
 
 function buildFillBlankQs(pool: SentenceItem[], count: number, direction: 'ko' | 'en' = 'en'): FillBlankQ[] {
@@ -103,81 +102,10 @@ function buildAllQuestions(
   const buildSlice = sentPool.slice(offset, offset + cfg.buildQ)
 
   const wordQs  = buildWordChoiceQs(words, cfg.wordQ)
-  const pickQs  = buildSentencePickQs(pickSlice, sents, cfg.pickQ)
+  const pickQs  = buildSentencePickQs(pickSlice, cfg.pickQ)
   const fillQs  = buildFillBlankQs(fillSlice, cfg.fillQ, cfg.fillDir)
   const buildQs = buildSentenceBuildQs(buildSlice, cfg.buildQ)
   return shuffle([...wordQs, ...pickQs, ...fillQs, ...buildQs])
-}
-
-// ── 문장 번역 선택형 ───────────────────────────────────────
-function SentencePickQuiz({ q, onCorrect, onWrong }: {
-  q: SentencePickQ
-  onCorrect: () => void
-  onWrong: () => void
-}) {
-  const [selected, setSelected] = useState<string | null>(null)
-  const [answered, setAnswered] = useState(false)
-
-  function handleSelect(choice: string) {
-    if (answered) return
-    setSelected(choice)
-  }
-
-  function handleConfirm() {
-    if (!selected || answered) return
-    setAnswered(true)
-    if (selected !== q.answer) onWrong()
-  }
-
-  const label = q.direction === 'en-to-ko' ? '올바른 한국어 번역을 고르세요' : '올바른 영어 번역을 고르세요'
-  const prompt = q.direction === 'en-to-ko' ? q.sentence.english : q.sentence.korean
-
-  return (
-    <div className="flex flex-col gap-5 p-6">
-      <p className="text-2xl font-bold text-ink">{label}</p>
-      <div className="bg-surface rounded-2xl px-5 py-5 border-2 border-hairline">
-        <p className="text-lg font-semibold text-ink leading-relaxed">{prompt}</p>
-      </div>
-      <div className="flex flex-col gap-2">
-        {q.choices.map((choice, idx) => {
-          const isCorrect  = choice === q.answer
-          const isSelected = choice === selected
-          return (
-            <button
-              key={idx}
-              onClick={() => handleSelect(choice)}
-              disabled={answered}
-              className={cn(
-                'px-4 py-4 rounded-2xl border-2 text-base font-semibold text-left transition-colors',
-                !answered && !isSelected && 'border-hairline bg-canvas text-ink hover:border-primary',
-                !answered && isSelected && 'border-primary bg-primary/10 text-ink',
-                answered && isCorrect  && 'border-green-500 bg-green-50 text-green-800',
-                answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
-                answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted opacity-50',
-              )}
-            >
-              {choice}
-            </button>
-          )
-        })}
-      </div>
-      {selected && !answered && (
-        <button onClick={handleConfirm} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
-          확인 ✓
-        </button>
-      )}
-      {answered && (
-        <p className={`text-base font-medium ${selected === q.answer ? 'text-green-600' : 'text-steel'}`}>
-          {selected === q.answer ? '✓ 정답이에요! 👍' : `정답: "${q.answer}"`}
-        </p>
-      )}
-      {answered && (
-        <button onClick={onCorrect} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
-          다음 ▶
-        </button>
-      )}
-    </div>
-  )
 }
 
 // ── 인트로 화면 ────────────────────────────────────────────
@@ -385,7 +313,9 @@ export function JumpTest() {
         {q.type === 'sentence-pick' && (
           <SentencePickQuiz
             key={`sp-${current}`}
-            q={q}
+            sentence={q.sentence}
+            allSentences={SENTENCES}
+            direction={q.direction}
             onCorrect={handleAdvance}
             onWrong={handleWrong}
           />
