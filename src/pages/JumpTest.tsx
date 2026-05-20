@@ -20,8 +20,8 @@ import type { WordItem, SentenceItem } from '../types'
 const DIFFICULTY_BY_IDX: Record<number, { hearts: number; wordQ: number; pickQ: number; fillQ: number; buildQ: number; fillDir: 'ko' | 'en' }> = {
   1: { hearts: 3, wordQ: 4, pickQ: 2, fillQ: 3, buildQ: 2, fillDir: 'ko' },  // → 탐험가  (11문제) 단어선택 중심
   2: { hearts: 3, wordQ: 2, pickQ: 4, fillQ: 3, buildQ: 3, fillDir: 'ko' },  // → 여행자  (12문제) 문장번역 중심
-  3: { hearts: 2, wordQ: 0, pickQ: 2, fillQ: 5, buildQ: 6, fillDir: 'en' },  // → 도전자  (13문제) 영어빈칸+작문
-  4: { hearts: 1, wordQ: 0, pickQ: 0, fillQ: 5, buildQ: 9, fillDir: 'en' },  // → 마스터  (14문제) 작문만
+  3: { hearts: 2, wordQ: 0, pickQ: 1, fillQ: 5, buildQ: 8, fillDir: 'en' },  // → 도전자  (14문제) 영어빈칸+작문 강화
+  4: { hearts: 1, wordQ: 0, pickQ: 0, fillQ: 4, buildQ: 11, fillDir: 'en' }, // → 마스터  (15문제) 작문만·최고난이도
 }
 const DEFAULT_DIFFICULTY = DIFFICULTY_BY_IDX[1]
 
@@ -204,9 +204,16 @@ export function JumpTest() {
 
   const cfg = DIFFICULTY_BY_IDX[targetIdx] ?? DEFAULT_DIFFICULTY
 
+  // 건너뛸 섹션의 유닛 카테고리에 맞는 문장만 + 범용(category 없음) 문장
+  const skipSentences = useMemo<SentenceItem[]>(() => {
+    if (targetIdx <= 0) return SENTENCES
+    const prevUnitIds = new Set(SECTIONS.slice(0, targetIdx).flatMap(s => s.unitIds))
+    return SENTENCES.filter(s => !s.category || prevUnitIds.has(s.category))
+  }, [targetIdx])
+
   const questions = useMemo<QuestionDef[]>(
-    () => (skipWords.length >= 4 ? buildAllQuestions(skipWords, SENTENCES, cfg) : []),
-    [skipWords, cfg]
+    () => (skipWords.length >= 4 ? buildAllQuestions(skipWords, skipSentences, cfg) : []),
+    [skipWords, skipSentences, cfg]
   )
 
   // 하트는 ref로 즉시 참조 + state로 렌더링
