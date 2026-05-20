@@ -50,11 +50,11 @@ describe('SentenceBuilderQuiz — 타일 모드', () => {
     const onCorrect = vi.fn()
     render(<SentenceBuilderQuiz sentence={sentence} onCorrect={onCorrect} direction="ko-to-en" />)
     // English tiles from sentence.english split: ['Coffee,', 'please'] (punctuation stripped → ['Coffee', 'please'])
-    // plus englishDistractors: ['now', 'first']
+    // plus englishDistractors: ['drink', 'receive']  ← 한국어 distractors와 평행 매핑
     expect(screen.getByText('Coffee')).toBeInTheDocument()
     expect(screen.getByText('please')).toBeInTheDocument()
-    expect(screen.getByText('now')).toBeInTheDocument()
-    expect(screen.getByText('first')).toBeInTheDocument()
+    expect(screen.getByText('drink')).toBeInTheDocument()
+    expect(screen.getByText('receive')).toBeInTheDocument()
   })
 
   it('ko-to-en 방향: 한국어 문장이 표시된다', () => {

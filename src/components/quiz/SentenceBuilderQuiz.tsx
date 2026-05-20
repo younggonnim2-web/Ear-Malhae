@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { SentenceItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
 import { shuffle } from '../../utils/quizHelpers'
@@ -31,8 +31,12 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
   const [selected, setSelected] = useState<string[]>([])
   const [checked, setChecked] = useState(false)
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
+  // 문제마다 1회만 자동 발음 (StrictMode 이중 effect 방지)
+  const lastSpokenIdRef = useRef<string | null>(null)
 
   useEffect(() => {
+    if (lastSpokenIdRef.current === sentence.id) return
+    lastSpokenIdRef.current = sentence.id
     // auto-speak only for en-to-ko (read the English sentence aloud)
     if (isEnToKo && speak) {
       speak(sentence.english, 'en-US')
@@ -45,9 +49,17 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
     setSelected(prev => [...prev, tile])
     if (speak) {
       if (isEnToKo) {
-        const idx = sentence.parts.indexOf(tile)
-        const word = idx >= 0 ? sentence.englishParts[idx] : null
-        if (word) speak(word, 'en-US')
+        // 정답 타일 → englishParts에서 매핑
+        const partsIdx = sentence.parts.indexOf(tile)
+        if (partsIdx >= 0 && sentence.englishParts[partsIdx]) {
+          speak(sentence.englishParts[partsIdx], 'en-US')
+          return
+        }
+        // 오답 타일 → englishDistractors에서 매핑 (평행 배열 가정)
+        const distrIdx = sentence.distractors.indexOf(tile)
+        if (distrIdx >= 0 && sentence.englishDistractors[distrIdx]) {
+          speak(sentence.englishDistractors[distrIdx], 'en-US')
+        }
       } else {
         speak(tile, 'en-US')
       }
