@@ -31,6 +31,8 @@ export function PronunciationQuiz({ item, onCorrect, onSkip, speak, tag }: Props
   useEffect(() => {
     if (!transcript) return
     const result = evaluateTyped(transcript, targetWord)
+    // eslint-disable-next-line no-console
+    console.log('[STT] 매칭 평가 — 들린 말:', JSON.stringify(transcript), '/ 정답:', JSON.stringify(targetWord), '/ 결과:', result)
     setMatched(result !== 'wrong')
     setLastTranscript(transcript)
     setPhase('result')

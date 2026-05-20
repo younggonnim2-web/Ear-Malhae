@@ -1,5 +1,5 @@
 // src/pages/LessonSession.tsx
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
@@ -103,6 +103,22 @@ export function LessonSession() {
 
   const currentList = phase === 'main' ? challenges : retryQueue
   const current = currentList[challengeIndex]
+
+  // DEV: 디버그 - 현재 챌린지 정보 콘솔 로그 (배포에선 자동 제거)
+  useEffect(() => {
+    if (!import.meta.env.DEV || !current) return
+    // eslint-disable-next-line no-console
+    console.log('[Lesson]', {
+      lessonId,
+      phase,
+      index: `${challengeIndex + 1}/${currentList.length}`,
+      kind: current.kind,
+      itemId: current.itemId,
+      sentenceId: current.sentenceId,
+      direction: current.direction,
+      tag: current.tag,
+    })
+  }, [lessonId, phase, challengeIndex, currentList.length, current])
 
   const currentChoices = useMemo(() => {
     if (!current?.itemId) return []
@@ -302,6 +318,20 @@ export function LessonSession() {
             />
           </div>
         </div>
+
+        {import.meta.env.DEV && current && (
+          <div className="px-3 py-1 bg-yellow-50 border-y border-yellow-200 text-[10px] font-mono text-yellow-900 leading-tight">
+            <span className="font-bold">DEBUG</span>
+            <span className="ml-2">{lessonId}</span>
+            <span className="ml-2">[{phase}]</span>
+            <span className="ml-2">{challengeIndex + 1}/{currentList.length}</span>
+            <span className="ml-2">kind={current.kind}</span>
+            {current.itemId && <span className="ml-2">item={current.itemId}</span>}
+            {current.sentenceId && <span className="ml-2">sent={current.sentenceId}</span>}
+            {current.direction && <span className="ml-2">dir={current.direction}</span>}
+            {current.tag && <span className="ml-2">tag={current.tag}</span>}
+          </div>
+        )}
 
         {phase === 'retry' && (
           <p className="text-center text-sm text-orange-600 py-1 bg-orange-50">

@@ -68,6 +68,8 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
     let settled = false
 
     recognition.onstart = () => {
+      // eslint-disable-next-line no-console
+      console.log('[STT] onstart — 음성 인식 시작')
       setIsListening(true)
       setError(null)
       setTranscript('')
@@ -76,19 +78,26 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
     recognition.onresult = (event) => {
       settled = true
       clearAutoStop()
-      setTranscript(event.results[0][0].transcript)
+      const text = event.results[0][0].transcript
+      // eslint-disable-next-line no-console
+      console.log('[STT] onresult — 인식됨:', text)
+      setTranscript(text)
       setIsListening(false)
     }
 
     recognition.onerror = (event) => {
       settled = true
       clearAutoStop()
+      // eslint-disable-next-line no-console
+      console.log('[STT] onerror — 에러:', event.error)
       setError(event.error)
       setIsListening(false)
     }
 
     recognition.onend = () => {
       clearAutoStop()
+      // eslint-disable-next-line no-console
+      console.log('[STT] onend — 종료 (settled:', settled, ')')
       // result도 error도 없이 ended → no-speech로 처리
       if (!settled) setError('no-speech')
       setIsListening(false)
