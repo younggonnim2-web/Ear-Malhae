@@ -20,6 +20,7 @@ export function LearningPath() {
   const navigate = useNavigate()
   const { progress, setDifficulty } = useApp()
   const [showDiffModal, setShowDiffModal] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
 
   const isNonBeginner = progress.difficultyLevel !== 'beginner'
   // For non-beginners, treat alphabet lessons as transparent (no skip badge, just invisible)
@@ -63,6 +64,29 @@ export function LearningPath() {
         />
       )}
 
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
+          <div className="w-full max-w-md bg-canvas rounded-t-3xl p-6 flex flex-col gap-4">
+            <p className="text-xl font-black text-ink text-center">학습 기록 초기화</p>
+            <p className="text-sm text-steel text-center">
+              지금까지의 모든 학습 기록이 삭제됩니다.{'\n'}이 작업은 되돌릴 수 없어요.
+            </p>
+            <button
+              onClick={() => { localStorage.clear(); location.reload() }}
+              className="w-full py-4 bg-red-500 text-white text-base font-bold rounded-2xl"
+            >
+              삭제할게요
+            </button>
+            <button
+              onClick={() => setShowResetConfirm(false)}
+              className="w-full py-4 bg-gray-100 text-ink text-base font-bold rounded-2xl"
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 헤더 */}
       <div className="sticky top-0 z-10 bg-canvas border-b border-hairline px-4 py-3 max-w-md mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -80,7 +104,7 @@ export function LearningPath() {
             ⚙️
           </button>
           <button
-            onClick={() => { localStorage.clear(); location.reload() }}
+            onClick={() => setShowResetConfirm(true)}
             className="text-xs text-gray-400 border border-gray-200 rounded px-2 py-0.5 hover:text-red-400 hover:border-red-300"
           >
             초기화
