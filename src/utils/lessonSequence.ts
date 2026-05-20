@@ -19,22 +19,19 @@ export function buildChallengeSequence(
 
 /**
  * 단어 레슨 시퀀스 — 완료 횟수에 따라 4단계 난이도 티어
+ * 각 티어는 다른 유형을 연속으로 쌓지 않고 아이템 단위로 교차(interleave) 배치한다.
  *
- * Tier 0 (첫 학습): 카드+이미지 중심, 문장 입문
- *   cards(ko-to-en)×N | list(ko-to-en)×⌈N/2⌉ | listen×⌈N/2⌉ |
- *   sb(en-to-ko)×2 | list(ko-to-en)×⌊N/2⌋ | sb(en-to-ko)×1 | matching | sb(ko-to-en)×2  = 19
+ * Tier 0 (첫 학습): 카드 소개 후 [list+listen] 쌍 교차
+ *   cards×N | [list,listen]×⌈N/2⌉ | listen×⌊N/2⌋ | sb(en-to-ko)×2 | matching | sb(ko-to-en)×2  = 18 (N=5)
  *
- * Tier 1 (2회차): 카드 제거, 역방향 이미지 추가, 듣기 전체 아이템, 문장 +1
- *   list(ko-to-en)×N | listen×N | list(en-to-ko)×⌈N/2⌉ |
- *   sb(en-to-ko)×3 | matching | sb(ko-to-en)×3  = 20
+ * Tier 1 (2회차): [list,listen] 쌍 교차, 역방향 list
+ *   [list,listen]×N | list(en-to-ko)×⌈N/2⌉ | fill×2 | sb(en-to-ko)×3 | matching | sb(ko-to-en)×3 = 22 (N=5)
  *
- * Tier 2 (3회차): 이미지 양방향 전체, 문장 강화
- *   list(ko-to-en)×N | list(en-to-ko)×N | listen×N |
- *   sb(en-to-ko)×3 | matching | sb(ko-to-en)×4  = 23
+ * Tier 2 (3회차): [list,listen,list(en)] 3연속 교차, speak 추가
+ *   [list,listen,list(en)]×N | speak×2 | fill×3 | sb(en-to-ko)×3 | matching | sb(ko-to-en)×4 = 28 (N=5)
  *
- * Tier 3 (4회차+): 듣기+문장 중심, 시각 단서 최소화
- *   listen(ko-to-en)×N | listen(en-to-ko)×N |
- *   sb(en-to-ko)×4 | matching | sb(ko-to-en)×5  = 20
+ * Tier 3 (4회차+): [listen,listen(en)] 쌍 교차, speak 강화
+ *   [listen,listen(en)]×N | speak×3 | fill×3 | sb(en-to-ko)×4 | matching | sb(ko-to-en)×5 = 26 (N=5)
  */
 function buildReviewChallenges(reviewItems: WordItem[]): LessonChallenge[] {
   return shuffle([...reviewItems])
@@ -70,25 +67,23 @@ function buildWordsSequence(
   }
 
   if (tier === 0) {
-    const firstHalf = itemIds.slice(0, half)
-    const secondHalf = itemIds.slice(half)
-
+    // Phase 1: 전체 카드 소개
     for (const id of shuffle([...itemIds]))
       seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'cards', tag: '새로운 단어' })
 
-    for (const id of shuffle([...firstHalf]))
-      seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
+    // Phase 2: [list, listen] 쌍 교차 — 처음 half 아이템은 둘 다, 나머지는 listen만
+    const shuf0 = shuffle([...itemIds])
+    for (let i = 0; i < N; i++) {
+      if (i < half) {
+        seq.push({ kind: 'image-choice', itemId: shuf0[i], direction: 'ko-to-en', displayMode: 'list' })
+        seq.push({ kind: 'listen-choice', itemId: shuf0[i], direction: 'ko-to-en' })
+      } else {
+        seq.push({ kind: 'listen-choice', itemId: shuf0[i], direction: 'ko-to-en' })
+      }
+    }
 
-    for (const id of shuffle([...firstHalf]))
-      seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
-
+    // Phase 3: 문장 연습
     for (const s of pickSentences(2, 0))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
-
-    for (const id of shuffle([...secondHalf]))
-      seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
-
-    for (const s of pickSentences(1, 2))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
 
     seq.push({ kind: 'matching' })
@@ -98,12 +93,13 @@ function buildWordsSequence(
   }
 
   if (tier === 1) {
-    for (const id of shuffle([...itemIds]))
+    // [list(ko-to-en), listen] 쌍 교차
+    for (const id of shuffle([...itemIds])) {
       seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
-
-    for (const id of shuffle([...itemIds]))
       seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
+    }
 
+    // 역방향 list (절반)
     for (const id of shuffle([...itemIds.slice(0, half)]))
       seq.push({ kind: 'image-choice', itemId: id, direction: 'en-to-ko', displayMode: 'list' })
 
@@ -120,14 +116,12 @@ function buildWordsSequence(
   }
 
   if (tier === 2) {
-    for (const id of shuffle([...itemIds]))
+    // [list(ko-to-en), listen, list(en-to-ko)] 3연속 교차
+    for (const id of shuffle([...itemIds])) {
       seq.push({ kind: 'image-choice', itemId: id, direction: 'ko-to-en', displayMode: 'list' })
-
-    for (const id of shuffle([...itemIds]))
-      seq.push({ kind: 'image-choice', itemId: id, direction: 'en-to-ko', displayMode: 'list' })
-
-    for (const id of shuffle([...itemIds]))
       seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
+      seq.push({ kind: 'image-choice', itemId: id, direction: 'en-to-ko', displayMode: 'list' })
+    }
 
     for (const id of shuffle([...itemIds]).slice(0, 2))
       seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })
@@ -145,14 +139,14 @@ function buildWordsSequence(
   }
 
   if (tier === 3) {
-    for (const id of shuffle([...itemIds]))
+    // [listen(ko-to-en), listen(en-to-ko)] 쌍 교차
+    for (const id of shuffle([...itemIds])) {
       seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
+      seq.push({ kind: 'listen-choice', itemId: id, direction: 'en-to-ko' })
+    }
 
     for (const id of shuffle([...itemIds]).slice(0, 3))
       seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })
-
-    for (const id of shuffle([...itemIds]))
-      seq.push({ kind: 'listen-choice', itemId: id, direction: 'en-to-ko' })
 
     for (const s of pickSentences(3, 0))
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })

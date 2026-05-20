@@ -47,10 +47,10 @@ describe('buildChallengeSequence — words', () => {
     expect(listens.every(c => c.direction === 'ko-to-en')).toBe(true)
   })
 
-  it('has 3 sentence-builder en-to-ko challenges tagged 새로운 단어', () => {
+  it('has 2 sentence-builder en-to-ko challenges tagged 새로운 단어', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
     const enToKo = seq.filter(c => c.kind === 'sentence-builder' && c.direction === 'en-to-ko')
-    expect(enToKo).toHaveLength(3)
+    expect(enToKo).toHaveLength(2)
     expect(enToKo.every(c => c.tag === '새로운 단어')).toBe(true)
   })
 
@@ -82,13 +82,11 @@ describe('buildChallengeSequence — words', () => {
     expect(ids0).not.toEqual(ids1)
   })
 
-  it('total count for 5-item words lesson is 19', () => {
-    // Stage 1: 5 cards + Stage 2: 3 list + Stage 3: 3 listen(firstHalf)
-    // Stage 4: 2 en-to-ko + Stage 5: 2 listen(secondHalf) + Stage 6: 1 en-to-ko
-    // Stage 7: 1 matching + Stage 8: 2 ko-to-en
-    // = 5 + 3 + 3 + 2 + 2 + 1 + 1 + 2 = 19
+  it('total count for 5-item words lesson is 18', () => {
+    // cards×5 | [list,listen]×3 + listen×2 | sb(en-to-ko)×2 | matching | sb(ko-to-en)×2
+    // = 5 + 6 + 2 + 2 + 1 + 2 = 18
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words')
-    expect(seq).toHaveLength(19)
+    expect(seq).toHaveLength(18)
   })
 })
 
@@ -145,9 +143,9 @@ describe('buildChallengeSequence — review items', () => {
     expect(seq.filter(c => c.tag === '복습')).toHaveLength(0)
   })
 
-  it('total count is 19+2=21 with 2 review items', () => {
+  it('total count is 18+2=20 with 2 review items', () => {
     const seq = buildChallengeSequence(wordLesson, 0, SENTENCES, 'words', 0, 0, mockReview)
-    expect(seq).toHaveLength(21)
+    expect(seq).toHaveLength(20)
   })
 })
 

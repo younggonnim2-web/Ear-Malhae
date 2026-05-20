@@ -14,12 +14,13 @@ import { buildChoices } from '../utils/quizHelpers'
 import type { WordItem, SentenceItem } from '../types'
 
 // 섹션 인덱스(1~4) → 난이도 설정
-// fillQ는 영어 빈칸(en), buildQ는 항상 ko-to-en
-const DIFFICULTY_BY_IDX: Record<number, { hearts: number; wordQ: number; pickQ: number; fillQ: number; buildQ: number }> = {
-  1: { hearts: 3, wordQ: 2, pickQ: 2, fillQ: 3, buildQ: 4 },  // → 탐험가  (11문제)
-  2: { hearts: 3, wordQ: 1, pickQ: 2, fillQ: 4, buildQ: 5 },  // → 여행자  (12문제)
-  3: { hearts: 2, wordQ: 0, pickQ: 3, fillQ: 5, buildQ: 6 },  // → 도전자  (14문제)
-  4: { hearts: 1, wordQ: 0, pickQ: 2, fillQ: 6, buildQ: 8 },  // → 마스터  (16문제)
+// fillDir: 'ko'=한국어 빈칸(이해), 'en'=영어 빈칸(생산)
+// buildQ: 항상 ko-to-en (영어 문장 작성)
+const DIFFICULTY_BY_IDX: Record<number, { hearts: number; wordQ: number; pickQ: number; fillQ: number; buildQ: number; fillDir: 'ko' | 'en' }> = {
+  1: { hearts: 3, wordQ: 4, pickQ: 2, fillQ: 3, buildQ: 2, fillDir: 'ko' },  // → 탐험가  (11문제) 단어선택 중심
+  2: { hearts: 3, wordQ: 2, pickQ: 4, fillQ: 3, buildQ: 3, fillDir: 'ko' },  // → 여행자  (12문제) 문장번역 중심
+  3: { hearts: 2, wordQ: 0, pickQ: 2, fillQ: 5, buildQ: 6, fillDir: 'en' },  // → 도전자  (13문제) 영어빈칸+작문
+  4: { hearts: 1, wordQ: 0, pickQ: 0, fillQ: 5, buildQ: 9, fillDir: 'en' },  // → 마스터  (14문제) 작문만
 }
 const DEFAULT_DIFFICULTY = DIFFICULTY_BY_IDX[1]
 
@@ -92,7 +93,6 @@ function buildAllQuestions(
 ): QuestionDef[] {
   const sents = shuffle(sentences)
   const need = cfg.pickQ + cfg.fillQ + cfg.buildQ
-  // 문장이 부족하면 반복 허용
   const sentPool = sents.length >= need
     ? sents
     : [...sents, ...sents, ...sents].slice(0, need + 4)
@@ -104,7 +104,7 @@ function buildAllQuestions(
 
   const wordQs  = buildWordChoiceQs(words, cfg.wordQ)
   const pickQs  = buildSentencePickQs(pickSlice, sents, cfg.pickQ)
-  const fillQs  = buildFillBlankQs(fillSlice, cfg.fillQ)
+  const fillQs  = buildFillBlankQs(fillSlice, cfg.fillQ, cfg.fillDir)
   const buildQs = buildSentenceBuildQs(buildSlice, cfg.buildQ)
   return shuffle([...wordQs, ...pickQs, ...fillQs, ...buildQs])
 }
