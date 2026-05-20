@@ -32,11 +32,22 @@ export default {
           '0%, 100%': { transform: 'scaleY(0.25)' },
           '50%': { transform: 'scaleY(1)' },
         },
+        celebrate: {
+          '0%':   { transform: 'scale(0.4)', opacity: '0' },
+          '65%':  { transform: 'scale(1.08)', opacity: '1' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        floatUp: {
+          '0%':   { transform: 'translateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(-160px)', opacity: '0' },
+        },
       },
       animation: {
         flash: 'flash 0.4s ease-in-out',
         speaking: 'speaking 0.6s ease-in-out infinite',
         'sound-bar': 'soundBar 0.7s ease-in-out infinite',
+        celebrate: 'celebrate 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards',
+        'float-up': 'floatUp 1.6s ease-out forwards',
       },
     },
   },

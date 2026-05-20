@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { calcLevelBarPct } from '../utils/xp'
@@ -33,11 +33,27 @@ export function Complete() {
   const state = location.state as CompleteState | null
   const [showDiffModal, setShowDiffModal] = useState(false)
 
+  const [showCelebration, setShowCelebration] = useState(false)
+
   const sectionLessonIds = useMemo(() => {
     if (!state?.sectionId) return []
     const section = SECTIONS.find(s => s.id === state.sectionId)
     return section?.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? []) ?? []
   }, [state?.sectionId])
+
+  const sectionCompleted = useMemo(
+    () => sectionLessonIds.length > 0 && sectionLessonIds.every(id => progress.lessonProgress.includes(id)),
+    [sectionLessonIds, progress.lessonProgress]
+  )
+
+  const completedSection = SECTIONS.find(s => s.id === state?.sectionId)
+
+  useEffect(() => {
+    if (!sectionCompleted) return
+    setShowCelebration(true)
+    const t = setTimeout(() => setShowCelebration(false), 3500)
+    return () => clearTimeout(t)
+  }, [sectionCompleted])
 
   // Compute once at mount — progress is stable at the moment of lesson completion
   const adaptiveSuggestionRef = useRef(checkAdaptiveDifficulty(progress, sectionLessonIds))
@@ -47,6 +63,34 @@ export function Complete() {
 
   return (
     <div className="min-h-screen bg-surface max-w-md mx-auto flex flex-col items-center justify-center p-8 text-center">
+      {showCelebration && completedSection && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/75 cursor-pointer"
+          onClick={() => setShowCelebration(false)}
+        >
+          {['✨','🌟','⭐','🎉','✨','🌟','🎊','⭐','✨','🌟'].map((e, i) => (
+            <span
+              key={i}
+              className="absolute text-3xl pointer-events-none animate-float-up"
+              style={{
+                left: `${5 + i * 9}%`,
+                bottom: `${20 + (i % 3) * 10}%`,
+                animationDelay: `${i * 0.12}s`,
+                animationDuration: `${1.5 + (i % 3) * 0.3}s`,
+              }}
+            >
+              {e}
+            </span>
+          ))}
+          <div className="animate-celebrate bg-white rounded-3xl px-10 py-8 text-center shadow-2xl">
+            <div className="text-7xl mb-3">🏆</div>
+            <p className="text-2xl font-black text-ink">섹션 완료!</p>
+            <p className="text-primary font-bold mt-1">{completedSection.title}</p>
+          </div>
+          <p className="text-white/50 text-xs mt-5">탭하면 계속</p>
+        </div>
+      )}
+
       {showDiffModal && (
         <DifficultyModal
           currentLevel={progress.difficultyLevel}
