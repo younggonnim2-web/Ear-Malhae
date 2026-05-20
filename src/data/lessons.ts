@@ -48,4 +48,44 @@ export const LESSONS_MAP: Record<string, Lesson> = {
   // ── 건강 ── (신규)
   'health-1': { id: 'health-1', unitId: 'health', title: '건강 1', itemIds: ['sick','doctor','medicine','fever'] },
   'health-2': { id: 'health-2', unitId: 'health', title: '건강 2', itemIds: ['sleep','exercise','healthy','rest'] },
+
+  // ── 중급 트랙 레슨 (sentence-type) ──
+  'int-dining-1': {
+    id: 'int-dining-1', unitId: 'int-dining', title: '예약·오주문', itemIds: [],
+    sentenceIds: ['adv-dining-reservation', 'adv-dining-wrong-order'],
+  },
+  'int-dining-2': {
+    id: 'int-dining-2', unitId: 'int-dining', title: '특별 요청', itemIds: [],
+    sentenceIds: ['adv-dining-allergy', 'adv-dining-side', 'adv-dining-steak'],
+  },
+  'int-hotel-1': {
+    id: 'int-hotel-1', unitId: 'int-hotel', title: '호텔·이동', itemIds: [],
+    sentenceIds: ['adv-travel-room-issue', 'adv-travel-upgrade', 'adv-travel-transport'],
+  },
+  'int-social-1': {
+    id: 'int-social-1', unitId: 'int-social', title: '거절·공감', itemIds: [],
+    sentenceIds: ['adv-daily-rejection', 'adv-daily-agree', 'adv-daily-netflix'],
+  },
+  'int-social-2': {
+    id: 'int-social-2', unitId: 'int-social', title: '조언·의견', itemIds: [],
+    sentenceIds: ['adv-daily-advice', 'adv-daily-opinion'],
+  },
+
+  // ── 고급 트랙 레슨 (sentence-type) ──
+  'adv-airport-1': {
+    id: 'adv-airport-1', unitId: 'adv-airport', title: '지연·분실·오버부킹', itemIds: [],
+    sentenceIds: ['adv-travel-delay', 'adv-travel-lost-baggage', 'adv-airport-overbook'],
+  },
+  'adv-biz-1': {
+    id: 'adv-biz-1', unitId: 'adv-biz', title: '마감·반론', itemIds: [],
+    sentenceIds: ['adv-biz-deadline', 'adv-biz-disagree'],
+  },
+  'adv-biz-2': {
+    id: 'adv-biz-2', unitId: 'adv-biz', title: '제안·설득', itemIds: [],
+    sentenceIds: ['adv-biz-proposal', 'adv-daily-opinion', 'adv-daily-advice'],
+  },
+  'adv-idiom-1': {
+    id: 'adv-idiom-1', unitId: 'adv-idiom', title: '관용구 표현', itemIds: [],
+    sentenceIds: ['adv-idiom-ballpark', 'adv-idiom-silver-lining', 'adv-idiom-catch22'],
+  },
 }

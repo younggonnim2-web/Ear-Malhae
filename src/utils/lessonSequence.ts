@@ -6,15 +6,66 @@ export function buildChallengeSequence(
   lesson: Lesson,
   lessonIndex: number,
   allSentences: SentenceItem[],
-  unitType: 'alphabet' | 'words' = 'words',
+  unitType: 'alphabet' | 'words' | 'sentences' = 'words',
   completionCount = 0,
   sectionBaseTier = 0,
   reviewItems: WordItem[] = [],
   difficultyOffset = 0,
 ): LessonChallenge[] {
-  return unitType === 'alphabet'
-    ? buildAlphabetSequence(lesson.itemIds)
-    : buildWordsSequence(lesson.itemIds, lessonIndex, lesson.unitId, allSentences, completionCount, sectionBaseTier, reviewItems, difficultyOffset)
+  if (unitType === 'alphabet') return buildAlphabetSequence(lesson.itemIds)
+  if (unitType === 'sentences') return buildSentenceSequence(lesson, allSentences, completionCount)
+  return buildWordsSequence(lesson.itemIds, lessonIndex, lesson.unitId, allSentences, completionCount, sectionBaseTier, reviewItems, difficultyOffset)
+}
+
+/**
+ * 문장형 레슨 시퀀스 (중급·고급 트랙 전용)
+ * 단어 플래시카드 없이 문장 상황 → 선택 → 구성 → 빈칸 순서로 진행
+ *
+ * Tier 0: dialogue-choice → sentence-pick(en-to-ko) → sentence-builder(en-to-ko)
+ * Tier 1: dialogue-choice → sentence-pick(ko-to-en) → sentence-builder(ko-to-en)
+ * Tier 2+: dialogue-choice → fill-blank(keyboard) → sentence-builder(listen-build)
+ */
+function buildSentenceSequence(
+  lesson: Lesson,
+  allSentences: SentenceItem[],
+  completionCount: number,
+): LessonChallenge[] {
+  const ids = lesson.sentenceIds ?? []
+  const sentences = ids.map(id => allSentences.find(s => s.id === id)!).filter(Boolean)
+  const tier = Math.min(completionCount, 2)
+  const seq: LessonChallenge[] = []
+
+  if (tier === 0) {
+    for (const s of sentences)
+      if (s.dialoguePrompt)
+        seq.push({ kind: 'dialogue-choice', sentenceId: s.id, tag: '새로운 패턴' })
+    for (const s of sentences)
+      seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+    for (const s of sentences)
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어', distractorCount: 2 })
+  }
+
+  if (tier === 1) {
+    for (const s of sentences)
+      if (s.dialoguePrompt)
+        seq.push({ kind: 'dialogue-choice', sentenceId: s.id, tag: '새로운 패턴' })
+    for (const s of sentences)
+      seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'ko-to-en', tag: '새로운 패턴' })
+    for (const s of sentences)
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 3 })
+  }
+
+  if (tier >= 2) {
+    for (const s of sentences)
+      if (s.dialoguePrompt)
+        seq.push({ kind: 'dialogue-choice', sentenceId: s.id, tag: '새로운 패턴' })
+    for (const s of sentences)
+      seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.englishParts.length > 1 ? 1 : 0, fillDir: 'en', keyboardInput: true, tag: '어려운 연습' })
+    for (const s of sentences)
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습', distractorCount: 3 })
+  }
+
+  return seq
 }
 
 /**
@@ -61,8 +112,32 @@ function buildWordsSequence(
   const seed = unitSeed(unitId)
 
   function pickSentences(count: number, offset: number): SentenceItem[] {
+    // 난이도별 문장 풀 결정
+    let pool: SentenceItem[]
+    if (difficultyOffset >= 2) {
+      // 고급: advanced 우선, 부족하면 전체 폴백
+      const adv = allSentences.filter(s => s.difficulty === 'advanced')
+      pool = adv.length >= 2 ? adv : allSentences
+    } else if (difficultyOffset >= 1) {
+      // 중급: basic + intermediate (advanced 제외)
+      const nonAdv = allSentences.filter(s => s.difficulty !== 'advanced')
+      pool = nonAdv.length > 0 ? nonAdv : allSentences
+    } else {
+      // 초급: basic만
+      const basic = allSentences.filter(s => s.difficulty === 'basic' || !s.difficulty)
+      pool = basic.length > 0 ? basic : allSentences
+    }
     return Array.from({ length: count }, (_, i) =>
-      allSentences[(seed + lessonIndex * 5 + offset + i) % allSentences.length]
+      pool[(seed + lessonIndex * 5 + offset + i) % pool.length]
+    )
+  }
+
+  // dialoguePrompt가 있는 고급 문장만 — Tier 2/3 dialogue-choice용
+  function pickDialogueSentences(count: number, offset: number): SentenceItem[] {
+    const pool = allSentences.filter(s => !!s.dialoguePrompt)
+    if (pool.length === 0) return []
+    return Array.from({ length: count }, (_, i) =>
+      pool[(seed + lessonIndex * 5 + offset + i) % pool.length]
     )
   }
 
@@ -82,14 +157,14 @@ function buildWordsSequence(
       }
     }
 
-    // Phase 3: 문장 연습
+    // Phase 3: 문장 연습 (tier 0 — distractor 1개: 핵심 오답만)
     for (const s of pickSentences(2, 0))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어', distractorCount: 1 })
 
     seq.push({ kind: 'matching' })
 
     for (const s of pickSentences(2, 3))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 1 })
   }
 
   if (tier === 1) {
@@ -110,13 +185,14 @@ function buildWordsSequence(
     for (const s of pickSentences(1, 1))
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
 
+    // tier 1 — distractor 2개
     for (const s of pickSentences(3, 2))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어', distractorCount: 2 })
 
     seq.push({ kind: 'matching' })
 
     for (const s of pickSentences(3, 5))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 2 })
   }
 
   if (tier === 2) {
@@ -130,6 +206,10 @@ function buildWordsSequence(
     for (const id of shuffle([...itemIds]).slice(0, 2))
       seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })
 
+    // 대화 상황 선택형 (고급 문장 있을 때만)
+    for (const s of pickDialogueSentences(1, 0))
+      seq.push({ kind: 'dialogue-choice', sentenceId: s.id, tag: '새로운 패턴' })
+
     // 문장 번역 선택형 2문제 (양방향)
     for (const s of pickSentences(1, 0))
       seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 패턴' })
@@ -139,17 +219,18 @@ function buildWordsSequence(
     for (const s of pickSentences(3, 2))
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
 
+    // tier 2 — distractor 3개
     for (const s of pickSentences(2, 5))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어', distractorCount: 3 })
 
     // Listen & Build: 오디오만 듣고 영어 타일 배열 (텍스트 힌트 없음)
     for (const s of pickSentences(1, 7))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습' })
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습', distractorCount: 3 })
 
     seq.push({ kind: 'matching' })
 
     for (const s of pickSentences(4, 8))
-      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
+      seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 3 })
   }
 
   if (tier === 3) {
@@ -162,8 +243,13 @@ function buildWordsSequence(
     for (const id of shuffle([...itemIds]).slice(0, 3))
       seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })
 
+    // 대화 상황 선택형 2문제 (고급 문장 있을 때만)
+    for (const s of pickDialogueSentences(2, 0))
+      seq.push({ kind: 'dialogue-choice', sentenceId: s.id, tag: '새로운 패턴' })
+
+    // tier 3 — fill-blank: 영어 직접 타이핑 (keyboardInput), distractor 전체 사용
     for (const s of pickSentences(3, 0))
-      seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, tag: '새로운 패턴' })
+      seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.englishParts.length > 1 ? 1 : 0, fillDir: 'en', keyboardInput: true, tag: '새로운 패턴' })
 
     for (const s of pickSentences(4, 3))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })

@@ -1,17 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
-import { SECTIONS, type Section } from '../data/sections'
+import { getSectionsForDifficulty, type Section } from '../data/sections'
 import { UNITS_MAP } from '../data/units'
 import { DifficultyModal } from '../components/DifficultyModal'
 import type { DifficultyLevel } from '../types'
 
-const ALPHABET_LESSON_IDS = new Set(UNITS_MAP['alphabet']?.lessonIds ?? [])
-
-function getVisibleLessonIds(section: Section, isNonBeginner: boolean): string[] {
-  return section.unitIds
-    .filter(uid => !(isNonBeginner && uid === 'alphabet'))
-    .flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
+function getVisibleLessonIds(section: Section): string[] {
+  return section.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
 }
 
 type SectionState = 'active' | 'locked' | 'completed'
@@ -22,11 +18,8 @@ export function LearningPath() {
   const [showDiffModal, setShowDiffModal] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
 
-  const isNonBeginner = progress.difficultyLevel !== 'beginner'
-  // For non-beginners, treat alphabet lessons as transparent (no skip badge, just invisible)
-  const effectiveCompletedSet = isNonBeginner
-    ? new Set([...progress.lessonProgress, ...ALPHABET_LESSON_IDS])
-    : new Set(progress.lessonProgress)
+  const sections = getSectionsForDifficulty(progress.difficultyLevel)
+  const effectiveCompletedSet = new Set(progress.lessonProgress)
 
   function handleDifficultyConfirm(level: DifficultyLevel) {
     setDifficulty(level)
@@ -39,11 +32,11 @@ export function LearningPath() {
 
   if (!progress.onboardingDone) return null
 
-  const allVisibleIds = SECTIONS.flatMap(s => getVisibleLessonIds(s, isNonBeginner))
+  const allVisibleIds = sections.flatMap(s => getVisibleLessonIds(s))
   const currentLessonId = allVisibleIds.find(id => !effectiveCompletedSet.has(id))
 
   function getSectionState(section: Section): SectionState {
-    const ids = getVisibleLessonIds(section, isNonBeginner)
+    const ids = getVisibleLessonIds(section)
     if (ids.length === 0) return 'locked'
     if (ids.every(id => effectiveCompletedSet.has(id))) return 'completed'
     if (ids.some(id => effectiveCompletedSet.has(id)) || ids[0] === currentLessonId)
@@ -114,9 +107,9 @@ export function LearningPath() {
 
       {/* 섹션 카드 목록 */}
       <div className="max-w-md mx-auto p-4 flex flex-col gap-4 pb-24">
-        {SECTIONS.map((section, idx) => {
+        {sections.map((section, idx) => {
           const state = getSectionState(section)
-          const ids = getVisibleLessonIds(section, isNonBeginner)
+          const ids = getVisibleLessonIds(section)
           const doneCount = ids.filter(id => effectiveCompletedSet.has(id)).length
           const pct = ids.length ? Math.round((doneCount / ids.length) * 100) : 0
 

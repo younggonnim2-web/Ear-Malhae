@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import type { SentenceItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
 import { shuffle } from '../../utils/quizHelpers'
@@ -15,9 +15,10 @@ interface Props {
   speak?: (text: string, lang?: string, rate?: number) => void
   isSpeaking?: boolean
   tag?: ChallengeTag
+  keyboardInput?: boolean
 }
 
-export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrect, onWrong, speak, isSpeaking, tag }: Props) {
+export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrect, onWrong, speak, isSpeaking, tag, keyboardInput }: Props) {
   const isEn = direction === 'en'
   const correctAnswer = isEn
     ? (sentence.englishParts[blankIndex] ?? sentence.englishParts[0])
@@ -29,7 +30,9 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
     return shuffle([correctAnswer, ...wrong])
   })
   const [selected, setSelected] = useState<string | null>(null)
+  const [inputValue, setInputValue] = useState('')
   const [answered, setAnswered] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
   // 문제마다 1회만 자동 발음 (StrictMode 이중 effect 방지)
   const lastSpokenIdRef = useRef<string | null>(null)
 
@@ -40,20 +43,35 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentence.id])
 
+  useEffect(() => {
+    if (keyboardInput) inputRef.current?.focus()
+  }, [keyboardInput])
+
   const partialKorean = sentence.parts
     .map((p, i) => (i === blankIndex ? '______' : p))
     .join(' ')
+
+  const normalize = (s: string) => s.trim().toLowerCase().replace(/[.,!?]/g, '')
+  const isInputCorrect = normalize(inputValue) === normalize(correctAnswer)
 
   function handleSelect(choice: string) {
     if (answered) return
     setSelected(choice)
   }
 
-  function handleConfirm() {
-    if (!selected || answered) return
-    setAnswered(true)
-    if (selected !== correctAnswer) onWrong?.()
-  }
+  const handleConfirm = useCallback(() => {
+    if (answered) return
+    if (keyboardInput) {
+      if (!inputValue.trim()) return
+      setAnswered(true)
+      if (!isInputCorrect) onWrong?.()
+    } else {
+      if (!selected) return
+      setAnswered(true)
+      if (selected !== correctAnswer) onWrong?.()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answered, keyboardInput, inputValue, isInputCorrect, selected, correctAnswer])
 
   return (
     <div className="flex flex-col gap-5 p-6">
@@ -77,13 +95,16 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
                   key={i}
                   className={cn(
                     'px-3 py-1 border-b-2 min-w-[56px] text-center text-lg font-bold',
-                    !selected && 'border-steel text-transparent select-none',
-                    selected && !answered && 'border-primary text-primary',
-                    answered && selected === correctAnswer && 'border-green-500 text-green-700',
-                    answered && selected !== correctAnswer && 'border-red-400 text-red-600',
+                    keyboardInput && !answered && 'border-primary text-ink',
+                    keyboardInput && answered && isInputCorrect && 'border-green-500 text-green-700',
+                    keyboardInput && answered && !isInputCorrect && 'border-red-400 text-red-600',
+                    !keyboardInput && !selected && 'border-steel text-transparent select-none',
+                    !keyboardInput && selected && !answered && 'border-primary text-primary',
+                    !keyboardInput && answered && selected === correctAnswer && 'border-green-500 text-green-700',
+                    !keyboardInput && answered && selected !== correctAnswer && 'border-red-400 text-red-600',
                   )}
                 >
-                  {selected ?? '    '}
+                  {keyboardInput ? (inputValue || '    ') : (selected ?? '    ')}
                 </span>
               ) : (
                 <span key={i} className="text-xl font-semibold text-ink">{part}</span>
@@ -91,30 +112,59 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
             )}
           </div>
 
-          {/* 영어 선택지 칩 */}
-          <div className="flex flex-wrap gap-2 justify-center pt-2">
-            {choices.map(choice => {
-              const isCorrect = choice === correctAnswer
-              const isSelected = choice === selected
-              return (
-                <button
-                  key={choice}
-                  onClick={() => handleSelect(choice)}
-                  disabled={answered}
-                  className={cn(
-                    'px-5 py-2 rounded-xl border-2 text-base font-semibold transition-colors',
-                    !answered && !isSelected && 'border-hairline bg-canvas text-ink hover:border-primary',
-                    !answered && isSelected && 'border-primary bg-primary/10 text-primary',
-                    answered && isCorrect && 'border-green-500 bg-green-50 text-green-800',
-                    answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
-                    answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted opacity-50',
-                  )}
-                >
-                  {choice}
-                </button>
-              )
-            })}
-          </div>
+          {/* 영어 선택지: 키보드 입력 or 객관식 칩 */}
+          {keyboardInput ? (
+            <div className="flex flex-col gap-2 pt-2">
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleConfirm()}
+                placeholder="영어로 직접 입력하세요..."
+                disabled={answered}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                className={cn(
+                  'w-full px-4 py-3 border-2 rounded-xl text-base font-semibold outline-none transition-colors',
+                  !answered && 'border-hairline bg-canvas text-ink focus:border-primary',
+                  answered && isInputCorrect && 'border-green-500 bg-green-50 text-green-800',
+                  answered && !isInputCorrect && 'border-red-400 bg-red-50 text-red-700',
+                )}
+              />
+              {answered && !isInputCorrect && (
+                <p className="text-sm text-steel">
+                  정답: <span className="font-bold text-ink">{correctAnswer}</span>
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2 justify-center pt-2">
+              {choices.map(choice => {
+                const isCorrect = choice === correctAnswer
+                const isSelected = choice === selected
+                return (
+                  <button
+                    key={choice}
+                    onClick={() => handleSelect(choice)}
+                    disabled={answered}
+                    className={cn(
+                      'px-5 py-2 rounded-xl border-2 text-base font-semibold transition-colors',
+                      !answered && !isSelected && 'border-hairline bg-canvas text-ink hover:border-primary',
+                      !answered && isSelected && 'border-primary bg-primary/10 text-primary',
+                      answered && isCorrect && 'border-green-500 bg-green-50 text-green-800',
+                      answered && isSelected && !isCorrect && 'border-red-400 bg-red-50 text-red-700',
+                      answered && !isSelected && !isCorrect && 'border-hairline bg-canvas text-muted opacity-50',
+                    )}
+                  >
+                    {choice}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </>
       ) : (
         <>
@@ -154,20 +204,21 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
         </>
       )}
 
-      {selected && !answered && (
+      {!answered && (
         <button
           onClick={handleConfirm}
-          className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
+          disabled={keyboardInput ? !inputValue.trim() : !selected}
+          className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full disabled:bg-hairline disabled:text-muted"
         >
           확인 ✓
         </button>
       )}
 
       {answered && (
-        <p className={`text-lg font-medium ${selected === correctAnswer ? 'text-green-600' : 'text-steel'}`}>
-          {selected === correctAnswer
+        <p className={`text-lg font-medium ${(keyboardInput ? isInputCorrect : selected === correctAnswer) ? 'text-green-600' : 'text-steel'}`}>
+          {(keyboardInput ? isInputCorrect : selected === correctAnswer)
             ? '✓ 정답이에요! 잘했어요 👍'
-            : `정답은 "${correctAnswer}"이에요. 괜찮아요! 👏`}
+            : keyboardInput ? '' : `정답은 "${correctAnswer}"이에요. 괜찮아요! 👏`}
         </p>
       )}
 

@@ -15,9 +15,10 @@ interface Props {
   tag?: ChallengeTag
   isSpeaking?: boolean
   listenBuild?: boolean
+  distractorCount?: number
 }
 
-export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direction = 'en-to-ko', tag, isSpeaking, listenBuild }: Props) {
+export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direction = 'en-to-ko', tag, isSpeaking, listenBuild, distractorCount }: Props) {
   // listenBuild: 한국어 텍스트 숨기고 오디오만 듣고 영어 타일 배열 (Dictation 모드)
   const isEnToKo = direction === 'en-to-ko' && !listenBuild
 
@@ -25,11 +26,17 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
   // ko-to-en: English tile bank (english words + englishDistractors)
   const englishTiles = sentence.english.replace(/[.,!?]/g, '').split(' ')
 
-  const [tiles] = useState(() =>
-    isEnToKo
-      ? shuffle([...sentence.parts, ...sentence.distractors])
-      : shuffle([...englishTiles, ...sentence.englishDistractors])
-  )
+  const [tiles] = useState(() => {
+    const koDistractors = distractorCount !== undefined
+      ? shuffle([...sentence.distractors]).slice(0, distractorCount)
+      : sentence.distractors
+    const enDistractors = distractorCount !== undefined
+      ? shuffle([...sentence.englishDistractors]).slice(0, distractorCount)
+      : sentence.englishDistractors
+    return isEnToKo
+      ? shuffle([...sentence.parts, ...koDistractors])
+      : shuffle([...englishTiles, ...enDistractors])
+  })
   const [selected, setSelected] = useState<string[]>([])
   const [checked, setChecked] = useState(false)
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)

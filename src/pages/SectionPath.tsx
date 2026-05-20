@@ -1,45 +1,35 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
-import { SECTIONS } from '../data/sections'
+import { getSectionsForDifficulty, type Section } from '../data/sections'
 import { UNITS_MAP } from '../data/units'
 import { LESSONS_MAP } from '../data/lessons'
 import type { Unit } from '../types/lesson'
-import type { Section } from '../data/sections'
 
 const ZIGZAG = [50, 67, 50, 33, 50, 67, 50, 33]
-
-const ALPHABET_LESSON_IDS = new Set(UNITS_MAP['alphabet']?.lessonIds ?? [])
-
-const ALL_LESSON_IDS = SECTIONS.flatMap(s =>
-  s.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
-)
-
-function isLocked(lessonId: string, completedSet: Set<string>): boolean {
-  const idx = ALL_LESSON_IDS.indexOf(lessonId)
-  if (idx <= 0) return false
-  return !completedSet.has(ALL_LESSON_IDS[idx - 1])
-}
 
 export function SectionPath() {
   const { sectionId } = useParams<{ sectionId: string }>()
   const navigate = useNavigate()
   const { progress } = useApp()
 
-  const isNonBeginner = progress.difficultyLevel !== 'beginner'
-  const effectiveCompletedSet = isNonBeginner
-    ? new Set([...progress.lessonProgress, ...ALPHABET_LESSON_IDS])
-    : new Set(progress.lessonProgress)
+  const sections = getSectionsForDifficulty(progress.difficultyLevel)
+  const allLessonIds = sections.flatMap(s =>
+    s.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? [])
+  )
 
-  const section = SECTIONS.find(s => s.id === sectionId)
-  const sectionIdx = SECTIONS.findIndex(s => s.id === sectionId)
+  function isLocked(lessonId: string, completedSet: Set<string>): boolean {
+    const idx = allLessonIds.indexOf(lessonId)
+    if (idx <= 0) return false
+    return !completedSet.has(allLessonIds[idx - 1])
+  }
+
+  const effectiveCompletedSet = new Set(progress.lessonProgress)
+  const section = sections.find(s => s.id === sectionId)
+  const sectionIdx = sections.findIndex(s => s.id === sectionId)
   if (!section) return <div className="p-8 text-steel text-center">섹션을 찾을 수 없습니다</div>
 
-  const currentLessonId = ALL_LESSON_IDS.find(id => !effectiveCompletedSet.has(id))
-
-  // Non-beginners: hide alphabet unit entirely from the lesson path
-  const units = section.unitIds
-    .filter(uid => !(isNonBeginner && uid === 'alphabet'))
-    .map(uid => UNITS_MAP[uid]).filter(Boolean) as Unit[]
+  const currentLessonId = allLessonIds.find(id => !effectiveCompletedSet.has(id))
+  const units = section.unitIds.map(uid => UNITS_MAP[uid]).filter(Boolean) as Unit[]
 
   return (
     <div className="min-h-screen bg-surface">
@@ -67,6 +57,7 @@ export function SectionPath() {
             completedSet={effectiveCompletedSet}
             currentLessonId={currentLessonId}
             stars={progress.lessonStars}
+            isLocked={isLocked}
             onLessonClick={id => navigate(`/lesson/${id}`)}
           />
         ))}
@@ -75,12 +66,13 @@ export function SectionPath() {
   )
 }
 
-function UnitSection({ unit, section, completedSet, currentLessonId, stars, onLessonClick }: {
+function UnitSection({ unit, section, completedSet, currentLessonId, stars, isLocked, onLessonClick }: {
   unit: Unit
   section: Pick<Section, 'bg' | 'border' | 'text'>
   completedSet: Set<string>
   currentLessonId: string | undefined
   stars: Record<string, 1 | 2 | 3>
+  isLocked: (id: string, set: Set<string>) => boolean
   onLessonClick: (id: string) => void
 }) {
   const SLOT_H = 100
@@ -104,6 +96,7 @@ function UnitSection({ unit, section, completedSet, currentLessonId, stars, onLe
           const isCurrent = lessonId === currentLessonId
           const locked = isLocked(lessonId, completedSet)
           const posX = ZIGZAG[lIdx % ZIGZAG.length]
+
           const lesson = LESSONS_MAP[lessonId]
           const lessonStars = stars[lessonId] ?? 0
 

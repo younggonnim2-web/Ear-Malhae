@@ -11,12 +11,14 @@ interface Props {
   onCorrect: () => void
   onSkip?: () => void
   speak?: (text: string, lang?: string, rate?: number) => void
+  isSpeaking?: boolean
+  isLastChance?: boolean
   tag?: ChallengeTag
 }
 
 type Phase = 'idle' | 'listening' | 'result' | 'blocked'
 
-export function PronunciationQuiz({ item, onCorrect, onSkip, speak, tag }: Props) {
+export function PronunciationQuiz({ item, onCorrect, onSkip, speak, isSpeaking, isLastChance, tag }: Props) {
   const { startListening, stopListening, transcript, isSupported, error, reset } =
     useSpeechRecognition()
 
@@ -102,7 +104,7 @@ export function PronunciationQuiz({ item, onCorrect, onSkip, speak, tag }: Props
             onClick={() => speak(targetWord, 'en-US')}
             className="flex items-center gap-1 text-primary text-sm font-semibold mt-1"
           >
-            🔊 발음 듣기
+            <span className={isSpeaking ? 'animate-speaking inline-block' : ''}>🔊</span> 발음 듣기
           </button>
         )}
       </div>
@@ -124,7 +126,7 @@ export function PronunciationQuiz({ item, onCorrect, onSkip, speak, tag }: Props
               onClick={onSkip}
               className="text-sm text-steel text-center underline py-1"
             >
-              지금은 넘길게요 (잠시 후 다시 출제)
+              {isLastChance ? '넘기고 단원 종료하기' : '지금은 넘길게요 (잠시 후 다시 출제)'}
             </button>
           )}
         </div>

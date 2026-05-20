@@ -61,6 +61,9 @@ export interface SentenceItem {
   englishDistractors: string[]
   englishParts: string[]
   category?: WordItem['category']
+  difficulty?: 'basic' | 'intermediate' | 'advanced'
+  scenario?: string
+  dialoguePrompt?: string
 }
 export type QuizDirection = 'en-to-ko' | 'ko-to-en'
 

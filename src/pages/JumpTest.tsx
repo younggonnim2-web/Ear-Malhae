@@ -9,7 +9,6 @@ import { useSpeech } from '../hooks/useSpeech'
 import { ImageChoiceQuiz } from '../components/quiz/ImageChoiceQuiz'
 import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
-import { cn } from '../utils/cn'
 import { buildChoices } from '../utils/quizHelpers'
 import { SentencePickQuiz } from '../components/quiz/SentencePickQuiz'
 import type { WordItem, SentenceItem } from '../types'
@@ -17,11 +16,11 @@ import type { WordItem, SentenceItem } from '../types'
 // 섹션 인덱스(1~4) → 난이도 설정
 // fillDir: 'ko'=한국어 빈칸(이해), 'en'=영어 빈칸(생산)
 // buildQ: 항상 ko-to-en (영어 문장 작성)
-const DIFFICULTY_BY_IDX: Record<number, { hearts: number; wordQ: number; pickQ: number; fillQ: number; buildQ: number; fillDir: 'ko' | 'en' }> = {
-  1: { hearts: 3, wordQ: 4, pickQ: 2, fillQ: 3, buildQ: 2, fillDir: 'ko' },  // → 탐험가  (11문제) 단어선택 중심
-  2: { hearts: 3, wordQ: 2, pickQ: 4, fillQ: 3, buildQ: 3, fillDir: 'ko' },  // → 여행자  (12문제) 문장번역 중심
-  3: { hearts: 2, wordQ: 0, pickQ: 1, fillQ: 5, buildQ: 8, fillDir: 'en' },  // → 도전자  (14문제) 영어빈칸+작문 강화
-  4: { hearts: 1, wordQ: 0, pickQ: 0, fillQ: 4, buildQ: 11, fillDir: 'en' }, // → 마스터  (15문제) 작문만·최고난이도
+const DIFFICULTY_BY_IDX: Record<number, { hearts: number; wordQ: number; pickQ: number; fillQ: number; buildQ: number; fillDir: 'ko' | 'en'; keyboardInput?: boolean; distractorCount?: number }> = {
+  1: { hearts: 3, wordQ: 4, pickQ: 2, fillQ: 3, buildQ: 2,  fillDir: 'ko', distractorCount: 2 },                        // → 탐험가  (11문제) 단어선택 중심
+  2: { hearts: 3, wordQ: 2, pickQ: 4, fillQ: 3, buildQ: 3,  fillDir: 'ko', distractorCount: 3 },                        // → 여행자  (12문제) 문장번역 중심
+  3: { hearts: 2, wordQ: 0, pickQ: 1, fillQ: 5, buildQ: 8,  fillDir: 'en', distractorCount: 4 },                        // → 도전자  (14문제) 영어빈칸+작문 강화
+  4: { hearts: 1, wordQ: 0, pickQ: 0, fillQ: 4, buildQ: 11, fillDir: 'en', keyboardInput: true },                       // → 마스터  (15문제) 키보드입력+작문 최고난이도
 }
 const DEFAULT_DIFFICULTY = DIFFICULTY_BY_IDX[1]
 
@@ -278,14 +277,14 @@ export function JumpTest() {
 
   return (
     <div className="min-h-screen bg-surface flex flex-col">
-      {/* 헤더 */}
-      <div className="sticky top-0 z-10 bg-canvas border-b border-hairline">
+      {/* 헤더 — 섹션 색상 적용 */}
+      <div className={`sticky top-0 z-10 ${targetSection.bg} border-b ${targetSection.border}`}>
         <div className="max-w-md mx-auto px-4 pt-3 pb-2">
           <div className="flex items-center justify-between mb-2">
-            <button onClick={() => navigate('/')} className="text-steel text-xl leading-none">✕</button>
+            <button onClick={() => navigate('/')} className="text-white/80 text-xl leading-none">✕</button>
             <div className="text-center">
-              <p className="text-xs text-steel font-bold uppercase tracking-wide">건너뛰기 테스트</p>
-              <p className="text-sm font-black text-ink">{targetSection.title} 섹션</p>
+              <p className="text-xs text-white/70 font-bold uppercase tracking-wide">건너뛰기 테스트</p>
+              <p className="text-sm font-black text-white">{targetSection.title} 섹션</p>
             </div>
             <div className="flex gap-0.5">
               {Array.from({ length: cfg.hearts }).map((_, i) => (
@@ -293,10 +292,10 @@ export function JumpTest() {
               ))}
             </div>
           </div>
-          <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${progressPct}%` }} />
+          <div className="h-2.5 bg-white/25 rounded-full overflow-hidden">
+            <div className="h-full bg-white rounded-full transition-all duration-300" style={{ width: `${progressPct}%` }} />
           </div>
-          <div className="flex justify-between text-xs text-steel mt-1">
+          <div className="flex justify-between text-xs text-white/80 mt-1">
             <span className="font-semibold">{TYPE_LABEL[q.type]}</span>
             <span>{current + 1}/{questions.length}</span>
           </div>
@@ -326,6 +325,8 @@ export function JumpTest() {
             direction={q.direction}
             onCorrect={handleAdvance}
             onWrong={handleWrong}
+            speak={speak}
+            isSpeaking={isSpeaking}
           />
         )}
         {q.type === 'fill-blank' && (
@@ -338,6 +339,7 @@ export function JumpTest() {
             onWrong={handleWrong}
             speak={speak}
             isSpeaking={isSpeaking}
+            keyboardInput={cfg.keyboardInput}
           />
         )}
         {q.type === 'sentence-build' && (
@@ -349,6 +351,7 @@ export function JumpTest() {
             onWrong={handleWrong}
             speak={speak}
             isSpeaking={isSpeaking}
+            distractorCount={cfg.distractorCount}
           />
         )}
       </div>

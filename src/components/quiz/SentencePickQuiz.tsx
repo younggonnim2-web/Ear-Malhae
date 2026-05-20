@@ -11,17 +11,26 @@ interface Props {
   direction: 'en-to-ko' | 'ko-to-en'
   onCorrect: () => void
   onWrong?: () => void
+  speak?: (text: string, lang?: string, rate?: number) => void
+  isSpeaking?: boolean
   tag?: ChallengeTag
 }
 
-export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect, onWrong, tag }: Props) {
+export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect, onWrong, speak, tag }: Props) {
   const isEnToKo = direction === 'en-to-ko'
   const answer = isEnToKo ? sentence.korean : sentence.english
   const prompt = isEnToKo ? sentence.english : sentence.korean
   const label = isEnToKo ? '올바른 한국어 번역을 고르세요' : '올바른 영어 번역을 고르세요'
 
   const [choices] = useState(() => {
-    const wrong = shuffle(allSentences.filter(s => s.id !== sentence.id))
+    // 정답 문장과 같은 difficulty 우선 → 부족하면 전체 폴백
+    const sameDiff = allSentences.filter(
+      s => s.id !== sentence.id && s.difficulty === sentence.difficulty
+    )
+    const pool = sameDiff.length >= 3
+      ? sameDiff
+      : allSentences.filter(s => s.id !== sentence.id)
+    const wrong = shuffle(pool)
       .slice(0, 3)
       .map(s => isEnToKo ? s.korean : s.english)
     return shuffle([answer, ...wrong])
@@ -32,6 +41,8 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
   function handleSelect(choice: string) {
     if (answered) return
     setSelected(choice)
+    // 영어 선택지는 TTS 재생 (en-to-ko: 프롬프트가 영어이므로 선택지는 한국어 → 스킵)
+    if (!isEnToKo && speak) speak(choice, 'en-US')
   }
 
   function handleConfirm() {

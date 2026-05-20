@@ -59,6 +59,34 @@ export const UNITS_MAP: Record<string, Unit> = {
     id: 'health', title: '건강', emoji: '💊', type: 'words',
     lessonIds: ['health-1','health-2'],
   },
+
+  // ── 중급 트랙 유닛 ──
+  'int-dining': {
+    id: 'int-dining', title: '식당 주문', emoji: '🍽️', type: 'sentences',
+    lessonIds: ['int-dining-1', 'int-dining-2'],
+  },
+  'int-hotel': {
+    id: 'int-hotel', title: '여행·숙박', emoji: '🏨', type: 'sentences',
+    lessonIds: ['int-hotel-1'],
+  },
+  'int-social': {
+    id: 'int-social', title: '일상 회화', emoji: '💬', type: 'sentences',
+    lessonIds: ['int-social-1', 'int-social-2'],
+  },
+
+  // ── 고급 트랙 유닛 ──
+  'adv-airport': {
+    id: 'adv-airport', title: '공항·교통', emoji: '✈️', type: 'sentences',
+    lessonIds: ['adv-airport-1'],
+  },
+  'adv-biz': {
+    id: 'adv-biz', title: '비즈니스 소통', emoji: '💼', type: 'sentences',
+    lessonIds: ['adv-biz-1', 'adv-biz-2'],
+  },
+  'adv-idiom': {
+    id: 'adv-idiom', title: '뉘앙스·관용구', emoji: '🧠', type: 'sentences',
+    lessonIds: ['adv-idiom-1'],
+  },
 }
 
 export const UNIT_ORDER = [

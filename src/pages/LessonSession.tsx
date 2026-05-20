@@ -19,6 +19,7 @@ import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
 import { SentencePickQuiz } from '../components/quiz/SentencePickQuiz'
 import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { PronunciationQuiz } from '../components/quiz/PronunciationQuiz'
+import { DialogueChoiceQuiz } from '../components/quiz/DialogueChoiceQuiz'
 import { useSpeech } from '../hooks/useSpeech'
 import { STAR_XP } from '../utils/xp'
 import type { LessonChallenge } from '../types/lesson'
@@ -35,7 +36,9 @@ export function LessonSession() {
 
   const allItems: StudyItem[] = unit?.type === 'alphabet' ? ALPHABET : WORDS
   const lessonItems = useMemo(
-    () => lesson?.itemIds.map(id => allItems.find(i => i.id === id)!).filter(Boolean) ?? [],
+    () => unit?.type === 'sentences'
+      ? []
+      : lesson?.itemIds.map(id => allItems.find(i => i.id === id)!).filter(Boolean) ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [lesson?.id],
   )
@@ -86,10 +89,12 @@ export function LessonSession() {
 
   // 현재 유닛 카테고리에 맞는 문장만 사용 (category 없음 = 범용)
   const relevantSentences = useMemo(() => {
+    // sentence-type 레슨: 전체 문장 풀 (오답 선택지를 다른 고급 문장에서 뽑기 위해)
+    if (unit?.type === 'sentences') return SENTENCES
     const unitId = lesson?.unitId
     if (!unitId) return SENTENCES
     return SENTENCES.filter(s => !s.category || s.category === unitId)
-  }, [lesson?.unitId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [lesson?.unitId, unit?.type]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const [challenges, setChallenges] = useState<LessonChallenge[]>(() =>
     lesson
@@ -145,15 +150,22 @@ export function LessonSession() {
 
   const handleSpeakSkip = useCallback(() => {
     if (!current) return
-    // 현재 위치에서 3문제 뒤에 재삽입 (없으면 마지막)
+    // 이미 한 번 스킵된 문제이거나 마지막 문제면 → 바로 완료 처리
+    if (current.skipped || challengeIndex >= currentList.length - 1) {
+      advance()
+      return
+    }
+    // 현재 위치에서 제거 후 3문제 뒤에 재삽입 (skipped 표시) → 총 문제 수 유지
     setChallenges(prev => {
       const next = [...prev]
+      next.splice(challengeIndex, 1)
       const insertAt = Math.min(challengeIndex + 3, next.length)
-      next.splice(insertAt, 0, { ...current })
+      next.splice(insertAt, 0, { ...current, skipped: true })
       return next
     })
-    setChallengeIndex(c => c + 1)
-  }, [current, challengeIndex])
+    // challengeIndex 유지: 제거로 인해 다음 문제가 현재 인덱스로 자동 이동
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, challengeIndex, currentList.length])
 
   function advance() {
     if (challengeIndex + 1 < currentList.length) {
@@ -173,6 +185,10 @@ export function LessonSession() {
   if (!lesson || !unit || !current) {
     return <div className="p-8 text-center text-steel">레슨을 찾을 수 없습니다</div>
   }
+
+  const section = SECTIONS[sectionIndex]
+  const headerBg = section?.bg ?? 'bg-primary'
+  const headerBorder = section?.border ?? 'border-primary/30'
 
   const exitDialog = showExit
     ? createPortal(
@@ -265,6 +281,7 @@ export function LessonSession() {
           tag={current.tag}
           isSpeaking={isSpeaking}
           listenBuild={current.listenBuild}
+          distractorCount={current.distractorCount}
         />
       )
     }
@@ -279,6 +296,8 @@ export function LessonSession() {
           direction={(current.direction as 'en-to-ko' | 'ko-to-en') ?? 'en-to-ko'}
           onCorrect={advance}
           onWrong={() => handleWrong(current)}
+          speak={speak}
+          isSpeaking={isSpeaking}
           tag={current.tag}
         />
       )
@@ -292,6 +311,8 @@ export function LessonSession() {
           onCorrect={advance}
           onSkip={handleSpeakSkip}
           speak={speak}
+          isSpeaking={isSpeaking}
+          isLastChance={current.skipped}
           tag={current.tag}
         />
       )
@@ -304,6 +325,24 @@ export function LessonSession() {
           key={`${phase}-${challengeIndex}`}
           sentence={sentence}
           blankIndex={current.blankIndex ?? 0}
+          direction={current.fillDir ?? 'ko'}
+          onCorrect={advance}
+          onWrong={() => handleWrong(current)}
+          speak={speak}
+          isSpeaking={isSpeaking}
+          tag={current.tag}
+          keyboardInput={current.keyboardInput}
+        />
+      )
+    }
+
+    if (current.kind === 'dialogue-choice') {
+      const sentence = SENTENCES.find(s => s.id === current.sentenceId) ?? SENTENCES[0]
+      return (
+        <DialogueChoiceQuiz
+          key={`${phase}-${challengeIndex}`}
+          sentence={sentence}
+          allSentences={SENTENCES}
           onCorrect={advance}
           onWrong={() => handleWrong(current)}
           speak={speak}
@@ -320,24 +359,41 @@ export function LessonSession() {
     <>
       {exitDialog}
       <div className="min-h-screen bg-surface flex flex-col max-w-md mx-auto">
-        <div className="flex items-center gap-2 px-4 pt-4 pb-2">
-          <button
-            onClick={() => setShowExit(true)}
-            aria-label="나가기"
-            className="text-muted text-2xl font-bold"
-          >
-            ✕
-          </button>
-          <div className="flex-1 h-2 bg-hairline rounded-full overflow-hidden">
-            <div
-              className="h-full bg-primary rounded-full transition-all duration-300"
-              style={{ width: `${progressPct}%` }}
-            />
+        {/* 헤더 */}
+        <div className={`sticky top-0 z-10 ${headerBg} border-b ${headerBorder}`}>
+          <div className="px-4 pt-3 pb-2">
+            <div className="flex items-center justify-between mb-2">
+              <button
+                onClick={() => setShowExit(true)}
+                aria-label="나가기"
+                className="text-white/80 text-xl leading-none"
+              >
+                ✕
+              </button>
+              <div className="text-center">
+                <p className="text-xs text-white/70 font-bold uppercase tracking-wide">{unit.title}</p>
+                <p className="text-sm font-black text-white">{lesson.title}</p>
+              </div>
+              <span className="text-xs text-white/80 font-semibold">
+                {challengeIndex + 1}/{currentList.length}
+              </span>
+            </div>
+            <div className="h-2.5 bg-white/25 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-white rounded-full transition-all duration-300"
+                style={{ width: `${progressPct}%` }}
+              />
+            </div>
           </div>
+          {phase === 'retry' && (
+            <p className="text-center text-xs text-white/80 py-1 bg-black/10">
+              틀린 문제를 다시 풀어봐요!
+            </p>
+          )}
         </div>
 
         {import.meta.env.DEV && current && (
-          <div className="px-3 py-1 bg-yellow-50 border-y border-yellow-200 text-[10px] font-mono text-yellow-900 leading-tight">
+          <div className="px-3 py-1 bg-yellow-50 border-b border-yellow-200 text-[10px] font-mono text-yellow-900 leading-tight">
             <span className="font-bold">DEBUG</span>
             <span className="ml-2">{lessonId}</span>
             <span className="ml-2">[{phase}]</span>
@@ -348,12 +404,6 @@ export function LessonSession() {
             {current.direction && <span className="ml-2">dir={current.direction}</span>}
             {current.tag && <span className="ml-2">tag={current.tag}</span>}
           </div>
-        )}
-
-        {phase === 'retry' && (
-          <p className="text-center text-sm text-orange-600 py-1 bg-orange-50">
-            틀린 문제를 다시 풀어봐요!
-          </p>
         )}
 
         <div className="flex-1">
