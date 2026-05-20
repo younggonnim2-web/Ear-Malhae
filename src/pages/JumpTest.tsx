@@ -67,10 +67,11 @@ function buildSentencePickQs(pool: SentenceItem[], count: number): SentencePickQ
 function buildFillBlankQs(pool: SentenceItem[], count: number, direction: 'ko' | 'en' = 'en'): FillBlankQ[] {
   return pool.slice(0, count).map(sentence => {
     const parts = direction === 'en' ? sentence.englishParts : sentence.parts
+    // distractors는 마지막 파트(동사/형용사) 기준으로 설계됨 → 항상 index 1(또는 마지막)을 blank로
     return {
       type: 'fill-blank',
       sentence,
-      blankIndex: Math.floor(Math.random() * Math.max(parts.length, 1)),
+      blankIndex: parts.length > 1 ? 1 : 0,
       direction,
     }
   })
