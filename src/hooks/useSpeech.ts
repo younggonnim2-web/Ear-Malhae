@@ -10,7 +10,7 @@ export function useSpeech(): UseSpeechResult {
   const isSupported = typeof window !== 'undefined' && 'speechSynthesis' in window
   const [isSpeaking, setIsSpeaking] = useState(false)
 
-  const speak = useCallback((text: string, lang = 'en-US', rate = 0.85) => {
+  const speak = useCallback((text: string, lang = 'en-US', rate = 1.0) => {
     if (!isSupported) return
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)

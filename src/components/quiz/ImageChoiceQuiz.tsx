@@ -22,7 +22,8 @@ interface Props {
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
   if (direction === 'en-to-ko') return item.meaning
-  return isWordItem(item) ? (item.sentence ?? item.word) : item.exampleWord
+  // 선택지는 항상 단어형으로 통일 (sentence는 question prompt에만 사용)
+  return isWordItem(item) ? item.word : item.exampleWord
 }
 
 function getQuestionWord(item: StudyItem, direction: QuizDirection): string {
@@ -36,14 +37,16 @@ export function ImageChoiceQuiz({
 }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
-  const hasSpokenRef = useRef(false)
+  // 문제마다 1회만 자동 발음 (StrictMode 이중 effect 방지)
+  const lastSpokenIdRef = useRef<string | null>(null)
 
   const questionWord = getQuestionWord(item, direction)
 
   useEffect(() => {
-    // list 모드 + 영어 단어 표시(en-to-ko)일 때만 최초 1회 자동 발음
-    if (speak && displayMode !== 'cards' && direction === 'en-to-ko' && !hasSpokenRef.current) {
-      hasSpokenRef.current = true
+    if (lastSpokenIdRef.current === item.id) return
+    // list 모드 + 영어 단어 표시(en-to-ko)일 때만 문제별 1회 자동 발음
+    if (speak && displayMode !== 'cards' && direction === 'en-to-ko') {
+      lastSpokenIdRef.current = item.id
       speak(questionWord, 'en-US')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import type { StudyItem } from '../types'
 import { isWordItem } from '../types'
 import { useSpeech } from '../hooks/useSpeech'
@@ -13,8 +13,12 @@ export function FlashCard({ item, onNext }: Props) {
   const { speak, isSupported, isSpeaking } = useSpeech()
   const word = isWordItem(item) ? item.word : item.exampleWord
   const meaning = item.meaning
+  // 문제마다 1회만 자동 발음 (StrictMode 이중 effect 방지)
+  const lastSpokenIdRef = useRef<string | null>(null)
 
   useEffect(() => {
+    if (lastSpokenIdRef.current === item.id) return
+    lastSpokenIdRef.current = item.id
     if (isSupported) speak(word)
   }, [item.id]) // eslint-disable-line react-hooks/exhaustive-deps
 

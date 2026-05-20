@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
 import { cn } from '../../utils/cn'
@@ -15,15 +15,20 @@ interface Props {
 
 function getChoiceLabel(item: StudyItem, direction: QuizDirection): string {
   if (direction === 'en-to-ko') return item.meaning
-  return isWordItem(item) ? (item.sentence ?? item.word) : item.exampleWord
+  // 선택지는 항상 단어형으로 통일 (sentence는 question prompt에만 사용)
+  return isWordItem(item) ? item.word : item.exampleWord
 }
 
 export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong, speak, isSpeaking }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
   const word = isWordItem(item) ? (item.sentence ?? item.word) : item.exampleWord
+  // 문제마다 1회만 자동 발음 (StrictMode 이중 effect 방지)
+  const lastSpokenIdRef = useRef<string | null>(null)
 
   useEffect(() => {
+    if (lastSpokenIdRef.current === item.id) return
+    lastSpokenIdRef.current = item.id
     speak(word, 'en-US')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.id])

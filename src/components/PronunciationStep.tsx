@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import type { StudyItem } from '../types'
 import { isWordItem } from '../types'
 import { useSpeech } from '../hooks/useSpeech'
@@ -11,10 +11,15 @@ interface Props {
 export function PronunciationStep({ item, onComplete }: Props) {
   const { speak, isSupported } = useSpeech()
   const word = isWordItem(item) ? item.word : item.exampleWord
+  // 문제마다 1회만 자동 발음 (StrictMode 이중 effect 방지)
+  const lastSpokenIdRef = useRef<string | null>(null)
 
   useEffect(() => {
+    if (lastSpokenIdRef.current === item.id) return
+    lastSpokenIdRef.current = item.id
     if (isSupported) speak(word)
-  }, [item.id, speak, isSupported])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item.id, isSupported])
 
   return (
     <div className="flex flex-col items-center gap-5 p-6">

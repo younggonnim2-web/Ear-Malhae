@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { SentenceItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
 import { shuffle } from '../../utils/quizHelpers'
@@ -29,8 +29,12 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
   })
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
+  // 문제마다 1회만 자동 발음 (StrictMode 이중 effect 방지)
+  const lastSpokenIdRef = useRef<string | null>(null)
 
   useEffect(() => {
+    if (lastSpokenIdRef.current === sentence.id) return
+    lastSpokenIdRef.current = sentence.id
     if (speak) speak(sentence.english, 'en-US')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentence.id])
