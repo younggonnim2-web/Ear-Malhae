@@ -51,24 +51,24 @@ export const LESSONS_MAP: Record<string, Lesson> = {
 
   // ── 중급 트랙 레슨 (sentence-type) ──
   'int-dining-1': {
-    id: 'int-dining-1', unitId: 'int-dining', title: '예약·오주문', itemIds: [],
-    sentenceIds: ['adv-dining-reservation', 'adv-dining-wrong-order'],
+    id: 'int-dining-1', unitId: 'int-dining', title: '예약·기본 주문', itemIds: [],
+    sentenceIds: ['dining-have-reservation', 'dining-get-menu', 'dining-get-water', 'dining-not-my-order'],
   },
   'int-dining-2': {
-    id: 'int-dining-2', unitId: 'int-dining', title: '특별 요청', itemIds: [],
-    sentenceIds: ['adv-dining-allergy', 'adv-dining-side', 'adv-dining-steak'],
+    id: 'int-dining-2', unitId: 'int-dining', title: '특별 요청·포장', itemIds: [],
+    sentenceIds: ['dining-no-ice', 'dining-to-go', 'dining-check-please'],
   },
   'int-hotel-1': {
-    id: 'int-hotel-1', unitId: 'int-hotel', title: '호텔·이동', itemIds: [],
-    sentenceIds: ['adv-travel-room-issue', 'adv-travel-upgrade', 'adv-travel-transport'],
+    id: 'int-hotel-1', unitId: 'int-hotel', title: '체크인·시설 안내', itemIds: [],
+    sentenceIds: ['hotel-have-reservation', 'hotel-where-is', 'hotel-wake-up-call'],
   },
   'int-social-1': {
-    id: 'int-social-1', unitId: 'int-social', title: '거절·공감', itemIds: [],
-    sentenceIds: ['adv-daily-rejection', 'adv-daily-agree', 'adv-daily-netflix'],
+    id: 'int-social-1', unitId: 'int-social', title: '공감·동의', itemIds: [],
+    sentenceIds: ['social-no-problem', 'social-sounds-good', 'social-maybe-next-time'],
   },
   'int-social-2': {
-    id: 'int-social-2', unitId: 'int-social', title: '조언·의견', itemIds: [],
-    sentenceIds: ['adv-daily-advice', 'adv-daily-opinion'],
+    id: 'int-social-2', unitId: 'int-social', title: '권유·의견', itemIds: [],
+    sentenceIds: ['social-i-think', 'social-you-should'],
   },
 
   // ── 고급 트랙 레슨 (sentence-type) ──
@@ -77,15 +77,19 @@ export const LESSONS_MAP: Record<string, Lesson> = {
     sentenceIds: ['adv-travel-delay', 'adv-travel-lost-baggage', 'adv-airport-overbook'],
   },
   'adv-biz-1': {
-    id: 'adv-biz-1', unitId: 'adv-biz', title: '마감·반론', itemIds: [],
-    sentenceIds: ['adv-biz-deadline', 'adv-biz-disagree'],
+    id: 'adv-biz-1', unitId: 'adv-biz', title: '감정 표현', itemIds: [],
+    sentenceIds: ['adv-feeling-proud', 'adv-feeling-cheer'],
   },
   'adv-biz-2': {
-    id: 'adv-biz-2', unitId: 'adv-biz', title: '제안·설득', itemIds: [],
-    sentenceIds: ['adv-biz-proposal', 'adv-daily-opinion', 'adv-daily-advice'],
+    id: 'adv-biz-2', unitId: 'adv-biz', title: '공감·조언', itemIds: [],
+    sentenceIds: ['adv-feeling-sympathy', 'adv-daily-advice', 'adv-daily-opinion'],
   },
   'adv-idiom-1': {
-    id: 'adv-idiom-1', unitId: 'adv-idiom', title: '관용구 표현', itemIds: [],
-    sentenceIds: ['adv-idiom-ballpark', 'adv-idiom-silver-lining', 'adv-idiom-catch22'],
+    id: 'adv-idiom-1', unitId: 'adv-idiom', title: '일상 표현', itemIds: [],
+    sentenceIds: ['adv-daily-netflix', 'adv-chat-recommend', 'adv-chat-catchup'],
+  },
+  'adv-idiom-2': {
+    id: 'adv-idiom-2', unitId: 'adv-idiom', title: '반응·표현', itemIds: [],
+    sentenceIds: ['adv-daily-rejection', 'adv-daily-agree'],
   },
 }

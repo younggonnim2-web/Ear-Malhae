@@ -26,17 +26,20 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
 
   const [choices] = useState(() => {
     // englishDistractors: 문맥상 틀렸지만 문법적으로 맞는 오답들
-    const distractors = [...sentence.englishDistractors].slice(0, 3)
-    // 부족하면 다른 고급 문장으로 보충
-    if (distractors.length < 3) {
-      const extras = shuffle(
-        allSentences.filter(s => s.id !== sentence.id && s.difficulty === 'advanced')
-      )
-        .slice(0, 3 - distractors.length)
-        .map(s => s.english)
-      distractors.push(...extras)
+    const seen = new Set<string>([answer])
+    const distractors: string[] = []
+    for (const d of sentence.englishDistractors) {
+      if (distractors.length >= 3) break
+      if (!seen.has(d)) { seen.add(d); distractors.push(d) }
     }
-    return shuffle([answer, ...distractors.slice(0, 3)])
+    // 부족하면 다른 문장으로 보충 (중복 제외)
+    if (distractors.length < 3) {
+      for (const s of shuffle(allSentences.filter(s => s.id !== sentence.id))) {
+        if (distractors.length >= 3) break
+        if (!seen.has(s.english)) { seen.add(s.english); distractors.push(s.english) }
+      }
+    }
+    return shuffle([answer, ...distractors])
   })
 
   useEffect(() => {
@@ -67,6 +70,14 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
       {tag && <div><TagBadge tag={tag} /></div>}
 
       <p className="text-lg font-bold text-ink">이 상황에 맞는 대답을 고르세요</p>
+
+      {/* 상황 설명 힌트 */}
+      {sentence.scenario && (
+        <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl">
+          <span className="text-base shrink-0">📍</span>
+          <p className="text-sm font-medium text-amber-800">{sentence.scenario}</p>
+        </div>
+      )}
 
       {/* 상대방 말풍선 */}
       <div className="flex items-start gap-3">

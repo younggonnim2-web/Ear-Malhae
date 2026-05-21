@@ -16,7 +16,7 @@ interface Props {
   tag?: ChallengeTag
 }
 
-export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect, onWrong, speak, tag }: Props) {
+export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect, onWrong, speak, isSpeaking, tag }: Props) {
   const isEnToKo = direction === 'en-to-ko'
   const answer = isEnToKo ? sentence.korean : sentence.english
   const prompt = isEnToKo ? sentence.english : sentence.korean
@@ -30,9 +30,18 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
     const pool = sameDiff.length >= 3
       ? sameDiff
       : allSentences.filter(s => s.id !== sentence.id)
-    const wrong = shuffle(pool)
-      .slice(0, 3)
-      .map(s => isEnToKo ? s.korean : s.english)
+
+    // 정답 및 이미 뽑힌 텍스트와 중복되지 않는 오답만 수집
+    const seen = new Set<string>([answer])
+    const wrong: string[] = []
+    for (const s of shuffle(pool)) {
+      if (wrong.length >= 3) break
+      const text = isEnToKo ? s.korean : s.english
+      if (!seen.has(text)) {
+        seen.add(text)
+        wrong.push(text)
+      }
+    }
     return shuffle([answer, ...wrong])
   })
   const [selected, setSelected] = useState<string | null>(null)
@@ -57,6 +66,14 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
       <p className="text-2xl font-bold text-ink">{label}</p>
       <div className="bg-surface rounded-2xl px-5 py-5 border-2 border-hairline">
         <p className="text-lg font-semibold text-ink leading-relaxed">{prompt}</p>
+        {isEnToKo && speak && (
+          <button
+            onClick={() => speak(prompt, 'en-US')}
+            className="flex items-center gap-1 text-primary text-xs font-semibold mt-2"
+          >
+            <span className={isSpeaking ? 'animate-speaking inline-block' : ''}>🔊</span> 다시 듣기
+          </button>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         {choices.map((choice, idx) => {

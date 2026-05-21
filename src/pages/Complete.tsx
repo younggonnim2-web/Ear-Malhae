@@ -4,8 +4,10 @@ import { useApp } from '../context/AppContext'
 import { calcLevelBarPct } from '../utils/xp'
 import { checkAdaptiveDifficulty } from '../utils/difficultyAdaptive'
 import { DifficultyModal } from '../components/DifficultyModal'
-import { SECTIONS } from '../data/sections'
+import { getSectionsForDifficulty } from '../data/sections'
 import { UNITS_MAP } from '../data/units'
+import type { DifficultyLevel } from '../types'
+import type { AdaptiveSuggestion } from '../utils/difficultyAdaptive'
 
 interface CompleteState {
   stars: 1 | 2 | 3
@@ -35,18 +37,45 @@ export function Complete() {
 
   const [showCelebration, setShowCelebration] = useState(false)
 
+  const currentSections = useMemo(
+    () => getSectionsForDifficulty(progress.difficultyLevel),
+    [progress.difficultyLevel],
+  )
+
   const sectionLessonIds = useMemo(() => {
     if (!state?.sectionId) return []
-    const section = SECTIONS.find(s => s.id === state.sectionId)
+    const section = currentSections.find(s => s.id === state.sectionId)
     return section?.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? []) ?? []
-  }, [state?.sectionId])
+  }, [state?.sectionId, currentSections])
 
   const sectionCompleted = useMemo(
     () => sectionLessonIds.length > 0 && sectionLessonIds.every(id => progress.lessonProgress.includes(id)),
-    [sectionLessonIds, progress.lessonProgress]
+    [sectionLessonIds, progress.lessonProgress],
   )
 
-  const completedSection = SECTIONS.find(s => s.id === state?.sectionId)
+  const completedSection = currentSections.find(s => s.id === state?.sectionId)
+
+  // 현재 난이도 모든 섹션 완료 여부
+  const allSectionsCompleted = useMemo(() => {
+    const allIds = currentSections.flatMap(s =>
+      s.unitIds.flatMap(uid => UNITS_MAP[uid]?.lessonIds ?? []),
+    )
+    return allIds.length > 0 && allIds.every(id => progress.lessonProgress.includes(id))
+  }, [currentSections, progress.lessonProgress])
+
+  const hasNextLevel = progress.difficultyLevel !== 'advanced'
+
+  const allSectionsUpgradeSuggestion = useMemo<AdaptiveSuggestion | null>(() => {
+    if (!allSectionsCompleted || !hasNextLevel) return null
+    const to: DifficultyLevel = progress.difficultyLevel === 'beginner' ? 'intermediate' : 'advanced'
+    return { type: 'upgrade', from: progress.difficultyLevel, to }
+  }, [allSectionsCompleted, hasNextLevel, progress.difficultyLevel])
+
+  // 모든 섹션 완료 시 모달 자동 오픈
+  useEffect(() => {
+    if (allSectionsUpgradeSuggestion) setShowDiffModal(true)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (!sectionCompleted) return
@@ -94,7 +123,10 @@ export function Complete() {
       {showDiffModal && (
         <DifficultyModal
           currentLevel={progress.difficultyLevel}
-          suggestion={adaptiveSuggestion ?? undefined}
+          suggestion={allSectionsUpgradeSuggestion ?? adaptiveSuggestion ?? undefined}
+          message={allSectionsUpgradeSuggestion
+            ? '🎓 모든 섹션을 완료했어요! 다음 단계로 올라갈 준비가 됐나요?'
+            : undefined}
           onConfirm={handleDifficultyConfirm}
           onDismiss={() => setShowDiffModal(false)}
         />

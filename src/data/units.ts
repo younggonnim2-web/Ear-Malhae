@@ -80,12 +80,12 @@ export const UNITS_MAP: Record<string, Unit> = {
     lessonIds: ['adv-airport-1'],
   },
   'adv-biz': {
-    id: 'adv-biz', title: '비즈니스 소통', emoji: '💼', type: 'sentences',
+    id: 'adv-biz', title: '감정·공감', emoji: '❤️', type: 'sentences',
     lessonIds: ['adv-biz-1', 'adv-biz-2'],
   },
   'adv-idiom': {
-    id: 'adv-idiom', title: '뉘앙스·관용구', emoji: '🧠', type: 'sentences',
-    lessonIds: ['adv-idiom-1'],
+    id: 'adv-idiom', title: '일상 대화', emoji: '💬', type: 'sentences',
+    lessonIds: ['adv-idiom-1', 'adv-idiom-2'],
   },
 }
 

@@ -26,11 +26,12 @@ const LEVELS: DifficultyLevel[] = ['beginner', 'intermediate', 'advanced']
 interface Props {
   currentLevel: DifficultyLevel
   suggestion?: AdaptiveSuggestion
+  message?: string  // suggestion 메시지 직접 override
   onConfirm: (level: DifficultyLevel) => void
   onDismiss: () => void
 }
 
-export function DifficultyModal({ currentLevel, suggestion, onConfirm, onDismiss }: Props) {
+export function DifficultyModal({ currentLevel, suggestion, message, onConfirm, onDismiss }: Props) {
   const [selected, setSelected] = useState<DifficultyLevel>(
     suggestion ? suggestion.to : currentLevel,
   )
@@ -41,6 +42,7 @@ export function DifficultyModal({ currentLevel, suggestion, onConfirm, onDismiss
   const downgradeMsg = suggestion?.type === 'downgrade'
     ? '💪 조금 더 탄탄하게 연습해볼까요? 난이도를 낮춰드릴게요.'
     : null
+  const displayMessage = message ?? upgradeMsg ?? downgradeMsg
 
   const modal = (
     <div
@@ -56,9 +58,9 @@ export function DifficultyModal({ currentLevel, suggestion, onConfirm, onDismiss
 
         <h2 className="text-xl font-black text-ink mb-1">학습 난이도</h2>
 
-        {(upgradeMsg || downgradeMsg) && (
+        {displayMessage && (
           <p className="text-sm text-primary font-semibold mb-4">
-            {upgradeMsg ?? downgradeMsg}
+            {displayMessage}
           </p>
         )}
 

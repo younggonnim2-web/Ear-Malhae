@@ -16,9 +16,10 @@ interface Props {
   isSpeaking?: boolean
   listenBuild?: boolean
   distractorCount?: number
+  autoAdvance?: boolean
 }
 
-export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direction = 'en-to-ko', tag, isSpeaking, listenBuild, distractorCount }: Props) {
+export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direction = 'en-to-ko', tag, isSpeaking, listenBuild, distractorCount, autoAdvance = true }: Props) {
   // listenBuild: 한국어 텍스트 숨기고 오디오만 듣고 영어 타일 배열 (Dictation 모드)
   const isEnToKo = direction === 'en-to-ko' && !listenBuild
 
@@ -87,7 +88,7 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
     setResult(correct ? 'correct' : 'wrong')
     setChecked(true)
     if (!correct) onWrong?.()
-    setTimeout(onCorrect, 1200)
+    if (autoAdvance) setTimeout(onCorrect, 1200)
   }
 
   const hasInput = selected.length > 0
@@ -184,14 +185,25 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
         </div>
       )}
 
-      <button
-        onClick={handleCheck}
-        disabled={!hasInput || checked}
-        className="w-full py-3 bg-primary text-ink rounded-full font-bold text-base
-          disabled:bg-hairline disabled:text-muted"
-      >
-        확인
-      </button>
+      {!checked && (
+        <button
+          onClick={handleCheck}
+          disabled={!hasInput}
+          className="w-full py-3 bg-primary text-ink rounded-full font-bold text-base
+            disabled:bg-hairline disabled:text-muted"
+        >
+          확인
+        </button>
+      )}
+
+      {checked && !autoAdvance && (
+        <button
+          onClick={onCorrect}
+          className="w-full py-3 bg-primary text-ink rounded-full font-bold text-base"
+        >
+          다음 ▶
+        </button>
+      )}
     </div>
   )
 }
