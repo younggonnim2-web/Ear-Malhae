@@ -111,6 +111,8 @@ function buildWordsSequence(
   const half = Math.ceil(N / 2)
   const seed = unitSeed(unitId)
 
+  const usedSentenceIds = new Set<string>()
+
   function pickSentences(count: number, offset: number): SentenceItem[] {
     // 난이도별 문장 풀 결정
     let pool: SentenceItem[]
@@ -127,9 +129,14 @@ function buildWordsSequence(
       const basic = allSentences.filter(s => s.difficulty === 'basic' || !s.difficulty)
       pool = basic.length > 0 ? basic : allSentences
     }
-    return Array.from({ length: count }, (_, i) =>
-      pool[(seed + lessonIndex * 5 + offset + i) % pool.length]
+    // 이미 이번 세션에서 사용한 문장은 제외 — 부족하면 전체 풀로 폴백
+    const unused = pool.filter(s => !usedSentenceIds.has(s.id))
+    const source = unused.length >= count ? unused : pool
+    const result = Array.from({ length: count }, (_, i) =>
+      source[(seed + lessonIndex * 5 + offset + i) % source.length]
     )
+    result.forEach(s => usedSentenceIds.add(s.id))
+    return result
   }
 
   // dialoguePrompt가 있는 고급 문장만 — Tier 2/3 dialogue-choice용
