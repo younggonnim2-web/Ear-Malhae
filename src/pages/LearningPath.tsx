@@ -57,7 +57,7 @@ export function LearningPath() {
         />
       )}
 
-      {showResetConfirm && (
+      {import.meta.env.DEV && showResetConfirm && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
           <div className="w-full max-w-md bg-canvas rounded-t-3xl p-6 flex flex-col gap-4">
             <p className="text-xl font-black text-ink text-center">학습 기록 초기화</p>
@@ -96,12 +96,14 @@ export function LearningPath() {
           >
             ⚙️
           </button>
-          <button
-            onClick={() => setShowResetConfirm(true)}
-            className="text-xs text-gray-400 border border-gray-200 rounded px-2 py-0.5 hover:text-red-400 hover:border-red-300"
-          >
-            초기화
-          </button>
+          {import.meta.env.DEV && (
+            <button
+              onClick={() => setShowResetConfirm(true)}
+              className="text-xs text-gray-400 border border-gray-200 rounded px-2 py-0.5 hover:text-red-400 hover:border-red-300"
+            >
+              초기화
+            </button>
+          )}
         </div>
       </div>
 
