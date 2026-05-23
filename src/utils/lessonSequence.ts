@@ -35,6 +35,21 @@ function buildSentenceSequence(
   const tier = Math.min(completionCount, 2)
   const seq: LessonChallenge[] = []
 
+  // 핵심 단어 발음용 partIndex 찾기: 가장 짧고 공백 없는 englishParts 인덱스 우선
+  function findKeyPartIndex(s: SentenceItem): number {
+    let best = -1
+    let bestLen = Infinity
+    for (let i = 0; i < s.englishParts.length; i++) {
+      const ep = s.englishParts[i]
+      if (!ep || ep.includes(' ')) continue
+      if (ep.length > 1 && ep.length < bestLen) {
+        best = i
+        bestLen = ep.length
+      }
+    }
+    return best
+  }
+
   if (tier === 0) {
     for (const s of sentences)
       if (s.dialoguePrompt)
@@ -43,6 +58,12 @@ function buildSentenceSequence(
       seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어', distractorCount: 2 })
+    // 말해보기: 핵심 단어 1문제 (가장 짧은 단어 englishPart)
+    if (sentences[0]) {
+      const partIdx = findKeyPartIndex(sentences[0])
+      if (partIdx >= 0)
+        seq.push({ kind: 'speak-sentence', sentenceId: sentences[0].id, partIndex: partIdx, tag: '어려운 연습' })
+    }
   }
 
   if (tier === 1) {
@@ -53,6 +74,14 @@ function buildSentenceSequence(
       seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'ko-to-en', tag: '새로운 패턴' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 3 })
+    // 말해보기: 핵심 단어 1 + 문장 전체 1
+    if (sentences[0]) {
+      const partIdx = findKeyPartIndex(sentences[0])
+      if (partIdx >= 0)
+        seq.push({ kind: 'speak-sentence', sentenceId: sentences[0].id, partIndex: partIdx, tag: '어려운 연습' })
+    }
+    if (sentences[1] ?? sentences[0])
+      seq.push({ kind: 'speak-sentence', sentenceId: (sentences[1] ?? sentences[0]).id, tag: '어려운 연습' })
   }
 
   if (tier >= 2) {
@@ -63,6 +92,14 @@ function buildSentenceSequence(
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.englishParts.length > 1 ? 1 : 0, fillDir: 'en', keyboardInput: true, tag: '어려운 연습' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습', distractorCount: 3 })
+    // 말해보기: 핵심 단어 1 + 문장 전체 1 (tier 1과 동일 구성)
+    if (sentences[0]) {
+      const partIdx = findKeyPartIndex(sentences[0])
+      if (partIdx >= 0)
+        seq.push({ kind: 'speak-sentence', sentenceId: sentences[0].id, partIndex: partIdx, tag: '어려운 연습' })
+    }
+    if (sentences[1] ?? sentences[0])
+      seq.push({ kind: 'speak-sentence', sentenceId: (sentences[1] ?? sentences[0]).id, tag: '어려운 연습' })
   }
 
   return seq

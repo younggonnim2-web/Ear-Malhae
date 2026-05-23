@@ -9,6 +9,7 @@ export type ChallengeKind =
   | 'sentence-builder'
   | 'fill-blank'
   | 'speak-check'
+  | 'speak-sentence'  // 문장 또는 문장 내 핵심 단어 발음 (sentence 트랙용)
   | 'sentence-pick'
   | 'dialogue-choice'
 
@@ -27,6 +28,8 @@ export interface LessonChallenge {
   keyboardInput?: boolean
   distractorCount?: number
   skipped?: boolean
+  /** speak-sentence 전용: undefined면 문장 전체, 숫자면 englishParts[N]의 핵심 단어만 발음 */
+  partIndex?: number
 }
 
 export interface Lesson {

@@ -7,7 +7,10 @@ import { evaluateTyped } from '../../utils/fuzzyMatch'
 import { TagBadge } from '../TagBadge'
 
 interface Props {
-  item: StudyItem
+  /** 단어/알파벳 발음 모드 */
+  item?: StudyItem
+  /** 문장 또는 임의 영어 텍스트 발음 모드 (item과 둘 중 하나 필수) */
+  phrase?: { english: string; korean: string }
   onCorrect: () => void
   onSkip?: () => void
   speak?: (text: string, lang?: string, rate?: number) => void
@@ -18,7 +21,7 @@ interface Props {
 
 type Phase = 'idle' | 'listening' | 'result' | 'blocked'
 
-export function PronunciationQuiz({ item, onCorrect, onSkip, speak, isSpeaking, isLastChance, tag }: Props) {
+export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSpeaking, isLastChance, tag }: Props) {
   const { startListening, stopListening, transcript, isSupported, error, reset } =
     useSpeechRecognition()
 
@@ -27,7 +30,15 @@ export function PronunciationQuiz({ item, onCorrect, onSkip, speak, isSpeaking, 
   const [matched, setMatched] = useState(false)
   const [lastTranscript, setLastTranscript] = useState('')
 
-  const targetWord = isWordItem(item) ? item.word : item.letter
+  // 발음 대상과 한국어 의미 — item 우선, 없으면 phrase 사용
+  const targetWord = item
+    ? (isWordItem(item) ? item.word : item.letter)
+    : (phrase?.english ?? '')
+  const meaning = item
+    ? (isWordItem(item) ? item.meaning : '')
+    : (phrase?.korean ?? '')
+  const isLongPhrase = targetWord.includes(' ')
+  const promptText = isLongPhrase ? '이 문장을 말해보세요' : '이 단어를 말해보세요'
 
   // 인식 결과 도착 시 평가
   useEffect(() => {
@@ -91,13 +102,13 @@ export function PronunciationQuiz({ item, onCorrect, onSkip, speak, isSpeaking, 
     <div className="flex flex-col gap-5 p-6">
       {tag && <div><TagBadge tag={tag} /></div>}
 
-      <p className="text-lg text-steel text-center font-semibold">이 단어를 말해보세요</p>
+      <p className="text-lg text-steel text-center font-semibold">{promptText}</p>
 
-      {/* 단어 표시 */}
+      {/* 발음 대상 표시 — 문장은 더 작은 폰트로 */}
       <div className="flex flex-col items-center gap-2 py-4">
-        <span className="text-5xl font-black text-ink">{targetWord}</span>
-        {isWordItem(item) && (
-          <span className="text-xl text-steel">{item.meaning}</span>
+        <span className={`${isLongPhrase ? 'text-3xl' : 'text-5xl'} font-black text-ink text-center`}>{targetWord}</span>
+        {meaning && (
+          <span className="text-xl text-steel text-center">{meaning}</span>
         )}
         {speak && (
           <button

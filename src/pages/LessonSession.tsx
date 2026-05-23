@@ -318,6 +318,26 @@ export function LessonSession() {
       )
     }
 
+    if (current.kind === 'speak-sentence') {
+      const sentence = SENTENCES.find(s => s.id === current.sentenceId) ?? SENTENCES[0]
+      // partIndex가 있으면 해당 영어 파트만 발음, 없으면 문장 전체
+      const phrase = current.partIndex !== undefined
+        ? { english: sentence.englishParts[current.partIndex], korean: sentence.parts[current.partIndex] }
+        : { english: sentence.english, korean: sentence.korean }
+      return (
+        <PronunciationQuiz
+          key={`${phase}-${challengeIndex}`}
+          phrase={phrase}
+          onCorrect={advance}
+          onSkip={handleSpeakSkip}
+          speak={speak}
+          isSpeaking={isSpeaking}
+          isLastChance={current.skipped}
+          tag={current.tag}
+        />
+      )
+    }
+
     if (current.kind === 'fill-blank') {
       const sentence = SENTENCES.find(s => s.id === current.sentenceId) ?? SENTENCES[0]
       return (
