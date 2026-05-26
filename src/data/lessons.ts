@@ -62,6 +62,10 @@ export const LESSONS_MAP: Record<string, Lesson> = {
     id: 'int-hotel-1', unitId: 'int-hotel', title: '체크인·시설 안내', itemIds: [],
     sentenceIds: ['hotel-have-reservation', 'hotel-where-is', 'hotel-wake-up-call'],
   },
+  'int-hotel-2': {
+    id: 'int-hotel-2', unitId: 'int-hotel', title: '서비스 요청·불만', itemIds: [],
+    sentenceIds: ['hotel-wifi', 'hotel-extra-towels', 'hotel-late-checkout', 'hotel-noisy', 'hotel-room-service'],
+  },
   'int-social-1': {
     id: 'int-social-1', unitId: 'int-social', title: '공감·동의', itemIds: [],
     sentenceIds: ['social-no-problem', 'social-sounds-good', 'social-maybe-next-time'],
@@ -70,11 +74,23 @@ export const LESSONS_MAP: Record<string, Lesson> = {
     id: 'int-social-2', unitId: 'int-social', title: '권유·의견', itemIds: [],
     sentenceIds: ['social-i-think', 'social-you-should'],
   },
+  'int-social-3': {
+    id: 'int-social-3', unitId: 'int-social', title: '대화 이어가기', itemIds: [],
+    sentenceIds: ['social-how-was', 'social-me-too', 'social-really', 'social-take-care', 'social-by-the-way'],
+  },
+  'int-dining-3': {
+    id: 'int-dining-3', unitId: 'int-dining', title: '주문 심화·계산', itemIds: [],
+    sentenceIds: ['dining-recommend', 'dining-allergy-gluten', 'dining-well-done', 'dining-split-bill', 'dining-refill'],
+  },
 
   // ── 고급 트랙 레슨 (sentence-type) ──
   'adv-airport-1': {
     id: 'adv-airport-1', unitId: 'adv-airport', title: '지연·분실·오버부킹', itemIds: [],
     sentenceIds: ['adv-travel-delay', 'adv-travel-lost-baggage', 'adv-airport-overbook'],
+  },
+  'adv-airport-2': {
+    id: 'adv-airport-2', unitId: 'adv-airport', title: '입출국·탑승 수속', itemIds: [],
+    sentenceIds: ['adv-customs-nothing', 'adv-visit-purpose', 'adv-connecting-flight', 'adv-checked-bags', 'adv-window-seat'],
   },
   'adv-biz-1': {
     id: 'adv-biz-1', unitId: 'adv-biz', title: '감정 표현', itemIds: [],
@@ -84,6 +100,10 @@ export const LESSONS_MAP: Record<string, Lesson> = {
     id: 'adv-biz-2', unitId: 'adv-biz', title: '공감·조언', itemIds: [],
     sentenceIds: ['adv-feeling-sympathy', 'adv-daily-advice', 'adv-daily-opinion'],
   },
+  'adv-biz-3': {
+    id: 'adv-biz-3', unitId: 'adv-biz', title: '위로·격려', itemIds: [],
+    sentenceIds: ['adv-things-better', 'adv-you-can-do', 'adv-worry-fine', 'adv-hang-in-there', 'adv-proud-of-you'],
+  },
   'adv-idiom-1': {
     id: 'adv-idiom-1', unitId: 'adv-idiom', title: '일상 표현', itemIds: [],
     sentenceIds: ['adv-daily-netflix', 'adv-chat-recommend', 'adv-chat-catchup'],
@@ -91,5 +111,9 @@ export const LESSONS_MAP: Record<string, Lesson> = {
   'adv-idiom-2': {
     id: 'adv-idiom-2', unitId: 'adv-idiom', title: '반응·표현', itemIds: [],
     sentenceIds: ['adv-daily-rejection', 'adv-daily-agree'],
+  },
+  'adv-idiom-3': {
+    id: 'adv-idiom-3', unitId: 'adv-idiom', title: '자연스러운 표현', itemIds: [],
+    sentenceIds: ['adv-kidding', 'adv-no-way', 'adv-hang-on', 'adv-fair-enough', 'adv-figured-out'],
   },
 }

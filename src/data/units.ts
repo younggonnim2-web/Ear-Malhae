@@ -63,29 +63,29 @@ export const UNITS_MAP: Record<string, Unit> = {
   // ── 중급 트랙 유닛 ──
   'int-dining': {
     id: 'int-dining', title: '식당 주문', emoji: '🍽️', type: 'sentences',
-    lessonIds: ['int-dining-1', 'int-dining-2'],
+    lessonIds: ['int-dining-1', 'int-dining-2', 'int-dining-3'],
   },
   'int-hotel': {
     id: 'int-hotel', title: '여행·숙박', emoji: '🏨', type: 'sentences',
-    lessonIds: ['int-hotel-1'],
+    lessonIds: ['int-hotel-1', 'int-hotel-2'],
   },
   'int-social': {
     id: 'int-social', title: '일상 회화', emoji: '💬', type: 'sentences',
-    lessonIds: ['int-social-1', 'int-social-2'],
+    lessonIds: ['int-social-1', 'int-social-2', 'int-social-3'],
   },
 
   // ── 고급 트랙 유닛 ──
   'adv-airport': {
     id: 'adv-airport', title: '공항·교통', emoji: '✈️', type: 'sentences',
-    lessonIds: ['adv-airport-1'],
+    lessonIds: ['adv-airport-1', 'adv-airport-2'],
   },
   'adv-biz': {
     id: 'adv-biz', title: '감정·공감', emoji: '❤️', type: 'sentences',
-    lessonIds: ['adv-biz-1', 'adv-biz-2'],
+    lessonIds: ['adv-biz-1', 'adv-biz-2', 'adv-biz-3'],
   },
   'adv-idiom': {
     id: 'adv-idiom', title: '일상 대화', emoji: '💬', type: 'sentences',
-    lessonIds: ['adv-idiom-1', 'adv-idiom-2'],
+    lessonIds: ['adv-idiom-1', 'adv-idiom-2', 'adv-idiom-3'],
   },
 }
 
