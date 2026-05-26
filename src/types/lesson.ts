@@ -12,6 +12,7 @@ export type ChallengeKind =
   | 'speak-sentence'  // 문장 또는 문장 내 핵심 단어 발음 (sentence 트랙용)
   | 'sentence-pick'
   | 'dialogue-choice'
+  | 'listen-type'
 
 export type ChallengeTag = '새로운 단어' | '어려운 연습' | '새로운 패턴' | '복습'
 

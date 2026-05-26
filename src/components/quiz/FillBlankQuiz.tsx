@@ -5,6 +5,7 @@ import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { CharacterBubble } from '../CharacterBubble'
 import { TagBadge } from '../TagBadge'
+import { SentenceTranslationCard } from './SentenceTranslationCard'
 
 interface Props {
   sentence: SentenceItem
@@ -86,6 +87,9 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
             onSpeak={speak ? () => speak(sentence.english, 'en-US') : undefined}
             isSpeaking={isSpeaking}
           />
+          {answered && (
+            <p className="text-center text-sm text-muted -mt-3">{sentence.english}</p>
+          )}
 
           {/* 영어 문장 인라인 빈칸 */}
           <div className="flex flex-wrap items-center gap-x-2 gap-y-2 bg-surface rounded-2xl px-5 py-4 border-2 border-hairline">
@@ -173,6 +177,9 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
             onSpeak={speak ? () => speak(sentence.english, 'en-US') : undefined}
             isSpeaking={isSpeaking}
           />
+          {answered && (
+            <p className="text-center text-sm text-muted -mt-3">{sentence.korean}</p>
+          )}
 
           <div className="bg-surface rounded-2xl px-5 py-4 border-2 border-hairline">
             <p className="text-xl font-semibold text-ink tracking-wide">{partialKorean}</p>
@@ -215,20 +222,20 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
       )}
 
       {answered && (
-        <p className={`text-lg font-medium ${(keyboardInput ? isInputCorrect : selected === correctAnswer) ? 'text-green-600' : 'text-steel'}`}>
-          {(keyboardInput ? isInputCorrect : selected === correctAnswer)
-            ? '✓ 정답이에요! 잘했어요 👍'
-            : keyboardInput ? '' : `정답은 "${correctAnswer}"이에요. 괜찮아요! 👏`}
-        </p>
-      )}
-
-      {answered && (
-        <button
-          onClick={onCorrect}
-          className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
-        >
-          다음 ▶
-        </button>
+        <>
+          <p className={`text-lg font-medium ${(keyboardInput ? isInputCorrect : selected === correctAnswer) ? 'text-green-600' : 'text-steel'}`}>
+            {(keyboardInput ? isInputCorrect : selected === correctAnswer)
+              ? '✓ 정답이에요! 잘했어요 👍'
+              : keyboardInput ? '' : `정답은 "${correctAnswer}"이에요. 괜찮아요! 👏`}
+          </p>
+          <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+          <button
+            onClick={onCorrect}
+            className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
+          >
+            다음 ▶
+          </button>
+        </>
       )}
     </div>
   )

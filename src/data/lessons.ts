@@ -116,4 +116,124 @@ export const LESSONS_MAP: Record<string, Lesson> = {
     id: 'adv-idiom-3', unitId: 'adv-idiom', title: '자연스러운 표현', itemIds: [],
     sentenceIds: ['adv-kidding', 'adv-no-way', 'adv-hang-on', 'adv-fair-enough', 'adv-figured-out'],
   },
+
+  // ── 중급: 쇼핑 ──
+  'int-shopping-1': {
+    id: 'int-shopping-1', unitId: 'int-shopping', title: '기본 쇼핑', itemIds: [],
+    sentenceIds: ['shopping-excuse-me', 'shopping-how-much', 'shopping-other-colors', 'shopping-try-on', 'shopping-size'],
+  },
+  'int-shopping-2': {
+    id: 'int-shopping-2', unitId: 'int-shopping', title: '결제·반품', itemIds: [],
+    sentenceIds: ['shopping-credit-card', 'shopping-receipt', 'shopping-gift-wrap', 'shopping-too-expensive', 'shopping-refund'],
+  },
+
+  // ── 중급: 길 찾기 ──
+  'int-directions-1': {
+    id: 'int-directions-1', unitId: 'int-directions', title: '길 묻기', itemIds: [],
+    sentenceIds: ['directions-how-get-to', 'directions-turn-left', 'directions-straight', 'directions-bus-stop', 'directions-how-far'],
+  },
+  'int-directions-2': {
+    id: 'int-directions-2', unitId: 'int-directions', title: '교통 안내', itemIds: [],
+    sentenceIds: ['directions-excuse-walking', 'directions-on-right', 'directions-subway', 'directions-take-a-cab'],
+  },
+
+  // ── 중급: 대중교통 ──
+  'int-transport-1': {
+    id: 'int-transport-1', unitId: 'int-transport', title: '탑승·환승', itemIds: [],
+    sentenceIds: ['transport-one-ticket', 'transport-does-stop', 'transport-how-many-stops', 'transport-transfer', 'transport-get-off'],
+  },
+  'int-transport-2': {
+    id: 'int-transport-2', unitId: 'int-transport', title: '좌석·도착', itemIds: [],
+    sentenceIds: ['transport-late', 'transport-which-platform', 'transport-reserved-seat', 'transport-arrival'],
+  },
+
+  // ── 중급: 은행 ──
+  'int-bank-1': {
+    id: 'int-bank-1', unitId: 'int-bank', title: '은행 기본', itemIds: [],
+    sentenceIds: ['bank-open-account', 'bank-exchange', 'bank-withdraw', 'bank-transfer', 'bank-fee'],
+  },
+  'int-bank-2': {
+    id: 'int-bank-2', unitId: 'int-bank', title: '계좌·카드', itemIds: [],
+    sentenceIds: ['bank-balance', 'bank-pin', 'bank-lost-card', 'bank-minimum'],
+  },
+
+  // ── 중급: 병원 ──
+  'int-hospital-1': {
+    id: 'int-hospital-1', unitId: 'int-hospital', title: '진료·증상', itemIds: [],
+    sentenceIds: ['hospital-appointment', 'hospital-headache', 'hospital-fever', 'hospital-allergy', 'hospital-test'],
+  },
+  'int-hospital-2': {
+    id: 'int-hospital-2', unitId: 'int-hospital', title: '처방·보험', itemIds: [],
+    sentenceIds: ['hospital-prescription', 'hospital-insurance', 'hospital-specialist', 'hospital-pharmacy'],
+  },
+
+  // ── 중급: 전화 통화 ──
+  'int-phone-1': {
+    id: 'int-phone-1', unitId: 'int-phone', title: '전화 기본', itemIds: [],
+    sentenceIds: ['phone-is-this', 'phone-hold-on', 'phone-can-you-repeat', 'phone-call-back', 'phone-message'],
+  },
+  'int-phone-2': {
+    id: 'int-phone-2', unitId: 'int-phone', title: '전화 심화', itemIds: [],
+    sentenceIds: ['phone-wrong-number', 'phone-speak-up', 'phone-available', 'phone-conference'],
+  },
+
+  // ── 고급: 회의 ──
+  'adv-meeting-1': {
+    id: 'adv-meeting-1', unitId: 'adv-meeting', title: '회의 진행', itemIds: [],
+    sentenceIds: ['adv-meeting-agenda', 'adv-meeting-discuss', 'adv-meeting-next-steps', 'adv-meeting-postpone', 'adv-meeting-on-track'],
+  },
+  'adv-meeting-2': {
+    id: 'adv-meeting-2', unitId: 'adv-meeting', title: '회의 정리', itemIds: [],
+    sentenceIds: ['adv-meeting-input', 'adv-meeting-deadline', 'adv-meeting-follow-up', 'adv-meeting-minutes', 'adv-meeting-decision'],
+  },
+
+  // ── 고급: 이메일 ──
+  'adv-email-1': {
+    id: 'adv-email-1', unitId: 'adv-email', title: '이메일 기본', itemIds: [],
+    sentenceIds: ['adv-email-followup', 'adv-email-attached', 'adv-email-clarify', 'adv-email-confirm', 'adv-email-deadline'],
+  },
+  'adv-email-2': {
+    id: 'adv-email-2', unitId: 'adv-email', title: '이메일 심화', itemIds: [],
+    sentenceIds: ['adv-email-appreciate', 'adv-email-update', 'adv-email-loop', 'adv-email-convenient', 'adv-email-priority'],
+  },
+
+  // ── 고급: 협상 ──
+  'adv-negotiate-1': {
+    id: 'adv-negotiate-1', unitId: 'adv-negotiate', title: '협상 기본', itemIds: [],
+    sentenceIds: ['adv-negotiate-offer', 'adv-negotiate-middle', 'adv-negotiate-counter', 'adv-negotiate-acceptable', 'adv-negotiate-terms'],
+  },
+  'adv-negotiate-2': {
+    id: 'adv-negotiate-2', unitId: 'adv-negotiate', title: '협상 타결', itemIds: [],
+    sentenceIds: ['adv-negotiate-deal', 'adv-negotiate-flexible', 'adv-negotiate-bottom-line', 'adv-negotiate-agree', 'adv-negotiate-finalize'],
+  },
+
+  // ── 고급: 뉴스·시사 ──
+  'adv-news-1': {
+    id: 'adv-news-1', unitId: 'adv-news', title: '뉴스 읽기', itemIds: [],
+    sentenceIds: ['adv-news-headline', 'adv-news-opinion', 'adv-news-source', 'adv-news-agree', 'adv-news-impact'],
+  },
+  'adv-news-2': {
+    id: 'adv-news-2', unitId: 'adv-news', title: '뉴스 토론', itemIds: [],
+    sentenceIds: ['adv-news-surprised', 'adv-news-controversial', 'adv-news-follow', 'adv-news-turn-out', 'adv-news-local'],
+  },
+
+  // ── 고급: 건강 생활 ──
+  'adv-health-1': {
+    id: 'adv-health-1', unitId: 'adv-health', title: '건강 관리', itemIds: [],
+    sentenceIds: ['adv-health-lifestyle', 'adv-health-mental', 'adv-health-workout', 'adv-health-diet', 'adv-health-checkup'],
+  },
+  'adv-health-2': {
+    id: 'adv-health-2', unitId: 'adv-health', title: '건강 습관', itemIds: [],
+    sentenceIds: ['adv-health-stress', 'adv-health-habit', 'adv-health-sleep', 'adv-health-prevention', 'adv-health-balance'],
+  },
+
+  // ── 고급: 기술 ──
+  'adv-tech-1': {
+    id: 'adv-tech-1', unitId: 'adv-tech', title: '기술 문제', itemIds: [],
+    sentenceIds: ['adv-tech-update', 'adv-tech-backup', 'adv-tech-crash', 'adv-tech-share', 'adv-tech-setting'],
+  },
+  'adv-tech-2': {
+    id: 'adv-tech-2', unitId: 'adv-tech', title: '기술 대화', itemIds: [],
+    sentenceIds: ['adv-tech-password', 'adv-tech-download', 'adv-tech-sync', 'adv-tech-connection', 'adv-tech-ai'],
+  },
 }

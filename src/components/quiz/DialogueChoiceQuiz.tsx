@@ -4,6 +4,7 @@ import type { ChallengeTag } from '../../types/lesson'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { TagBadge } from '../TagBadge'
+import { SentenceTranslationCard } from './SentenceTranslationCard'
 
 interface Props {
   sentence: SentenceItem
@@ -86,6 +87,9 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
         </div>
         <div className="bg-surface border-2 border-hairline rounded-2xl rounded-tl-sm px-4 py-3 flex-1">
           <p className="text-base font-semibold text-ink leading-relaxed">{prompt}</p>
+          {answered && sentence.dialoguePromptKorean && (
+            <p className="text-xs text-muted mt-1 leading-relaxed">{sentence.dialoguePromptKorean}</p>
+          )}
           {speak && (
             <button
               onClick={() => speak(prompt, 'en-US')}
@@ -145,6 +149,7 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
               <p className={`text-base font-medium ${selected === answer ? 'text-green-600' : 'text-steel'}`}>
                 {selected === answer ? '✓ 정답이에요! 👍' : `정답: "${answer}"`}
               </p>
+              <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
               <button
                 onClick={onCorrect}
                 className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"

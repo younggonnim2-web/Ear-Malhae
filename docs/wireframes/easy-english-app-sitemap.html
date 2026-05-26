@@ -440,6 +440,86 @@
   .text-right { text-align: right; }
   .mt-auto   { margin-top: auto; }
 
+  /* ── Quiz Catalog ── */
+  .quiz-catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .quiz-type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .quiz-type-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--ink);
+    text-align: center;
+    letter-spacing: -0.01em;
+    max-width: 140px;
+  }
+  .quiz-type-path {
+    font-size: 9px;
+    color: var(--muted);
+    font-family: 'Geist Mono', monospace;
+    text-align: center;
+    max-width: 140px;
+  }
+  .quiz-test-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 16px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: -0.01em;
+  }
+  .quiz-test-btn:hover { background: #333; transform: translateY(-1px); }
+  .quiz-test-btn.mid  { background: #0891b2; }
+  .quiz-test-btn.mid:hover { background: #0e7490; }
+  .quiz-test-btn.adv  { background: #7c3aed; }
+  .quiz-test-btn.adv:hover { background: #6d28d9; }
+  .quiz-test-btn.new  { background: var(--green); color: var(--ink); }
+  .quiz-test-btn.new:hover { background: #00b890; }
+  .catalog-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--steel);
+    background: var(--blue-dim);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .catalog-note code {
+    background: rgba(59,130,246,0.1);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+  }
+  .catalog-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    grid-column: 1 / -1;
+    padding: 4px 0 2px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
   /* ── Arrow connector ── */
   .arrow-row {
     display: flex;
@@ -1238,6 +1318,382 @@
 
 
 <!-- ═══════════════════════════════════════════
+     문제 유형 카탈로그
+══════════════════════════════════════════════ -->
+<div class="section-label">문제 유형 카탈로그 (10종 · 13 변형) — ▶ 버튼 클릭으로 즉시 테스트</div>
+
+<div class="catalog-note">
+  <span style="font-size:14px;flex-shrink:0">💡</span>
+  <div style="display:flex;flex-direction:column;gap:5px;flex:1">
+    <span>▶ 테스트 버튼 → 아래 포트의 개발 서버에서 해당 문제 유형으로 바로 이동. <strong>Tier 1+</strong> 표기 유형은 <code>completion=1</code> 파라미터로 2회차 시퀀스를 강제합니다.</span>
+    <span style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:11px;color:var(--muted)">개발 서버 포트:</span>
+      <input id="dev-port" type="number" value="5176" min="1000" max="9999"
+        style="width:60px;font-size:11px;padding:2px 6px;border:1px solid var(--hairline);border-radius:6px;background:var(--canvas);color:var(--ink);font-family:'Geist Mono',monospace;text-align:center"
+        oninput="updateTestButtonPorts()" />
+      <span id="server-status" style="font-size:11px;font-weight:600;color:var(--muted)">확인 중...</span>
+      <button onclick="checkDevServer()" style="font-size:10px;padding:2px 10px;border:1px solid var(--hairline);border-radius:999px;background:var(--canvas);cursor:pointer;color:var(--steel);font-family:inherit">↺ 재확인</button>
+    </span>
+  </div>
+</div>
+
+<div class="quiz-catalog-grid">
+
+  <!-- ── 기본 트랙 ── -->
+  <div class="catalog-group-label">기본 트랙 (초급)</div>
+
+  <!-- 1. flash — 카드 보기 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;padding:5px;flex:1;overflow:hidden">
+        <div class="wf-header back session">← 알파벳</div>
+        <div class="wf-progress-bar"><div class="wf-progress-fill" style="width:30%"></div></div>
+        <div style="font-size:4px;text-align:center;background:var(--green-dim);color:var(--emerald);border-radius:3px;padding:1px">🔊 자동 재생</div>
+        <div class="wf-emoji">🍎</div>
+        <div class="wf-big-text">A</div>
+        <div class="wf-sub-text">에이</div>
+        <div class="wf-divider"></div>
+        <div class="wf-sub-text" style="font-size:7px;font-weight:700;color:var(--ink)">apple · 사과</div>
+        <div class="wf-btn secondary" style="margin-top:2px;font-size:5.5px">🔊 다시 듣기</div>
+        <div class="wf-btn primary mt-auto">다음 ▶</div>
+      </div>
+    </div>
+    <div class="quiz-type-label">카드 보기</div>
+    <div class="quiz-type-path">flash · FlashCard.tsx</div>
+    <span class="wf-badge blue">기본</span>
+    <a href="#" data-path="/lesson/alphabet-1?kind=flash" class="quiz-test-btn">▶ 테스트</a>
+  </div>
+
+  <!-- 2. image-choice — 그림 선택 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;padding:5px;flex:1;overflow:hidden">
+        <div class="wf-header back session">← 학습</div>
+        <div class="wf-row"><span class="wf-badge blue">새로운 단어</span></div>
+        <div class="wf-emoji">🍎</div>
+        <div style="font-size:5px;text-align:center;color:var(--steel)">이 그림에 맞는 뜻은?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
+          <div class="wf-quiz-option correct">✓ 사과</div>
+          <div class="wf-quiz-option">고양이</div>
+          <div class="wf-quiz-option">개</div>
+          <div class="wf-quiz-option">바나나</div>
+        </div>
+        <div style="font-size:4.5px;color:var(--emerald);text-align:center;font-weight:700">✓ 정답이에요! 👍</div>
+        <div class="wf-btn primary mt-auto">다음 ▶</div>
+      </div>
+    </div>
+    <div class="quiz-type-label">그림 선택</div>
+    <div class="quiz-type-path">image-choice · ImageChoiceQuiz.tsx</div>
+    <span class="wf-badge blue">기본</span>
+    <a href="#" data-path="/lesson/daily-1?kind=image-choice" class="quiz-test-btn">▶ 테스트</a>
+  </div>
+
+  <!-- 3. listen-choice — 듣고 선택 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;padding:5px;flex:1;overflow:hidden">
+        <div class="wf-header back session">← 학습</div>
+        <div class="wf-row"><span class="wf-badge blue">새로운 단어</span></div>
+        <div class="wf-speaker">🔊</div>
+        <div class="wf-row" style="justify-content:center;gap:4px">
+          <div class="wf-btn secondary" style="width:auto;padding:2px 8px;font-size:5px">🔊 다시 듣기</div>
+          <div class="wf-btn secondary" style="width:auto;padding:2px 8px;font-size:5px">🐢 느리게</div>
+        </div>
+        <div style="font-size:4.5px;text-align:center;color:var(--steel)">들은 단어의 뜻은?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
+          <div class="wf-quiz-option">사과</div>
+          <div class="wf-quiz-option">고양이</div>
+          <div class="wf-quiz-option">개</div>
+          <div class="wf-quiz-option">바나나</div>
+        </div>
+        <div class="wf-btn gray mt-auto">다음 ▶</div>
+      </div>
+    </div>
+    <div class="quiz-type-label">듣고 선택</div>
+    <div class="quiz-type-path">listen-choice · ListenChoiceQuiz.tsx</div>
+    <span class="wf-badge blue">기본</span>
+    <a href="#" data-path="/lesson/daily-1?kind=listen-choice" class="quiz-test-btn">▶ 테스트</a>
+  </div>
+
+  <!-- 4. matching — 매칭 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;padding:5px;flex:1;overflow:hidden">
+        <div class="wf-header back session">← 학습</div>
+        <div style="font-size:4.5px;text-align:center;color:var(--muted)">영↔한 짝을 맞추세요</div>
+        <div class="wf-match-grid" style="margin-top:2px">
+          <div class="wf-match-card selected">apple</div>
+          <div class="wf-match-card">개</div>
+          <div class="wf-match-card">cat</div>
+          <div class="wf-match-card matched">사과</div>
+          <div class="wf-match-card">dog</div>
+          <div class="wf-match-card">고양이</div>
+        </div>
+        <div style="font-size:4.5px;text-align:center;color:var(--steel)">apple 선택됨</div>
+        <div class="wf-btn primary mt-auto">확인 ▶</div>
+      </div>
+    </div>
+    <div class="quiz-type-label">매칭</div>
+    <div class="quiz-type-path">matching · MatchingQuiz.tsx</div>
+    <span class="wf-badge blue">기본</span>
+    <a href="#" data-path="/lesson/daily-1?kind=matching" class="quiz-test-btn">▶ 테스트</a>
+  </div>
+
+  <!-- ── 중급·고급 공통 ── -->
+  <div class="catalog-group-label">중급·고급 공통 (Tier 0부터)</div>
+
+  <!-- 5. sentence-pick — 문장 번역 선택 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div class="screen-states">
+        <div class="state-tabs">
+          <button class="state-tab active" data-state="en-to-ko">EN→KO</button>
+          <button class="state-tab" data-state="ko-to-en">KO→EN</button>
+        </div>
+        <div class="state-content active" data-state="en-to-ko" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge mint">새로운 패턴</span></div>
+          <div style="font-size:5.5px;font-weight:700;text-align:center;color:var(--ink);background:var(--green-dim);border-radius:4px;padding:3px">I'd like to order.</div>
+          <div style="font-size:4.5px;text-align:center;color:var(--muted)">한국어를 고르세요</div>
+          <div class="wf-quiz-option correct" style="font-size:5px">✓ 주문하고 싶어요</div>
+          <div class="wf-quiz-option" style="font-size:5px">계산하고 싶어요</div>
+          <div class="wf-quiz-option" style="font-size:5px">예약하고 싶어요</div>
+          <div class="wf-quiz-option" style="font-size:5px">취소하고 싶어요</div>
+          <div class="wf-btn primary mt-auto" style="font-size:5.5px">다음 ▶</div>
+        </div>
+        <div class="state-content" data-state="ko-to-en" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge orange">어려운 연습</span></div>
+          <div style="font-size:5.5px;font-weight:700;text-align:center;color:var(--ink);background:var(--surface);border-radius:4px;padding:3px;border:1px solid var(--hairline)">주문하고 싶어요</div>
+          <div style="font-size:4.5px;text-align:center;color:var(--muted)">영어를 고르세요</div>
+          <div class="wf-quiz-option" style="font-size:4.5px">I'd like to order.</div>
+          <div class="wf-quiz-option" style="font-size:4.5px">Can I have the bill?</div>
+          <div class="wf-quiz-option" style="font-size:4.5px">I'd like to cancel.</div>
+          <div class="wf-quiz-option" style="font-size:4.5px">May I reserve?</div>
+          <div class="wf-btn gray mt-auto" style="font-size:5.5px">다음 ▶</div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-type-label">문장 번역 선택</div>
+    <div class="quiz-type-path">sentence-pick · SentencePickQuiz.tsx</div>
+    <span class="wf-badge mint">중급+</span>
+    <a href="#" data-path="/lesson/int-dining-1?kind=sentence-pick&completion=1" class="quiz-test-btn mid">▶ 테스트</a>
+  </div>
+
+  <!-- 6. dialogue-choice — 대화 상황 선택 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;padding:5px;flex:1;overflow:hidden">
+        <div class="wf-header back session">← 학습</div>
+        <div class="wf-row"><span class="wf-badge mint">새로운 패턴</span></div>
+        <div style="background:var(--surface);border:1px solid var(--hairline);border-radius:5px;padding:3px 5px">
+          <div style="font-size:4px;color:var(--muted)">Waiter</div>
+          <div style="font-size:5px;color:var(--ink)">Are you ready to order?</div>
+        </div>
+        <div style="font-size:4.5px;text-align:center;color:var(--steel)">답변을 고르세요</div>
+        <div class="wf-quiz-option correct" style="font-size:4.5px">✓ I'd like to order, please.</div>
+        <div class="wf-quiz-option" style="font-size:4.5px">Check, please.</div>
+        <div class="wf-quiz-option" style="font-size:4.5px">No, thank you.</div>
+        <div class="wf-quiz-option" style="font-size:4.5px">Excuse me!</div>
+        <div class="wf-btn primary mt-auto">다음 ▶</div>
+      </div>
+    </div>
+    <div class="quiz-type-label">대화 상황 선택</div>
+    <div class="quiz-type-path">dialogue-choice · DialogueChoiceQuiz.tsx</div>
+    <span class="wf-badge mint">중급+</span>
+    <a href="#" data-path="/lesson/int-dining-1?kind=dialogue-choice&completion=1" class="quiz-test-btn mid">▶ 테스트</a>
+  </div>
+
+  <!-- 7. fill-blank — 빈칸 채우기 (타일 / 키보드) -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div class="screen-states">
+        <div class="state-tabs">
+          <button class="state-tab active" data-state="tile">타일 선택</button>
+          <button class="state-tab" data-state="keyboard">키보드 입력</button>
+        </div>
+        <div class="state-content active" data-state="tile" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge mint">새로운 패턴</span></div>
+          <div style="font-size:5.5px;text-align:center;color:var(--ink)">I'd <span style="background:var(--green-dim);border:1px solid var(--green);border-radius:3px;padding:1px 4px;font-weight:700">like</span> to order.</div>
+          <div style="font-size:4px;color:var(--muted);text-align:center">빈칸에 들어갈 단어를 고르세요</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;justify-content:center">
+            <div style="padding:2px 6px;border:1px solid var(--green);border-radius:999px;font-size:5.5px;background:var(--green-dim)">like</div>
+            <div style="padding:2px 6px;border:1px solid var(--hairline);border-radius:999px;font-size:5.5px;background:var(--canvas)">want</div>
+            <div style="padding:2px 6px;border:1px solid var(--hairline);border-radius:999px;font-size:5.5px;background:var(--canvas)">need</div>
+          </div>
+          <div class="wf-btn primary mt-auto">확인 ✓</div>
+        </div>
+        <div class="state-content" data-state="keyboard" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge orange">어려운 연습</span></div>
+          <div style="font-size:5.5px;text-align:center;color:var(--ink)">I'd <span style="background:var(--surface);border:1px dashed var(--hairline);border-radius:3px;padding:1px 8px">____</span> to order.</div>
+          <div style="font-size:4px;color:var(--muted);text-align:center">영어로 입력하세요 (ko→en)</div>
+          <div style="border:1.5px solid var(--blue);border-radius:5px;padding:4px 5px;background:var(--canvas)">
+            <div style="font-size:5.5px;color:var(--ink)">like|</div>
+          </div>
+          <div class="wf-btn primary mt-auto">확인 ✓</div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-type-label">빈칸 채우기</div>
+    <div class="quiz-type-path">fill-blank · FillBlankQuiz.tsx</div>
+    <span class="wf-badge mint">중급+ / 고급 Tier 2+</span>
+    <a href="#" data-path="/lesson/int-dining-1?kind=fill-blank&completion=1" class="quiz-test-btn mid">▶ 테스트 (타일)</a>
+  </div>
+
+  <!-- 8. sentence-builder — 문장 구성 (타일 / listen-build) -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div class="screen-states">
+        <div class="state-tabs">
+          <button class="state-tab active" data-state="tile">타일 배열</button>
+          <button class="state-tab" data-state="listen">듣고 배열</button>
+        </div>
+        <div class="state-content active" data-state="tile" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge orange">어려운 연습</span></div>
+          <div style="font-size:5px;text-align:center;font-weight:700;color:var(--ink)">주문하고 싶어요</div>
+          <div style="min-height:12px;border:1px dashed var(--hairline);border-radius:4px;padding:2px;display:flex;gap:2px;flex-wrap:wrap">
+            <span style="padding:1px 5px;background:var(--green-dim);border-radius:999px;font-size:5px;border:1px solid rgba(0,212,164,0.3)">I'd</span>
+            <span style="padding:1px 5px;background:var(--green-dim);border-radius:999px;font-size:5px;border:1px solid rgba(0,212,164,0.3)">like</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:2px">
+            <div style="padding:2px 5px;border:1px solid var(--hairline);border-radius:999px;font-size:5px">to</div>
+            <div style="padding:2px 5px;border:1px solid var(--hairline);border-radius:999px;font-size:5px">order.</div>
+            <div style="padding:2px 5px;border:1px solid var(--hairline);border-radius:999px;font-size:5px">please</div>
+          </div>
+          <div class="wf-btn primary mt-auto">확인 ✓</div>
+        </div>
+        <div class="state-content" data-state="listen" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge orange">어려운 연습</span></div>
+          <div style="font-size:4.5px;text-align:center;color:var(--muted)">🔊 오디오만 — 한국어 힌트 없음</div>
+          <div class="wf-speaker" style="font-size:18px;padding:2px">🔊</div>
+          <div style="min-height:12px;border:1px dashed var(--hairline);border-radius:4px;padding:2px">
+            <span style="padding:1px 5px;background:var(--green-dim);border-radius:999px;font-size:5px;border:1px solid rgba(0,212,164,0.3)">I'd</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:2px">
+            <div style="padding:2px 5px;border:1px solid var(--hairline);border-radius:999px;font-size:5px">like</div>
+            <div style="padding:2px 5px;border:1px solid var(--hairline);border-radius:999px;font-size:5px">to</div>
+            <div style="padding:2px 5px;border:1px solid var(--hairline);border-radius:999px;font-size:5px">order.</div>
+          </div>
+          <div class="wf-btn primary mt-auto">확인 ✓</div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-type-label">문장 구성 (타일 배열)</div>
+    <div class="quiz-type-path">sentence-builder · SentenceBuilderQuiz.tsx</div>
+    <span class="wf-badge mint">중급+ / 듣고배열 Tier 2+</span>
+    <a href="#" data-path="/lesson/int-dining-1?kind=sentence-builder&completion=1" class="quiz-test-btn mid">▶ 테스트</a>
+  </div>
+
+  <!-- 9. speak-check / speak-sentence — 발음 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div class="screen-states">
+        <div class="state-tabs">
+          <button class="state-tab active" data-state="word">단어 발음</button>
+          <button class="state-tab" data-state="sentence">문장 발음</button>
+        </div>
+        <div class="state-content active" data-state="word" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge orange">어려운 연습</span></div>
+          <div style="font-size:4.5px;text-align:center;color:var(--steel)">따라 말해봐요</div>
+          <div style="font-size:16px;text-align:center">🎤</div>
+          <div class="wf-big-text" style="font-size:12px">apple</div>
+          <div class="wf-sub-text">사과</div>
+          <div class="wf-btn secondary" style="font-size:5.5px">🔊 예시 듣기</div>
+          <div class="wf-row" style="gap:3px;margin-top:2px">
+            <div class="wf-btn success" style="flex:1;font-size:5.5px">🎤 시작</div>
+            <div class="wf-btn gray" style="flex:1;font-size:5.5px">→ 넘기기</div>
+          </div>
+        </div>
+        <div class="state-content" data-state="sentence" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge orange">어려운 연습</span></div>
+          <div style="font-size:4.5px;text-align:center;color:var(--steel)">문장을 따라 말해봐요</div>
+          <div style="font-size:16px;text-align:center">🎤</div>
+          <div style="font-size:5.5px;font-weight:700;text-align:center;color:var(--ink);background:var(--green-dim);border-radius:4px;padding:3px">I'd like to order.</div>
+          <div style="font-size:4.5px;text-align:center;color:var(--steel)">주문하고 싶어요</div>
+          <div class="wf-btn secondary" style="font-size:5.5px">🔊 예시 듣기</div>
+          <div class="wf-row" style="gap:3px;margin-top:2px">
+            <div class="wf-btn success" style="flex:1;font-size:5.5px">🎤 시작</div>
+            <div class="wf-btn gray" style="flex:1;font-size:5.5px">→ 넘기기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-type-label">발음 연습</div>
+    <div class="quiz-type-path">speak-check / speak-sentence · PronunciationQuiz.tsx</div>
+    <span class="wf-badge orange">Tier 2+ / 중급 Tier 1+</span>
+    <a href="#" data-path="/lesson/int-dining-1?kind=speak-sentence&completion=1" class="quiz-test-btn mid">▶ 테스트</a>
+  </div>
+
+  <!-- ── 신규 유형 ── -->
+  <div class="catalog-group-label">신규 유형 — 중급 Tier 1+ (2회차~)</div>
+
+  <!-- 10. listen-type — 듣고 타이핑 (NEW) -->
+  <div class="quiz-type-card">
+    <div class="phone sentence">
+      <div class="phone-top"></div>
+      <div class="screen-states">
+        <div class="state-tabs">
+          <button class="state-tab active" data-state="input">입력 전</button>
+          <button class="state-tab" data-state="correct">정답</button>
+          <button class="state-tab" data-state="wrong">오답</button>
+        </div>
+        <div class="state-content active" data-state="input" style="padding:4px;gap:3px">
+          <div class="wf-row"><span class="wf-badge orange">어려운 연습</span></div>
+          <div style="font-size:5.5px;font-weight:700;color:var(--ink)">들리는 내용을 입력하세요</div>
+          <div class="wf-row" style="gap:4px;align-items:center">
+            <div style="font-size:18px">🎧</div>
+            <div class="wf-btn primary" style="width:auto;padding:3px 6px;font-size:12px">🔊</div>
+            <div class="wf-btn secondary" style="width:auto;padding:3px 6px;font-size:11px">🐢</div>
+          </div>
+          <div style="border:1.5px solid var(--blue);border-radius:5px;padding:4px 5px;background:var(--canvas)">
+            <div style="font-size:5px;color:var(--muted)">들은 내용을 영어로 입력하세요...</div>
+          </div>
+          <div class="wf-btn primary mt-auto">확인 ✓</div>
+        </div>
+        <div class="state-content" data-state="correct" style="padding:4px;gap:3px">
+          <div style="font-size:5.5px;font-weight:700;color:var(--ink)">들리는 내용을 입력하세요</div>
+          <div class="wf-row" style="gap:4px;align-items:center">
+            <div style="font-size:18px">🎧</div>
+            <div class="wf-btn primary" style="width:auto;padding:3px 6px;font-size:12px">🔊</div>
+          </div>
+          <div style="border:1.5px solid var(--emerald);border-radius:5px;padding:4px 5px;background:var(--emerald-dim)">
+            <div style="font-size:5px;color:#065f46;font-weight:700">I'd like to order, please.</div>
+          </div>
+          <div style="font-size:5px;color:var(--emerald);font-weight:700">✓ 정답이에요! 잘했어요 👍</div>
+          <div class="wf-btn primary mt-auto">계속하기 ▶</div>
+        </div>
+        <div class="state-content" data-state="wrong" style="padding:4px;gap:3px">
+          <div style="font-size:5.5px;font-weight:700;color:var(--ink)">들리는 내용을 입력하세요</div>
+          <div style="border:1.5px solid var(--red);border-radius:5px;padding:3px 5px;background:var(--red-dim)">
+            <div style="font-size:5px;color:#b91c1c">I'd like order</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--hairline);border-radius:5px;padding:3px 5px">
+            <div style="font-size:4px;color:var(--steel)">정답</div>
+            <div style="font-size:5px;font-weight:700;color:var(--ink)">I'd like to order, please.</div>
+            <div style="font-size:4.5px;color:var(--muted)">주문하고 싶어요.</div>
+          </div>
+          <div style="font-size:4.5px;color:var(--steel)">오타가 있습니다.</div>
+          <div class="wf-btn primary mt-auto">계속하기 ▶</div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-type-label">듣고 타이핑 <span style="font-size:9px;color:var(--green);font-weight:700">NEW</span></div>
+    <div class="quiz-type-path">listen-type · ListenTypeQuiz.tsx</div>
+    <span class="wf-badge orange">중급 Tier 1+ (2회차~)</span>
+    <a href="#" data-path="/lesson/int-dining-1?kind=listen-type&completion=1" class="quiz-test-btn new">▶ 테스트</a>
+  </div>
+
+</div><!-- end quiz-catalog-grid -->
+
+
+<!-- ═══════════════════════════════════════════
      핵심 흐름 요약
 ══════════════════════════════════════════════ -->
 <div class="flow-section">
@@ -1393,12 +1849,14 @@
   document.querySelectorAll('.state-tab').forEach(tab => {
     tab.addEventListener('click', e => {
       e.stopPropagation();
-      const card = tab.closest('.screen-card');
+      const card = tab.closest('.screen-card') || tab.closest('.quiz-type-card');
+      if (!card) return;
       const state = tab.dataset.state;
       card.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
       card.querySelectorAll('.state-content').forEach(c => c.classList.remove('active'));
       tab.classList.add('active');
-      card.querySelector(`.state-content[data-state="${state}"]`).classList.add('active');
+      const target = card.querySelector(`.state-content[data-state="${state}"]`);
+      if (target) target.classList.add('active');
     });
   });
 
@@ -1431,6 +1889,49 @@
       document.querySelectorAll('.screen-card').forEach(c =>
         c.classList.remove('highlighted', 'source', 'dimmed'));
   });
+
+  // ── 테스트 버튼 클릭 핸들러 (data-path + 동적 포트) ──
+  function getDevPort() {
+    const input = document.getElementById('dev-port');
+    return (input && input.value) ? input.value.trim() : '5176';
+  }
+
+  document.querySelectorAll('.quiz-test-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const path = this.getAttribute('data-path');
+      if (path) window.open('http://localhost:' + getDevPort() + path, '_blank');
+    });
+  });
+
+  function updateTestButtonPorts() { /* 포트 변경 시 checkDevServer 재확인 */ checkDevServer(); }
+
+  // ── 개발 서버 상태 감지 (표시 전용 — 버튼은 항상 클릭 가능) ──
+  async function checkDevServer() {
+    const port = getDevPort();
+    const statusEl = document.getElementById('server-status');
+    if (statusEl) { statusEl.textContent = '확인 중...'; statusEl.style.color = 'var(--muted)'; }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3000);
+
+    try {
+      await fetch('http://localhost:' + port + '/', { mode: 'no-cors', signal: controller.signal });
+      clearTimeout(timer);
+      if (statusEl) {
+        statusEl.textContent = '● 실행 중 (port ' + port + ')';
+        statusEl.style.color = '#10b981';
+      }
+    } catch {
+      clearTimeout(timer);
+      if (statusEl) {
+        statusEl.innerHTML = '● 감지 불가 &nbsp;—&nbsp; 서버가 켜져 있으면 그냥 클릭하세요. 꺼져 있으면 <code style="background:rgba(239,68,68,0.12);padding:1px 5px;border-radius:3px;font-family:monospace">npm run dev</code> 먼저 실행';
+        statusEl.style.color = '#f97316';
+      }
+    }
+  }
+  checkDevServer();
 </script>
 </body>
 </html>

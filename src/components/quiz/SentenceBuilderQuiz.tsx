@@ -5,6 +5,7 @@ import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { CharacterBubble } from '../CharacterBubble'
 import { TagBadge } from '../TagBadge'
+import { SentenceTranslationCard } from './SentenceTranslationCard'
 
 interface Props {
   sentence: SentenceItem
@@ -117,24 +118,36 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
       <p className="text-2xl font-bold text-ink">{questionLabel}</p>
 
       {listenBuild ? (
-        <button
-          onClick={() => speak?.(sentence.english, 'en-US')}
-          className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
-          aria-label="다시 듣기"
-        >
-          <span className="text-7xl select-none">🦉</span>
-          <div className="relative bg-brand-green-dim rounded-2xl px-6 py-3 shadow-sm">
-            <span className={cn('text-2xl font-bold text-ink', isSpeaking && 'animate-speaking inline-block')}>
-              🔊 다시 듣기
-            </span>
-          </div>
-        </button>
+        <>
+          <button
+            onClick={() => speak?.(sentence.english, 'en-US')}
+            className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
+            aria-label="다시 듣기"
+          >
+            <span className="text-7xl select-none">🦉</span>
+            <div className="relative bg-brand-green-dim rounded-2xl px-6 py-3 shadow-sm">
+              <span className={cn('text-2xl font-bold text-ink', isSpeaking && 'animate-speaking inline-block')}>
+                🔊 다시 듣기
+              </span>
+            </div>
+          </button>
+          {checked && (
+            <p className="text-center text-sm text-muted">{sentence.korean}</p>
+          )}
+        </>
       ) : (
-        <CharacterBubble
-          word={displayWord}
-          onSpeak={isEnToKo && speak ? () => speak(sentence.english, 'en-US') : undefined}
-          isSpeaking={isSpeaking}
-        />
+        <>
+          <CharacterBubble
+            word={displayWord}
+            onSpeak={isEnToKo && speak ? () => speak(sentence.english, 'en-US') : undefined}
+            isSpeaking={isSpeaking}
+          />
+          {checked && (
+            <p className="text-center text-sm text-muted -mt-2">
+              {isEnToKo ? sentence.korean : sentence.english}
+            </p>
+          )}
+        </>
       )}
 
       <div className="flex-1 h-px bg-hairline my-1" />
@@ -173,16 +186,19 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
       </div>
 
       {checked && result && (
-        <div
-          className={cn(
-            'text-center text-sm font-bold rounded-lg p-2',
-            result === 'correct' && 'text-green-700 bg-green-50',
-            result === 'wrong' && 'text-red-600 bg-red-50',
-          )}
-        >
-          {result === 'correct' && '✓ 완성했어요! 👍'}
-          {result === 'wrong' && `정답: ${isEnToKo ? sentence.parts.join(' ') : englishTiles.join(' ')}`}
-        </div>
+        <>
+          <div
+            className={cn(
+              'text-center text-sm font-bold rounded-lg p-2',
+              result === 'correct' && 'text-green-700 bg-green-50',
+              result === 'wrong' && 'text-red-600 bg-red-50',
+            )}
+          >
+            {result === 'correct' && '✓ 완성했어요! 👍'}
+            {result === 'wrong' && `정답: ${isEnToKo ? sentence.parts.join(' ') : englishTiles.join(' ')}`}
+          </div>
+          <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+        </>
       )}
 
       {!checked && (

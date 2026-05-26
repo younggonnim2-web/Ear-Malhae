@@ -70,7 +70,7 @@ function buildSentenceSequence(
   }
 
   if (tier === 1) {
-    // 역방향 번역 선택 → 빈칸 채우기 → 역방향 구성
+    // 역방향 번역 선택 → 빈칸 채우기 → 듣고 타이핑 → 역방향 구성
     for (const s of sentences)
       if (s.dialoguePrompt)
         seq.push({ kind: 'dialogue-choice', sentenceId: s.id, tag: '새로운 패턴' })
@@ -78,6 +78,8 @@ function buildSentenceSequence(
       seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'ko-to-en', tag: '새로운 패턴' })
     for (const s of sentences)
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, fillDir: 'ko', tag: '새로운 패턴' })
+    for (const s of sentences.slice(0, 1))
+      seq.push({ kind: 'listen-type', sentenceId: s.id, tag: '어려운 연습' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 3 })
     // 말해보기: 핵심 단어 1 + 문장 전체 1
@@ -91,7 +93,7 @@ function buildSentenceSequence(
   }
 
   if (tier >= 2) {
-    // 번역 선택 → 영어 직접 입력 → 오디오 듣고 구성
+    // 번역 선택 → 영어 직접 입력 → 듣고 타이핑 × 2 → 오디오 듣고 구성
     for (const s of sentences)
       if (s.dialoguePrompt)
         seq.push({ kind: 'dialogue-choice', sentenceId: s.id, tag: '새로운 패턴' })
@@ -99,6 +101,8 @@ function buildSentenceSequence(
       seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'ko-to-en', tag: '새로운 패턴' })
     for (const s of sentences)
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.englishParts.length > 1 ? 1 : 0, fillDir: 'en', keyboardInput: true, tag: '어려운 연습' })
+    for (const s of sentences.slice(0, 2))
+      seq.push({ kind: 'listen-type', sentenceId: s.id, tag: '어려운 연습' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습', distractorCount: 3 })
     // 말해보기: 핵심 단어 1 + 문장 전체 1 (tier 1과 동일 구성)

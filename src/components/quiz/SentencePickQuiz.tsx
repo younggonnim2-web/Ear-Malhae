@@ -4,6 +4,7 @@ import type { ChallengeTag } from '../../types/lesson'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { TagBadge } from '../TagBadge'
+import { SentenceTranslationCard } from './SentenceTranslationCard'
 
 interface Props {
   sentence: SentenceItem
@@ -66,6 +67,11 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
       <p className="text-2xl font-bold text-ink">{label}</p>
       <div className="bg-surface rounded-2xl px-5 py-5 border-2 border-hairline">
         <p className="text-lg font-semibold text-ink leading-relaxed">{prompt}</p>
+        {answered && (
+          <p className="text-sm text-muted mt-1 leading-relaxed">
+            {isEnToKo ? sentence.korean : sentence.english}
+          </p>
+        )}
         {isEnToKo && speak && (
           <button
             onClick={() => speak(prompt, 'en-US')}
@@ -104,14 +110,15 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
         </button>
       )}
       {answered && (
-        <p className={`text-base font-medium ${selected === answer ? 'text-green-600' : 'text-steel'}`}>
-          {selected === answer ? '✓ 정답이에요! 👍' : `정답: "${answer}"`}
-        </p>
-      )}
-      {answered && (
-        <button onClick={onCorrect} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
-          다음 ▶
-        </button>
+        <>
+          <p className={`text-base font-medium ${selected === answer ? 'text-green-600' : 'text-steel'}`}>
+            {selected === answer ? '✓ 정답이에요! 👍' : `정답: "${answer}"`}
+          </p>
+          <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+          <button onClick={onCorrect} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
+            다음 ▶
+          </button>
+        </>
       )}
     </div>
   )

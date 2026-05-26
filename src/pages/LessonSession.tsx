@@ -1,7 +1,7 @@
 // src/pages/LessonSession.tsx
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { ALPHABET } from '../data/alphabet'
 import { WORDS } from '../data/words'
@@ -20,6 +20,7 @@ import { SentencePickQuiz } from '../components/quiz/SentencePickQuiz'
 import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { PronunciationQuiz } from '../components/quiz/PronunciationQuiz'
 import { DialogueChoiceQuiz } from '../components/quiz/DialogueChoiceQuiz'
+import { ListenTypeQuiz } from '../components/quiz/ListenTypeQuiz'
 import { useSpeech } from '../hooks/useSpeech'
 import { STAR_XP } from '../utils/xp'
 import type { LessonChallenge } from '../types/lesson'
@@ -28,6 +29,9 @@ import type { StudyItem } from '../types'
 export function LessonSession() {
   const { lessonId } = useParams<{ lessonId: string }>()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const kindParam = searchParams.get('kind')
+  const completionOverride = searchParams.get('completion') !== null ? parseInt(searchParams.get('completion')!, 10) : null
   const { markLessonDone, updateStreak, progress } = useApp()
   const { speak, isSpeaking } = useSpeech()
 
@@ -49,7 +53,7 @@ export function LessonSession() {
     [unit?.id, lessonId],
   )
 
-  const completionCount = lessonId ? (progress.lessonCompletionCount[lessonId] ?? 0) : 0
+  const completionCount = completionOverride ?? (lessonId ? (progress.lessonCompletionCount[lessonId] ?? 0) : 0)
 
   const sectionIndex = useMemo(
     () => SECTIONS.findIndex(s => s.unitIds.includes(lesson?.unitId ?? '')),
@@ -101,7 +105,12 @@ export function LessonSession() {
       ? buildChallengeSequence(lesson, lessonIndex, relevantSentences, unit?.type ?? 'words', completionCount, sectionBaseTier, reviewItems, difficultyOffset)
       : []
   )
-  const [challengeIndex, setChallengeIndex] = useState(0)
+  const [challengeIndex, setChallengeIndex] = useState(() => {
+    if (!kindParam || !lesson) return 0
+    const chs = buildChallengeSequence(lesson, lessonIndex, relevantSentences, unit?.type ?? 'words', completionCount, sectionBaseTier, reviewItems, difficultyOffset)
+    const idx = chs.findIndex(c => c.kind === kindParam)
+    return idx >= 0 ? idx : 0
+  })
   const [retryQueue, setRetryQueue] = useState<LessonChallenge[]>([])
   const [phase, setPhase] = useState<'main' | 'retry'>('main')
   const [wrongCount, setWrongCount] = useState(0)
@@ -352,6 +361,21 @@ export function LessonSession() {
           isSpeaking={isSpeaking}
           tag={current.tag}
           keyboardInput={current.keyboardInput}
+        />
+      )
+    }
+
+    if (current.kind === 'listen-type') {
+      const sentence = SENTENCES.find(s => s.id === current.sentenceId) ?? SENTENCES[0]
+      return (
+        <ListenTypeQuiz
+          key={`${phase}-${challengeIndex}`}
+          sentence={sentence}
+          onCorrect={advance}
+          onWrong={() => handleWrong(current)}
+          speak={speak}
+          isSpeaking={isSpeaking}
+          tag={current.tag}
         />
       )
     }
