@@ -105,7 +105,7 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
               {sentence.dialoguePromptKorean}
             </p>
           )}
-          {speak && (
+          {speak && !answered && (
             <button
               onClick={() => speak(prompt, 'en-US', 1.0, 'sentence')}
               className="flex items-center gap-1 text-primary text-xs font-semibold mt-2"
