@@ -177,7 +177,7 @@ export function ListenTypeQuiz({ sentence, onCorrect, onWrong, speak, isSpeaking
       )}
 
       {answered && answerResult === 'wrong' && (
-        <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+        <SentenceTranslationCard english={sentence.english} korean={sentence.korean} speak={speak} />
       )}
 
       {!answered && (

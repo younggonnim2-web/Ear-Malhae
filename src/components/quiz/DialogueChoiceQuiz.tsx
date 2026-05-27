@@ -164,7 +164,7 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
               <p className={`text-base font-medium ${selected === answer ? 'text-green-600' : 'text-steel'}`}>
                 {selected === answer ? '✓ 정답이에요! 👍' : `정답: "${answer}"`}
               </p>
-              <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+              <SentenceTranslationCard english={sentence.english} korean={sentence.korean} speak={speak} />
               <button
                 onClick={onCorrect}
                 className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"

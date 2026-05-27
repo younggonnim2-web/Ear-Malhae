@@ -198,7 +198,7 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
             {result === 'correct' && '✓ 완성했어요! 👍'}
             {result === 'wrong' && `정답: ${isEnToKo ? sentence.parts.join(' ') : englishTiles.join(' ')}`}
           </div>
-          <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+          <SentenceTranslationCard english={sentence.english} korean={sentence.korean} speak={isEnToKo || listenBuild ? undefined : speak} />
         </>
       )}
 

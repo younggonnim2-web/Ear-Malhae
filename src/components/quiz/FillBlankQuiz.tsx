@@ -229,7 +229,7 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
               ? '✓ 정답이에요! 잘했어요 👍'
               : keyboardInput ? '' : `정답은 "${correctAnswer}"이에요. 괜찮아요! 👏`}
           </p>
-          <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+          <SentenceTranslationCard english={sentence.english} korean={sentence.korean} speak={isEn ? speak : undefined} />
           <button
             onClick={onCorrect}
             className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"

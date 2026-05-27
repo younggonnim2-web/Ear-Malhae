@@ -198,8 +198,8 @@ export function LessonSession() {
   }
 
   const section = SECTIONS[sectionIndex]
-  const headerBg = section?.bg ?? 'bg-primary'
-  const headerBorder = section?.border ?? 'border-primary/30'
+  const headerBg = phase === 'retry' ? 'bg-orange-500' : (section?.bg ?? 'bg-primary')
+  const headerBorder = phase === 'retry' ? 'border-orange-600/30' : (section?.border ?? 'border-primary/30')
 
   const exitDialog = showExit
     ? createPortal(
@@ -458,9 +458,10 @@ export function LessonSession() {
             </div>
           </div>
           {phase === 'retry' && (
-            <p className="text-center text-xs text-white/80 py-1 bg-black/10">
-              틀린 문제를 다시 풀어봐요!
-            </p>
+            <div className="flex items-center justify-center gap-1.5 py-1.5 bg-black/15">
+              <span className="text-sm">🔄</span>
+              <p className="text-xs font-bold text-white">복습 구간 — 틀린 문제를 다시 풀어봐요!</p>
+            </div>
           )}
         </div>
 

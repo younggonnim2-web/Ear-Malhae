@@ -186,7 +186,7 @@ export function TranslateTypeQuiz({ sentence, onCorrect, onWrong, speak, tag }: 
       )}
 
       {answered && answerResult === 'wrong' && (
-        <SentenceTranslationCard english={sentence.english} korean={sentence.korean} />
+        <SentenceTranslationCard english={sentence.english} korean={sentence.korean} speak={speak} />
       )}
 
       {!answered && (
