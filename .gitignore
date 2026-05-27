@@ -30,3 +30,6 @@ venv/
 
 # Logs
 *.log
+
+# Screenshots
+ss-*.png
