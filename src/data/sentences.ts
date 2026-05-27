@@ -1207,7 +1207,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Welcome! How can I help you today?",
     dialoguePromptKorean: "어서오세요! 오늘 어떻게 도와드릴까요?",
     category: 'place',
-    acceptableAnswers: ["Pardon me, where are the fitting rooms?", "Could you tell me where the fitting room is?", "Where are the changing rooms?"],
+    acceptableAnswers: ["Pardon me, where are the fitting rooms?", "Could you tell me where the fitting room is?", "Where are the changing rooms?", "Excuse me, where is the fittingroom?"],
   },
   {
     id: 'shopping-how-much',
