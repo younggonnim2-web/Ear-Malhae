@@ -769,7 +769,7 @@ export const SENTENCES: SentenceItem[] = [
     parts: ["잘 익혀서", "주세요"],
     englishParts: ["Well-done,", "please"],
     distractors: ["살짝 익혀주세요", "날것으로 주세요"],
-    englishDistractors: ["Medium-rare please", "Raw please", "medium-well", "a little pink"],
+    englishDistractors: ["I want a pizza.", "I don't eat meat.", "Can I get pasta instead?", "No, thank you."],
     difficulty: 'basic',
     scenario: '고기 굽기를 요청할 때',
     dialoguePrompt: "How would you like your steak cooked?",
