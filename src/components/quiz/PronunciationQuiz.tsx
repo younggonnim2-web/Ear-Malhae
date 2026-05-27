@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { StudyItem } from '../../types'
 import { isWordItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
+import type { SpeakFn } from '../../hooks/useSpeech'
 import { useSpeechRecognition } from '../../hooks/useSpeechRecognition'
 import { evaluateTyped } from '../../utils/fuzzyMatch'
 import { TagBadge } from '../TagBadge'
@@ -13,7 +14,7 @@ interface Props {
   phrase?: { english: string; korean: string }
   onCorrect: () => void
   onSkip?: () => void
-  speak?: (text: string, lang?: string, rate?: number) => void
+  speak?: SpeakFn
   isSpeaking?: boolean
   isLastChance?: boolean
   tag?: ChallengeTag

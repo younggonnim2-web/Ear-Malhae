@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
+import type { SpeakFn } from '../../hooks/useSpeech'
 import { cn } from '../../utils/cn'
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
   direction: QuizDirection
   onCorrect: () => void
   onWrong?: () => void
-  speak: (text: string, lang?: string, rate?: number) => void
+  speak: SpeakFn
   isSpeaking?: boolean
 }
 

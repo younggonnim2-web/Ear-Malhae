@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import type { SentenceItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
+import type { SpeakFn } from '../../hooks/useSpeech'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { CharacterBubble } from '../CharacterBubble'
@@ -11,7 +12,7 @@ interface Props {
   sentence: SentenceItem
   onCorrect: () => void
   onWrong?: () => void
-  speak?: (text: string, lang?: string, rate?: number) => void
+  speak?: SpeakFn
   direction?: 'en-to-ko' | 'ko-to-en'
   tag?: ChallengeTag
   isSpeaking?: boolean
@@ -50,7 +51,7 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
     lastSpokenIdRef.current = sentence.id
     // en-to-ko: 영어 문장 자동 발음 / listenBuild: 힌트 없이 오디오만
     if ((isEnToKo || listenBuild) && speak) {
-      speak(sentence.english, 'en-US')
+      speak(sentence.english, 'en-US', 1.0, 'sentence')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentence.id])
@@ -63,16 +64,16 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
         // 정답 타일 → englishParts에서 매핑
         const partsIdx = sentence.parts.indexOf(tile)
         if (partsIdx >= 0 && sentence.englishParts[partsIdx]) {
-          speak(sentence.englishParts[partsIdx], 'en-US')
+          speak(sentence.englishParts[partsIdx], 'en-US', 1.0, 'sentence')
           return
         }
         // 오답 타일 → englishDistractors에서 매핑 (평행 배열 가정)
         const distrIdx = sentence.distractors.indexOf(tile)
         if (distrIdx >= 0 && sentence.englishDistractors[distrIdx]) {
-          speak(sentence.englishDistractors[distrIdx], 'en-US')
+          speak(sentence.englishDistractors[distrIdx], 'en-US', 1.0, 'sentence')
         }
       } else {
-        speak(tile, 'en-US')
+        speak(tile, 'en-US', 1.0, 'sentence')
       }
     }
   }
@@ -139,7 +140,7 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
         <>
           <CharacterBubble
             word={displayWord}
-            onSpeak={isEnToKo && speak ? () => speak(sentence.english, 'en-US') : undefined}
+            onSpeak={isEnToKo && speak ? () => speak(sentence.english, 'en-US', 1.0, 'sentence') : undefined}
             isSpeaking={isSpeaking}
           />
           {checked && (

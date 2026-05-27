@@ -65,6 +65,7 @@ export interface SentenceItem {
   scenario?: string
   dialoguePrompt?: string
   dialoguePromptKorean?: string
+  acceptableAnswers?: string[]
 }
 export type QuizDirection = 'en-to-ko' | 'ko-to-en'
 

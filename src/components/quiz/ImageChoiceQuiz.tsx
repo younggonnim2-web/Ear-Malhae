@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
+import type { SpeakFn } from '../../hooks/useSpeech'
 import { cn } from '../../utils/cn'
 import { CharacterBubble } from '../CharacterBubble'
 import { TagBadge } from '../TagBadge'
@@ -14,7 +15,7 @@ interface Props {
   onWrong?: () => void
   allowNextOnWrong?: boolean
   onNext?: () => void
-  speak?: (text: string, lang?: string, rate?: number) => void
+  speak?: SpeakFn
   isSpeaking?: boolean
   displayMode?: 'cards' | 'list'
   tag?: ChallengeTag

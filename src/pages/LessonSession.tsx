@@ -21,6 +21,8 @@ import { FillBlankQuiz } from '../components/quiz/FillBlankQuiz'
 import { PronunciationQuiz } from '../components/quiz/PronunciationQuiz'
 import { DialogueChoiceQuiz } from '../components/quiz/DialogueChoiceQuiz'
 import { ListenTypeQuiz } from '../components/quiz/ListenTypeQuiz'
+import { WordTypeQuiz } from '../components/quiz/WordTypeQuiz'
+import { TranslateTypeQuiz } from '../components/quiz/TranslateTypeQuiz'
 import { useSpeech } from '../hooks/useSpeech'
 import { STAR_XP } from '../utils/xp'
 import type { LessonChallenge } from '../types/lesson'
@@ -242,7 +244,7 @@ export function LessonSession() {
     }
 
     if (current.kind === 'matching') {
-      return <MatchingQuiz items={lessonItems} onComplete={advance} />
+      return <MatchingQuiz items={lessonItems} onComplete={advance} speak={speak} />
     }
 
     if (current.kind === 'image-choice' && item) {
@@ -375,6 +377,32 @@ export function LessonSession() {
           onWrong={() => handleWrong(current)}
           speak={speak}
           isSpeaking={isSpeaking}
+          tag={current.tag}
+        />
+      )
+    }
+
+    if (current.kind === 'type-word' && item) {
+      return (
+        <WordTypeQuiz
+          key={`${phase}-${challengeIndex}`}
+          item={item}
+          onCorrect={advance}
+          onWrong={() => handleWrong(current)}
+          tag={current.tag}
+        />
+      )
+    }
+
+    if (current.kind === 'translate-type') {
+      const sentence = SENTENCES.find(s => s.id === current.sentenceId) ?? SENTENCES[0]
+      return (
+        <TranslateTypeQuiz
+          key={`${phase}-${challengeIndex}`}
+          sentence={sentence}
+          onCorrect={advance}
+          onWrong={() => handleWrong(current)}
+          speak={speak}
           tag={current.tag}
         />
       )

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import type { SentenceItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
+import type { SpeakFn } from '../../hooks/useSpeech'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { TagBadge } from '../TagBadge'
@@ -11,7 +12,7 @@ interface Props {
   allSentences: SentenceItem[]
   onCorrect: () => void
   onWrong?: () => void
-  speak?: (text: string, lang?: string, rate?: number) => void
+  speak?: SpeakFn
   isSpeaking?: boolean
   tag?: ChallengeTag
 }
@@ -20,6 +21,7 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
   const [choicesVisible, setChoicesVisible] = useState(false)
   const [selected, setSelected] = useState<string | null>(null)
   const [answered, setAnswered] = useState(false)
+  const [translationVisible, setTranslationVisible] = useState(false)
   const hasPlayedRef = useRef(false)
 
   const prompt = sentence.dialoguePrompt ?? ''
@@ -49,7 +51,7 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
     // TTS는 한 번만 (hasPlayedRef로 중복 방지)
     if (!hasPlayedRef.current) {
       hasPlayedRef.current = true
-      if (speak && prompt) speak(prompt, 'en-US')
+      if (speak && prompt) speak(prompt, 'en-US', 1.0, 'sentence')
     }
     return () => clearTimeout(timer)
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,13 +88,26 @@ export function DialogueChoiceQuiz({ sentence, allSentences, onCorrect, onWrong,
           💬
         </div>
         <div className="bg-surface border-2 border-hairline rounded-2xl rounded-tl-sm px-4 py-3 flex-1">
-          <p className="text-base font-semibold text-ink leading-relaxed">{prompt}</p>
-          {answered && sentence.dialoguePromptKorean && (
-            <p className="text-xs text-muted mt-1 leading-relaxed">{sentence.dialoguePromptKorean}</p>
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-base font-semibold text-ink leading-relaxed flex-1">{prompt}</p>
+            {sentence.dialoguePromptKorean && !answered && (
+              <button
+                onClick={() => setTranslationVisible(v => !v)}
+                className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full bg-steel/10 hover:bg-steel/20 transition-colors mt-0.5"
+                aria-label="번역 보기"
+              >
+                <span className="text-sm">🌐</span>
+              </button>
+            )}
+          </div>
+          {(translationVisible || answered) && sentence.dialoguePromptKorean && (
+            <p className="text-xs text-muted mt-1.5 leading-relaxed border-t border-hairline pt-1.5">
+              {sentence.dialoguePromptKorean}
+            </p>
           )}
           {speak && (
             <button
-              onClick={() => speak(prompt, 'en-US')}
+              onClick={() => speak(prompt, 'en-US', 1.0, 'sentence')}
               className="flex items-center gap-1 text-primary text-xs font-semibold mt-2"
             >
               <span className={isSpeaking ? 'animate-speaking inline-block' : ''}>🔊</span> 다시 듣기

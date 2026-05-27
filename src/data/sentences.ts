@@ -27,13 +27,13 @@ export const SENTENCES: SentenceItem[] = [
   { id: 'its-red',       english: "It's red.",           korean: '빨간색이에요',            parts: ['빨간색이에요'],                englishParts: ['red'],                      distractors: ['파란색이에요', '초록색이에요', '노란색이에요'], englishDistractors: ['blue', 'green', 'yellow', 'redder', 'reddish'], category: 'color', difficulty: 'basic' },
   { id: 'i-like-blue',   english: 'I like blue.',        korean: '나는 파란색이 좋아요',   parts: ['나는 파란색이', '좋아요'],    englishParts: ['I like', 'blue'],           distractors: ['싫어요', '먹어요'],             englishDistractors: ['red', 'green', 'blues', 'bluer'],  category: 'color', difficulty: 'basic' },
   { id: 'i-like-red',    english: 'I like red.',         korean: '나는 빨간색이 좋아요',   parts: ['나는 빨간색이', '좋아요'],    englishParts: ['I like', 'red'],            distractors: ['싫어요', '먹어요'],             englishDistractors: ['blue', 'green', 'reds', 'redder'], category: 'color', difficulty: 'basic' },
-  { id: 'red-is-my-favorite', english: 'Red is my favorite color.', korean: '빨간색이 제일 좋아요', parts: ['빨간색이', '제일 좋아요'], englishParts: ['Red is', 'my favorite color'], distractors: ['파란색이', '싫어요'], englishDistractors: ['Blue is', 'my favorite colors', 'my least favorite color', 'Red was'], category: 'color', difficulty: 'intermediate' },
+  { id: 'red-is-my-favorite', english: 'Red is my favorite color.', korean: '빨간색이 제일 좋아요', parts: ['빨간색이', '제일 좋아요'], englishParts: ['Red is', 'my favorite color'], distractors: ['파란색이', '싫어요'], englishDistractors: ['Blue is', 'my favorite colors', 'my least favorite color', 'Red was'], category: 'color', difficulty: 'intermediate', acceptableAnswers: ['Red is my favourite color.', 'My favorite color is red.', 'I love red the most.'] },
 
   // ── 동물 (animal) ─────────────────────────────────────────────────────
   { id: 'i-like-cats',   english: 'I like cats.',        korean: '나는 고양이가 좋아요',   parts: ['나는 고양이가', '좋아요'],    englishParts: ['I like', 'cats'],           distractors: ['싫어요', '먹어요'],             englishDistractors: ['dogs', 'birds', 'liked', 'likes'], category: 'animal', difficulty: 'basic' },
   { id: 'its-a-dog',     english: "It's a dog.",         korean: '강아지예요',              parts: ['강아지예요'],                  englishParts: ['dog'],                      distractors: ['고양이예요', '새예요', '토끼예요'], englishDistractors: ['cat', 'bird', 'rabbit'], category: 'animal', difficulty: 'basic' },
   { id: 'i-see-bird',    english: 'I see a bird.',       korean: '새가 보여요',            parts: ['새가', '보여요'],              englishParts: ['I see', 'a bird'],          distractors: ['날아요', '들려요'],             englishDistractors: ['hear', 'fly', 'birds', 'the bird'],   category: 'animal', difficulty: 'basic' },
-  { id: 'i-see-cats-and-dogs', english: 'I see cats and dogs.', korean: '고양이와 강아지가 보여요', parts: ['고양이와', '강아지가', '보여요'], englishParts: ['I see', 'cats', 'and dogs'], distractors: ['새와', '토끼가', '들려요'], englishDistractors: ['birds', 'and rabbits', 'I hear', 'sees', 'saw'], category: 'animal', difficulty: 'intermediate' },
+  { id: 'i-see-cats-and-dogs', english: 'I see cats and dogs.', korean: '고양이와 강아지가 보여요', parts: ['고양이와', '강아지가', '보여요'], englishParts: ['I see', 'cats', 'and dogs'], distractors: ['새와', '토끼가', '들려요'], englishDistractors: ['birds', 'and rabbits', 'I hear', 'sees', 'saw'], category: 'animal', difficulty: 'intermediate', acceptableAnswers: ['I can see cats and dogs.', 'There are cats and dogs.'] },
 
   // ── 음식 (food) ───────────────────────────────────────────────────────
   { id: 'im-hungry',    english: "I'm hungry.",         korean: '나는 배고파요',           parts: ['나는', '배고파요'],            englishParts: ['I am', 'hungry'],           distractors: ['행복해요', '슬퍼요'],           englishDistractors: ['happy', 'sad', 'hungrily', 'hungrier'],          category: 'food', difficulty: 'basic' },
@@ -41,15 +41,15 @@ export const SENTENCES: SentenceItem[] = [
   { id: 'coffee-please', english: 'Coffee, please.',     korean: '커피 주세요!',           parts: ['커피', '주세요'],              englishParts: ['Coffee', 'please'],         distractors: ['마셔요', '받아요'],             englishDistractors: ['drink', 'receive', 'Coffees', 'Coffee,'],  category: 'food', difficulty: 'basic' },
   { id: 'water-please',  english: 'Water, please.',      korean: '물 주세요',              parts: ['물', '주세요'],                englishParts: ['Water', 'please'],          distractors: ['마셔요', '받아요'],             englishDistractors: ['drink', 'receive', 'Waters', 'Water,'], category: 'food', difficulty: 'basic' },
   { id: 'i-want-bread',  english: 'I want bread.',       korean: '빵을 원해요',            parts: ['빵을', '원해요'],              englishParts: ['I want', 'bread'],          distractors: ['먹어요', '좋아요'],             englishDistractors: ['eat', 'like', 'breads', 'a bread'],  category: 'food', difficulty: 'basic' },
-  { id: 'i-want-bread-and-milk', english: 'I want bread and milk.', korean: '나는 빵과 우유를 원해요', parts: ['나는 빵과', '우유를', '원해요'], englishParts: ['I want', 'bread and', 'milk'], distractors: ['커피와', '주스를', '먹어요'], englishDistractors: ['coffee and', 'juice', 'I like', 'wants', 'wanted'], category: 'food', difficulty: 'intermediate' },
-  { id: 'im-hungry-lets-eat', english: "I'm hungry, let's eat.", korean: '배고프니까 먹어요', parts: ['배고프니까', '먹어요'], englishParts: ["I'm hungry,", "let's eat"], distractors: ['자요', '가요'], englishDistractors: ["let's sleep", "let's go", "I was hungry,", "I'm full,"], category: 'food', difficulty: 'intermediate' },
+  { id: 'i-want-bread-and-milk', english: 'I want bread and milk.', korean: '나는 빵과 우유를 원해요', parts: ['나는 빵과', '우유를', '원해요'], englishParts: ['I want', 'bread and', 'milk'], distractors: ['커피와', '주스를', '먹어요'], englishDistractors: ['coffee and', 'juice', 'I like', 'wants', 'wanted'], category: 'food', difficulty: 'intermediate', acceptableAnswers: ["I'd like bread and milk.", 'I need bread and milk.', 'Can I have bread and milk?'] },
+  { id: 'im-hungry-lets-eat', english: "I'm hungry, let's eat.", korean: '배고프니까 먹어요', parts: ['배고프니까', '먹어요'], englishParts: ["I'm hungry,", "let's eat"], distractors: ['자요', '가요'], englishDistractors: ["let's sleep", "let's go", "I was hungry,", "I'm full,"], category: 'food', difficulty: 'intermediate', acceptableAnswers: ["I'm hungry, so let's eat.", "I'm hungry — time to eat.", "I'm hungry, shall we eat?"] },
 
   // ── 숫자 (number) ─────────────────────────────────────────────────────
   { id: 'one-please',    english: 'One, please.',        korean: '하나 주세요',            parts: ['하나', '주세요'],              englishParts: ['One', 'please'],            distractors: ['마셔요', '가져요'],             englishDistractors: ['drink', 'take', 'ones', 'two'],  category: 'number', difficulty: 'basic' },
   { id: 'two-please',    english: 'Two, please.',        korean: '둘 주세요',              parts: ['둘', '주세요'],                englishParts: ['Two', 'please'],            distractors: ['마셔요', '가져요'],             englishDistractors: ['drink', 'take', 'Three', 'One'],  category: 'number', difficulty: 'basic' },
   { id: 'i-have-three',  english: 'I have three.',       korean: '세 개 있어요',           parts: ['세 개', '있어요'],             englishParts: ['I have', 'three'],          distractors: ['없어요', '원해요'],             englishDistractors: ['two', 'five', 'I had', 'I want'],  category: 'number', difficulty: 'basic' },
   { id: 'give-me-five',  english: 'Give me five, please.', korean: '다섯 개 주세요',       parts: ['다섯 개', '주세요'],           englishParts: ['Give me', 'five, please'],  distractors: ['가져가요', '사요'],             englishDistractors: ['take', 'buy', 'three, please', 'ten, please'],  category: 'number', difficulty: 'basic' },
-  { id: 'i-see-ten',     english: 'I see ten birds.',    korean: '새가 열 마리 보여요',    parts: ['새가', '열 마리', '보여요'],   englishParts: ['I see', 'ten', 'birds'],    distractors: ['날아요', '다섯 마리', '들려요'], englishDistractors: ['fly', 'five', 'I hear', 'seen', 'cats'],  category: 'number', difficulty: 'intermediate' },
+  { id: 'i-see-ten',     english: 'I see ten birds.',    korean: '새가 열 마리 보여요',    parts: ['새가', '열 마리', '보여요'],   englishParts: ['I see', 'ten', 'birds'],    distractors: ['날아요', '다섯 마리', '들려요'], englishDistractors: ['fly', 'five', 'I hear', 'seen', 'cats'],  category: 'number', difficulty: 'intermediate', acceptableAnswers: ['I can see ten birds.', 'There are ten birds.'] },
 
   // ── 과일 (fruit) ─────────────────────────────────────────────────────
   { id: 'i-like-apples',     english: 'I like apples.',          korean: '나는 사과가 좋아요',      parts: ['나는 사과가', '좋아요'],       englishParts: ['I like', 'apples'],         distractors: ['싫어요', '먹어요'],             englishDistractors: ['bananas', 'oranges', 'liked', 'likes'],            category: 'fruit', difficulty: 'basic' },
@@ -57,7 +57,7 @@ export const SENTENCES: SentenceItem[] = [
   { id: 'i-want-grapes',     english: 'I want grapes.',          korean: '포도를 원해요',            parts: ['포도를', '원해요'],            englishParts: ['I want', 'grapes'],         distractors: ['먹어요', '사요'],               englishDistractors: ['eat', 'buy', 'grape', 'a grape'],                  category: 'fruit', difficulty: 'basic' },
   { id: 'i-eat-orange',      english: 'I eat an orange.',        korean: '오렌지를 먹어요',          parts: ['오렌지를', '먹어요'],          englishParts: ['I eat', 'an orange'],       distractors: ['마셔요', '사요'],               englishDistractors: ['drink', 'buy', 'oranges', 'the orange'],           category: 'fruit', difficulty: 'basic' },
   { id: 'strawberry-is-red', english: 'The strawberry is red.',  korean: '딸기는 빨간색이에요',      parts: ['딸기는', '빨간색이에요'],      englishParts: ['The strawberry', 'is red'], distractors: ['노란색이에요', '초록색이에요'], englishDistractors: ['yellow', 'green', 'is redder', 'are red'],         category: 'fruit', difficulty: 'basic' },
-  { id: 'i-like-fruit',      english: 'I like fruit.',           korean: '나는 과일이 좋아요',       parts: ['나는 과일이', '좋아요'],       englishParts: ['I like', 'fruit'],          distractors: ['싫어요', '먹어요'],             englishDistractors: ['vegetables', 'meat', 'fruits', 'like'],            category: 'fruit', difficulty: 'intermediate' },
+  { id: 'i-like-fruit',      english: 'I like fruit.',           korean: '나는 과일이 좋아요',       parts: ['나는 과일이', '좋아요'],       englishParts: ['I like', 'fruit'],          distractors: ['싫어요', '먹어요'],             englishDistractors: ['vegetables', 'meat', 'fruits', 'like'],            category: 'fruit', difficulty: 'intermediate', acceptableAnswers: ['I enjoy fruit.', 'I love fruit.', 'Fruit is my favorite.'] },
 
   // ── 신체 (body) ───────────────────────────────────────────────────────
   { id: 'my-eyes-are-big',   english: 'My eyes are big.',        korean: '눈이 커요',               parts: ['눈이', '커요'],               englishParts: ['My eyes', 'are big'],       distractors: ['작아요', '파래요'],             englishDistractors: ['small', 'blue', 'is big', 'were big'],             category: 'body', difficulty: 'basic' },
@@ -65,42 +65,42 @@ export const SENTENCES: SentenceItem[] = [
   { id: 'wash-your-hands',   english: 'Wash your hands.',        korean: '손을 씻어요',              parts: ['손을', '씻어요'],              englishParts: ['Wash', 'your hands'],       distractors: ['닦아요', '잡아요'],             englishDistractors: ['Dry', 'Hold', 'your feet', 'my hands'],            category: 'body', difficulty: 'basic' },
   { id: 'my-nose-is-small',  english: 'My nose is small.',       korean: '코가 작아요',              parts: ['코가', '작아요'],              englishParts: ['My nose', 'is small'],      distractors: ['커요', '길어요'],               englishDistractors: ['big', 'long', 'is smaller', 'are small'],          category: 'body', difficulty: 'basic' },
   { id: 'my-ears-are-big',   english: 'My ears are big.',        korean: '귀가 커요',               parts: ['귀가', '커요'],               englishParts: ['My ears', 'are big'],       distractors: ['작아요', '아파요'],             englishDistractors: ['small', 'hurt', 'is big', 'were big'],             category: 'body', difficulty: 'basic' },
-  { id: 'my-legs-are-tired', english: 'My legs are tired.',      korean: '다리가 피곤해요',          parts: ['다리가', '피곤해요'],          englishParts: ['My legs', 'are tired'],     distractors: ['팔이', '머리가'],               englishDistractors: ['arms', 'head', 'is tired', 'were tired'],          category: 'body', difficulty: 'intermediate' },
+  { id: 'my-legs-are-tired', english: 'My legs are tired.',      korean: '다리가 피곤해요',          parts: ['다리가', '피곤해요'],          englishParts: ['My legs', 'are tired'],     distractors: ['팔이', '머리가'],               englishDistractors: ['arms', 'head', 'is tired', 'were tired'],          category: 'body', difficulty: 'intermediate', acceptableAnswers: ['My legs feel tired.', 'My legs are exhausted.', 'I have tired legs.'] },
 
   // ── 가족 (family) ─────────────────────────────────────────────────────
   { id: 'my-mother',    english: 'She is my mother.',   korean: '그녀는 우리 엄마예요',    parts: ['그녀는 우리', '엄마예요'],    englishParts: ['She is my', 'mother'],      distractors: ['아빠예요', '할아버지예요'],      englishDistractors: ['father', 'grandfather', 'mothers', 'motherly'], category: 'family', difficulty: 'basic' },
   { id: 'i-love-family',english: 'I love my family.',   korean: '나는 가족을 사랑해요',    parts: ['나는 가족을', '사랑해요'],    englishParts: ['I love my', 'family'],      distractors: ['싫어해요', '잊어요'],           englishDistractors: ['hate', 'forget', 'families', 'a family'], category: 'family', difficulty: 'basic' },
   { id: 'my-brother',   english: 'He is my brother.',   korean: '그는 우리 오빠예요',      parts: ['그는 우리', '오빠예요'],      englishParts: ['He is my', 'brother'],      distractors: ['언니예요', '할머니예요'],        englishDistractors: ['sister', 'grandmother', 'brothers', 'a brother'], category: 'family', difficulty: 'basic' },
-  { id: 'my-family-is-kind', english: 'My family is kind and funny.', korean: '우리 가족은 친절하고 재미있어요', parts: ['우리 가족은', '친절하고', '재미있어요'], englishParts: ['My family', 'is kind', 'and funny'], distractors: ['나빠요', '무서워요', '지루해요'], englishDistractors: ['is mean', 'and boring', 'My friends', 'was kind', 'and funnily'], category: 'family', difficulty: 'intermediate' },
+  { id: 'my-family-is-kind', english: 'My family is kind and funny.', korean: '우리 가족은 친절하고 재미있어요', parts: ['우리 가족은', '친절하고', '재미있어요'], englishParts: ['My family', 'is kind', 'and funny'], distractors: ['나빠요', '무서워요', '지루해요'], englishDistractors: ['is mean', 'and boring', 'My friends', 'was kind', 'and funnily'], category: 'family', difficulty: 'intermediate', acceptableAnswers: ['My family is nice and funny.', 'My family is kind and fun.', 'My family is warm and funny.'] },
 
   // ── 날씨 (weather) ────────────────────────────────────────────────────
   { id: 'its-hot',      english: "It's hot.",           korean: '더워요',                 parts: ['더워요'],                      englishParts: ['hot'],                      distractors: ['추워요', '좋아요', '싫어요'],    englishDistractors: ['cold', 'good', 'dislike', 'hotter', 'hottest'],  category: 'weather', difficulty: 'basic' },
   { id: 'its-cold',     english: "It's cold.",          korean: '추워요',                 parts: ['추워요'],                      englishParts: ['cold'],                     distractors: ['더워요', '좋아요'],             englishDistractors: ['hot', 'good', 'colder', 'coldest'],              category: 'weather', difficulty: 'basic' },
   { id: 'its-sunny',    english: "It's sunny today.",   korean: '오늘은 맑아요',           parts: ['오늘은', '맑아요'],            englishParts: ["It's sunny", 'today'],      distractors: ['흐려요', '추워요'],             englishDistractors: ['cloudy', 'cold', 'sunnier', 'yesterday'],        category: 'weather', difficulty: 'basic' },
   { id: 'its-raining',  english: "It's raining.",       korean: '오늘 비가 와요',          parts: ['오늘', '비가 와요'],           englishParts: ["It's", 'raining'],          distractors: ['맑아요', '눈이 와요'],          englishDistractors: ['sunny', 'snowing', 'rained', 'rains'], category: 'weather', difficulty: 'basic' },
-  { id: 'its-windy',    english: "It's very windy.",    korean: '바람이 많이 불어요',       parts: ['바람이 많이', '불어요'],       englishParts: ["It's very", 'windy'],       distractors: ['내려요', '쏟아져요'],           englishDistractors: ['falls', 'pours', 'winding', 'winded'], category: 'weather', difficulty: 'intermediate' },
-  { id: 'stay-home-raining', english: "Stay home when it's raining.", korean: '비가 오면 집에 있어요', parts: ['비가 오면', '집에 있어요'], englishParts: ['Stay home', "when it's raining"], distractors: ['나가요', '공원에 가요'], englishDistractors: ["when it's sunny", "when it's windy", 'Go outside', 'Stayed home'], category: 'weather', difficulty: 'intermediate' },
-  { id: 'cold-and-windy', english: "It's cold and very windy today.", korean: '오늘은 춥고 바람이 많이 불어요', parts: ['오늘은 춥고', '바람이 많이 불어요'], englishParts: ["It's cold", "and very windy today"], distractors: ['따뜻하고', '비가 많이 와요'], englishDistractors: ["and very sunny today", "and very rainy today", "It was cold", "It's hot"], category: 'weather', difficulty: 'intermediate' },
+  { id: 'its-windy',    english: "It's very windy.",    korean: '바람이 많이 불어요',       parts: ['바람이 많이', '불어요'],       englishParts: ["It's very", 'windy'],       distractors: ['내려요', '쏟아져요'],           englishDistractors: ['falls', 'pours', 'winding', 'winded'], category: 'weather', difficulty: 'intermediate', acceptableAnswers: ["It's so windy.", 'It is very windy.', 'The wind is really strong.'] },
+  { id: 'stay-home-raining', english: "Stay home when it's raining.", korean: '비가 오면 집에 있어요', parts: ['비가 오면', '집에 있어요'], englishParts: ['Stay home', "when it's raining"], distractors: ['나가요', '공원에 가요'], englishDistractors: ["when it's sunny", "when it's windy", 'Go outside', 'Stayed home'], category: 'weather', difficulty: 'intermediate', acceptableAnswers: ["Stay inside when it's raining.", "When it rains, stay home.", "If it's raining, stay home."] },
+  { id: 'cold-and-windy', english: "It's cold and very windy today.", korean: '오늘은 춥고 바람이 많이 불어요', parts: ['오늘은 춥고', '바람이 많이 불어요'], englishParts: ["It's cold", "and very windy today"], distractors: ['따뜻하고', '비가 많이 와요'], englishDistractors: ["and very sunny today", "and very rainy today", "It was cold", "It's hot"], category: 'weather', difficulty: 'intermediate', acceptableAnswers: ["Today it's cold and very windy.", "It's really cold and windy today.", "It's freezing and very windy today."] },
 
   // ── 감정 (feeling) ────────────────────────────────────────────────────
   { id: 'im-happy',     english: "I'm happy.",          korean: '나는 행복해요',           parts: ['나는', '행복해요'],            englishParts: ['I am', 'happy'],            distractors: ['슬퍼요', '배고파요'],           englishDistractors: ['sad', 'hungry', 'happily', 'happier'],           category: 'feeling', difficulty: 'basic' },
   { id: 'im-angry',     english: "I'm angry.",          korean: '나는 화가 났어요',         parts: ['나는', '화가 났어요'],         englishParts: ['I am', 'angry'],            distractors: ['짜증이 났어요', '걱정이에요'],   englishDistractors: ['annoyed', 'worried', 'angrily', 'angrier'], category: 'feeling', difficulty: 'basic' },
   { id: 'im-tired',     english: "I'm tired.",          korean: '나는 피곤해요',            parts: ['나는', '피곤해요'],            englishParts: ['I am', 'tired'],            distractors: ['신나요', '화났어요'],           englishDistractors: ['excited', 'angry', 'tiring', 'tried'], category: 'feeling', difficulty: 'basic' },
   { id: 'im-excited',   english: "I'm excited!",        korean: '신나요!',                 parts: ['신나요'],                      englishParts: ['excited'],                  distractors: ['무서워요', '지루해요'],         englishDistractors: ['scared', 'bored', 'exciting', 'excites'], category: 'feeling', difficulty: 'basic' },
-  { id: 'tired-because-busy', english: "I'm tired because I'm busy.", korean: '바빠서 피곤해요', parts: ['바빠서', '피곤해요'], englishParts: ["I'm tired", "because I'm busy"], distractors: ['행복해요', '신나요'], englishDistractors: ["because I'm happy", "because I'm free", "I was tired", "I'm tiring"], category: 'feeling', difficulty: 'intermediate' },
-  { id: 'happy-and-excited', english: "I'm happy and excited today!", korean: '오늘 행복하고 신나요!', parts: ['오늘', '행복하고 신나요'], englishParts: ["I'm happy", "and excited today"], distractors: ['슬프고', '화가 났어요'], englishDistractors: ["and angry today", "and tired today", "I was happy", "and exciting today"], category: 'feeling', difficulty: 'intermediate' },
+  { id: 'tired-because-busy', english: "I'm tired because I'm busy.", korean: '바빠서 피곤해요', parts: ['바빠서', '피곤해요'], englishParts: ["I'm tired", "because I'm busy"], distractors: ['행복해요', '신나요'], englishDistractors: ["because I'm happy", "because I'm free", "I was tired", "I'm tiring"], category: 'feeling', difficulty: 'intermediate', acceptableAnswers: ["I'm exhausted because I'm busy.", "I feel tired because I'm so busy.", "Being busy makes me tired."] },
+  { id: 'happy-and-excited', english: "I'm happy and excited today!", korean: '오늘 행복하고 신나요!', parts: ['오늘', '행복하고 신나요'], englishParts: ["I'm happy", "and excited today"], distractors: ['슬프고', '화가 났어요'], englishDistractors: ["and angry today", "and tired today", "I was happy", "and exciting today"], category: 'feeling', difficulty: 'intermediate', acceptableAnswers: ["I feel happy and excited today!", "Today I'm happy and excited!", "I'm so happy and excited today!"] },
 
   // ── 교통 (transport) ──────────────────────────────────────────────────
   { id: 'take-the-bus', english: 'I go by bus.',        korean: '버스를 타고 가요',         parts: ['버스를 타고', '가요'],         englishParts: ['I go by', 'bus'],           distractors: ['와요', '달려요'],               englishDistractors: ['come', 'run', 'goes', 'went'],    category: 'transport', difficulty: 'basic' },
   { id: 'take-subway',  english: 'Take the subway.',    korean: '지하철을 타요',            parts: ['지하철을', '타요'],            englishParts: ['Take', 'the subway'],       distractors: ['이용해요', '내려요'],           englishDistractors: ['Use', 'Get off', 'Took', 'Taking'], category: 'transport', difficulty: 'basic' },
   { id: 'train-is-fast',english: 'The train is fast.',  korean: '기차는 빨라요',            parts: ['기차는', '빨라요'],            englishParts: ['The train', 'is fast'],     distractors: ['느려요', '좋아요'],             englishDistractors: ['slow', 'good', 'faster', 'fastest'],   category: 'transport', difficulty: 'basic' },
-  { id: 'bus-slow-take-subway', english: 'The bus is slow, so take the subway.', korean: '버스가 느려서 지하철을 타요', parts: ['버스가 느려서', '지하철을 타요'], englishParts: ['The bus is slow,', 'so take the subway'], distractors: ['기차를 타요', '걸어요'], englishDistractors: ['so take the bus', 'so go home', 'The train is slow,', 'so took the subway'], category: 'transport', difficulty: 'intermediate' },
+  { id: 'bus-slow-take-subway', english: 'The bus is slow, so take the subway.', korean: '버스가 느려서 지하철을 타요', parts: ['버스가 느려서', '지하철을 타요'], englishParts: ['The bus is slow,', 'so take the subway'], distractors: ['기차를 타요', '걸어요'], englishDistractors: ['so take the bus', 'so go home', 'The train is slow,', 'so took the subway'], category: 'transport', difficulty: 'intermediate', acceptableAnswers: ['Since the bus is slow, take the subway.', 'The bus is slow, so use the subway.', "The bus takes too long, so take the subway."] },
 
   // ── 건강 (health) ─────────────────────────────────────────────────────
   { id: 'i-feel-sick',  english: 'I feel sick.',        korean: '몸이 아파요',              parts: ['몸이', '아파요'],              englishParts: ['I feel', 'sick'],           distractors: ['건강해요', '피곤해요'],         englishDistractors: ['healthy', 'tired', 'sicker', 'sickly'], category: 'health', difficulty: 'basic' },
   { id: 'see-doctor',   english: 'See a doctor.',       korean: '의사를 만나요',            parts: ['의사를', '만나요'],            englishParts: ['See', 'a doctor'],          distractors: ['불러요', '찾아요'],             englishDistractors: ['Call', 'Find', 'Saw', 'Seeing'], category: 'health', difficulty: 'basic' },
   { id: 'take-medicine',english: 'Take your medicine.', korean: '약을 먹어요',              parts: ['약을', '먹어요'],              englishParts: ['Take', 'your medicine'],    distractors: ['사요', '버려요'],               englishDistractors: ['Buy', 'Throw', 'Takes', 'Took'], category: 'health', difficulty: 'basic' },
-  { id: 'sick-so-see-doctor', english: 'I feel sick, so I see a doctor.', korean: '몸이 아파서 의사를 만나요', parts: ['몸이 아파서', '의사를 만나요'], englishParts: ['I feel sick,', 'so I see a doctor'], distractors: ['집에 있어요', '자요'], englishDistractors: ['so I stay home', 'so I sleep', 'I felt sick,', 'I feel well,'], category: 'health', difficulty: 'intermediate' },
+  { id: 'sick-so-see-doctor', english: 'I feel sick, so I see a doctor.', korean: '몸이 아파서 의사를 만나요', parts: ['몸이 아파서', '의사를 만나요'], englishParts: ['I feel sick,', 'so I see a doctor'], distractors: ['집에 있어요', '자요'], englishDistractors: ['so I stay home', 'so I sleep', 'I felt sick,', 'I feel well,'], category: 'health', difficulty: 'intermediate', acceptableAnswers: ["I'm sick, so I'm seeing a doctor.", "Since I feel sick, I see a doctor.", "I feel unwell, so I go to the doctor."] },
 
   // ── 중급 상황별 표현 (Intermediate) — 짧고 즉시 써먹는 생존 표현 ─────────
   // 테마: 식당 주문 (int-dining-1: 예약·기본 주문)
@@ -117,6 +117,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Welcome! How can I help you?",
     dialoguePromptKorean: "어서오세요! 도와드릴까요?",
     category: 'food',
+    acceptableAnswers: ["Could I have a menu, please?", "May I have a menu?", "Can I see the menu, please?"],
   },
   {
     id: 'dining-get-water',
@@ -131,6 +132,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What would you like to drink?",
     dialoguePromptKorean: "음료는 무엇으로 하시겠어요?",
     category: 'food',
+    acceptableAnswers: ["Could I have some water, please?", "May I have some water?", "Water, please.", "Can I have water?"],
   },
   {
     id: 'dining-have-reservation',
@@ -145,6 +147,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Good evening! Do you have a reservation?",
     dialoguePromptKorean: "안녕하세요! 예약하셨나요?",
     category: 'food',
+    acceptableAnswers: ["I made a reservation.", "Yes, I have a reservation.", "I booked a table."],
   },
   {
     id: 'dining-not-my-order',
@@ -159,6 +162,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Here is your pizza, enjoy!",
     dialoguePromptKorean: "피자 나왔습니다, 맛있게 드세요!",
     category: 'food',
+    acceptableAnswers: ["I didn't order this.", "This isn't what I ordered.", "I think there's been a mistake."],
   },
 
   // 테마: 식당 특별 요청 (int-dining-2)
@@ -175,6 +179,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Would you like ice in your drink?",
     dialoguePromptKorean: "음료에 얼음 넣어 드릴까요?",
     category: 'food',
+    acceptableAnswers: ["Without ice, please.", "I'd like no ice, please.", "Please hold the ice."],
   },
   {
     id: 'dining-to-go',
@@ -189,6 +194,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Will you be eating here today?",
     dialoguePromptKorean: "오늘 여기서 드실 건가요?",
     category: 'food',
+    acceptableAnswers: ["Can I have this to go?", "I'd like this to go, please.", "Can you pack this up for me?", "To go, please."],
   },
   {
     id: 'dining-check-please',
@@ -203,6 +209,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Is there anything else I can get you?",
     dialoguePromptKorean: "더 필요하신 것 있으세요?",
     category: 'food',
+    acceptableAnswers: ["The bill, please.", "Can we have the check?", "Can I have the bill, please?"],
   },
 
   // 테마: 호텔·이동 (int-hotel-1)
@@ -219,6 +226,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Good evening! Welcome to our hotel.",
     dialoguePromptKorean: "안녕하세요! 저희 호텔에 오신 것을 환영합니다.",
     category: 'place',
+    acceptableAnswers: ["I made a reservation.", "I booked a room.", "Yes, I have a booking."],
   },
   {
     id: 'hotel-where-is',
@@ -233,6 +241,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Here is your room key. Enjoy your stay!",
     dialoguePromptKorean: "객실 키 드립니다. 편안하게 지내세요!",
     category: 'place',
+    acceptableAnswers: ["Can you tell me where the elevator is?", "Where can I find the elevator?", "Which way is the elevator?"],
   },
   {
     id: 'hotel-wake-up-call',
@@ -242,11 +251,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["Can I get a wake-up call", "at seven?"],
     distractors: ["늦게 일어날게요", "전화하지 마세요"],
     englishDistractors: ["I'll sleep in", "No calls please", "at eight", "at six"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '호텔에서 모닝콜을 요청할 때',
     dialoguePrompt: "Is there anything else you need tonight?",
     dialoguePromptKorean: "오늘 밤 더 필요하신 것 있으세요?",
     category: 'place',
+    acceptableAnswers: ["Could I have a wake-up call at seven?", "Please call me at seven.", "I'd like a wake-up call at 7 AM."],
   },
 
   // 테마: 거절·공감 (int-social-1)
@@ -263,6 +273,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'm so sorry I'm late!",
     dialoguePromptKorean: "너무 늦어서 미안해요!",
     category: 'daily',
+    acceptableAnswers: ["Don't worry about it!", "No worries!", "It's totally fine!"],
   },
   {
     id: 'social-sounds-good',
@@ -277,6 +288,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Let's grab some pizza after this!",
     dialoguePromptKorean: "이거 끝나고 피자 먹으러 가요!",
     category: 'daily',
+    acceptableAnswers: ["That sounds great!", "I'm in!", "Works for me!"],
   },
   {
     id: 'social-maybe-next-time',
@@ -291,15 +303,16 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Do you want to come to the party tonight?",
     dialoguePromptKorean: "오늘 밤 파티에 올래요?",
     category: 'daily',
+    acceptableAnswers: ["Perhaps next time.", "Next time, maybe.", "Maybe another time."],
   },
 
   // 테마: 조언·의견 (int-social-2)
   {
     id: 'social-i-think',
-    english: "I think that's a great idea.",
+    english: "That's a good idea.",
     korean: "좋은 생각이에요",
     parts: ["좋은", "생각이에요"],
-    englishParts: ["I think", "that's a great idea"],
+    englishParts: ["That's", "a good idea"],
     distractors: ["별로예요", "모르겠어요"],
     englishDistractors: ["That's bad", "I'm not sure", "terrible idea", "I disagree"],
     difficulty: 'basic',
@@ -307,6 +320,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What if we meet on Friday instead?",
     dialoguePromptKorean: "대신 금요일에 만나는 건 어때요?",
     category: 'daily',
+    acceptableAnswers: ["Good idea.", "That's a great idea.", "That is a good idea.", "I think that's a good idea.", "I think that's a great idea.", "That sounds like a great idea."],
   },
   {
     id: 'social-you-should',
@@ -316,11 +330,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["You should", "try it"],
     distractors: ["하지 마세요", "어려워요"],
     englishDistractors: ["Don't do it", "It's too hard", "avoid it", "give up"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '뭔가를 권유할 때',
     dialoguePrompt: "I've never tried sushi before.",
     dialoguePromptKorean: "저 초밥을 먹어본 적이 없어요.",
     category: 'daily',
+    acceptableAnswers: ["Give it a try.", "You should give it a try.", "Try it out."],
   },
 
   // ── 고급 상황별 표현 (Advanced) ──────────────────────────────────────────
@@ -337,7 +352,12 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '식당에서 알레르기 요청할 때',
     dialoguePrompt: 'Any allergies we should know about?',
     dialoguePromptKorean: "알려드려야 할 알레르기가 있으신가요?",
-    category: 'food'
+    category: 'food',
+    acceptableAnswers: [
+      "I'm severely allergic to nuts, so please keep them out of my salad.",
+      "I have a serious nut allergy — no nuts in my salad, please.",
+      "I'm allergic to nuts, so could you make sure my salad has none?",
+    ],
   },
   {
     id: 'adv-dining-side',
@@ -351,7 +371,12 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '식당에서 소스 따로 요청할 때',
     dialoguePrompt: 'Would you like the dressing on the salad?',
     dialoguePromptKorean: "샐러드에 드레싱 뿌려 드릴까요?",
-    category: 'food'
+    category: 'food',
+    acceptableAnswers: [
+      "Can I have the dressing on the side? I like to add it myself.",
+      "Could you put the dressing on the side? I'd rather add it myself.",
+      "I'd like the dressing separate, please — I prefer to add it myself.",
+    ],
   },
   {
     id: 'adv-dining-steak',
@@ -365,7 +390,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '식당에서 스테이크 굽기 및 사이드 변경 요청',
     dialoguePrompt: 'How would you like your steak done?',
     dialoguePromptKorean: "스테이크 굽기는 어떻게 해드릴까요?",
-    category: 'food'
+    category: 'food',
+    acceptableAnswers: [
+      "Medium-rare for my steak, please, and can I get a baked potato instead of fries?",
+      "I'll have my steak medium-rare, and is it possible to substitute the fries with a baked potato?",
+    ],
   },
   {
     id: 'adv-dining-wrong-order',
@@ -379,7 +408,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '식당에서 주문한 음식이 잘못 나왔을 때',
     dialoguePrompt: 'Here is your pasta, sir.',
     dialoguePromptKorean: "파스타 나왔습니다.",
-    category: 'food'
+    category: 'food',
+    acceptableAnswers: [
+      "Excuse me, but this isn't what I ordered. I ordered the grilled salmon.",
+      "I'm afraid this isn't my order. I had the grilled salmon.",
+    ],
   },
   {
     id: 'adv-dining-reservation',
@@ -393,7 +426,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '식당에서 예약 확인 및 인원 추가 알림',
     dialoguePrompt: 'Welcome, do you have a reservation?',
     dialoguePromptKorean: "어서오세요, 예약하셨나요?",
-    category: 'food'
+    category: 'food',
+    acceptableAnswers: [
+      "We booked a table for four under Kim, though there may be one more person.",
+      "I have a reservation for four under Kim, but possibly one more will be joining.",
+    ],
   },
 
   // 테마: 여행 (Travel)
@@ -409,7 +446,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '공항에서 비행기 지연으로 인한 노선 문의',
     dialoguePrompt: 'How can I help you at the counter?',
     dialoguePromptKorean: "카운터에서 도와드릴까요?",
-    category: 'transport'
+    category: 'transport',
+    acceptableAnswers: [
+      "Due to a delay, I missed my connecting flight. Are there any other flights tonight?",
+      "My connecting flight was delayed and I missed my plane. Is there another flight this evening?",
+    ],
   },
   {
     id: 'adv-travel-room-issue',
@@ -423,7 +464,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '호텔에서 시설 문제로 방 변경 요청',
     dialoguePrompt: 'Is everything okay with your room?',
     dialoguePromptKorean: "객실에 불편한 점은 없으세요?",
-    category: 'place'
+    category: 'place',
+    acceptableAnswers: [
+      "My room's air conditioner is noisy. Would it be possible to switch to another room?",
+      "There's a noise coming from the AC in my room. Can I be moved to a different room?",
+    ],
   },
   {
     id: 'adv-travel-upgrade',
@@ -437,7 +482,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '호텔에서 무료 업그레이드 가능 여부 문의',
     dialoguePrompt: 'Check-in is complete. Here is your key.',
     dialoguePromptKorean: "체크인 완료됐습니다. 키 드릴게요.",
-    category: 'place'
+    category: 'place',
+    acceptableAnswers: [
+      "I'd like to know if any free upgrades are available for my stay.",
+      "Are there any complimentary room upgrades available?",
+    ],
   },
   {
     id: 'adv-travel-lost-baggage',
@@ -451,7 +500,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '공항에서 수하물 미도착 신고',
     dialoguePrompt: 'Did you find all your bags at the carousel?',
     dialoguePromptKorean: "수하물 찾는 곳에서 짐 다 찾으셨나요?",
-    category: 'transport'
+    category: 'transport',
+    acceptableAnswers: [
+      "My bags haven't come yet. Can you assist me with filing a lost baggage report?",
+      "My luggage is missing. Could you help me report it?",
+    ],
   },
   {
     id: 'adv-travel-transport',
@@ -465,7 +518,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '여행지에서 시내 가는 방법 문의',
     dialoguePrompt: 'Where would you like to go from the airport?',
     dialoguePromptKorean: "공항에서 어디로 가시겠어요?",
-    category: 'place'
+    category: 'place',
+    acceptableAnswers: [
+      "Can you tell me the best way to reach the city center by public transport?",
+      "What's the best way to get downtown using public transportation?",
+    ],
   },
 
   // 테마: 일상 (Daily Life)
@@ -481,7 +538,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '완곡하게 거절할 때',
     dialoguePrompt: 'Do you want to grab dinner this Thursday?',
     dialoguePromptKorean: "이번 목요일에 저녁 같이 먹을래요?",
-    category: 'daily'
+    category: 'daily',
+    acceptableAnswers: [
+      "I'd love to, but I'm really slammed with work this week. Maybe another time?",
+      "Sounds good, but I'm overwhelmed with work this week. Can we do it next time?",
+    ],
   },
   {
     id: 'adv-daily-agree',
@@ -495,7 +556,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '상대방의 말에 적극 공감할 때',
     dialoguePrompt: 'I think this movie is a bit overrated.',
     dialoguePromptKorean: "이 영화 좀 과대평가된 것 같아요.",
-    category: 'daily'
+    category: 'daily',
+    acceptableAnswers: [
+      "You read my mind! I was just about to say the same thing.",
+      "That's exactly what I was thinking! I was about to say the same.",
+    ],
   },
   {
     id: 'adv-daily-netflix',
@@ -509,7 +574,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '최신 영상 콘텐츠에 대해 스몰토크 할 때',
     dialoguePrompt: 'Any recommendations for the weekend?',
     dialoguePromptKorean: "주말에 추천해줄 곳 있어요?",
-    category: 'daily'
+    category: 'daily',
+    acceptableAnswers: [
+      "Have you checked out that new Netflix series? It's slow at first but becomes really gripping.",
+      "Did you watch the new Netflix show? It starts off slow but gets really exciting.",
+    ],
   },
   {
     id: 'adv-daily-advice',
@@ -523,7 +592,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '상대방에게 조언을 건넬 때',
     dialoguePrompt: "I'm having a hard time with my co-worker.",
     dialoguePromptKorean: "동료 때문에 힘드네요.",
-    category: 'daily'
+    category: 'daily',
+    acceptableAnswers: [
+      "If I were you, I'd speak with him directly to sort things out.",
+      "In your position, I would have a direct conversation with him to resolve the misunderstanding.",
+    ],
   },
   {
     id: 'adv-daily-opinion',
@@ -537,7 +610,11 @@ export const SENTENCES: SentenceItem[] = [
     scenario: '자신의 의견을 피력할 때',
     dialoguePrompt: 'What do you think about the new company policy?',
     dialoguePromptKorean: "새 회사 방침에 대해 어떻게 생각해요?",
-    category: 'daily'
+    category: 'daily',
+    acceptableAnswers: [
+      "To my mind, the most important thing is achieving a work-life balance.",
+      "I think the key thing is to maintain a balance between work and personal life.",
+    ],
   },
 
   // ── 고급 트랙 전용 — 공항·교통 ────────────────────────────────────────
@@ -554,6 +631,10 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'm sorry, this flight is overbooked and you've been bumped.",
     dialoguePromptKorean: "죄송합니다, 이 항공편이 초과 예약되어 좌석이 취소됐습니다.",
     category: 'transport',
+    acceptableAnswers: [
+      "What compensation is available for being bumped? I have to get to my destination today.",
+      "Do I get any compensation for being denied boarding? I absolutely need to arrive today.",
+    ],
   },
 
   // ── 고급 트랙 전용 — 감정·공감 표현 ──────────────────────────────────────
@@ -570,6 +651,10 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I passed my exam! I finally did it!",
     dialoguePromptKorean: "시험에 합격했어요! 드디어 해냈어요!",
     category: 'daily',
+    acceptableAnswers: [
+      "I'm really proud of you! You put in so much hard work.",
+      "You should be so proud! You worked incredibly hard for this.",
+    ],
   },
   {
     id: 'adv-feeling-cheer',
@@ -584,6 +669,10 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'm so nervous about my presentation tomorrow.",
     dialoguePromptKorean: "내일 발표 때문에 너무 긴장돼요.",
     category: 'daily',
+    acceptableAnswers: [
+      "Don't stress, you'll do great. Have confidence in yourself!",
+      "No need to worry — I know you'll nail it. Believe in yourself!",
+    ],
   },
   {
     id: 'adv-feeling-sympathy',
@@ -598,6 +687,10 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I lost my job last week and I don't know what to do.",
     dialoguePromptKorean: "지난주에 직장을 잃었는데 어떻게 해야 할지 모르겠어요.",
     category: 'daily',
+    acceptableAnswers: [
+      "That sounds incredibly tough. I'm really sorry to hear that.",
+      "I can imagine how hard that was. I'm so sorry.",
+    ],
   },
 
   // ── 고급 트랙 전용 — 일상 대화 ──────────────────────────────────────────
@@ -614,6 +707,10 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Do you know any good places to grab a snack around here?",
     dialoguePromptKorean: "이 근처에 간식 먹기 좋은 곳 아세요?",
     category: 'daily',
+    acceptableAnswers: [
+      "Have you been to the new café by the park? The cakes are incredible.",
+      "Did you check out that new café near the park? Their cakes are really good.",
+    ],
   },
   {
     id: 'adv-chat-catchup',
@@ -628,6 +725,10 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Oh wow, is that you? I haven't seen you in ages!",
     dialoguePromptKorean: "오, 맞죠? 정말 오랜만이에요!",
     category: 'daily',
+    acceptableAnswers: [
+      "It's been ages! How have you been?",
+      "Wow, it's been forever! What have you been doing lately?",
+    ],
   },
 
   // ── 중급: 식당 심화 (int-dining-3) ──────────────────────────────────────
@@ -644,6 +745,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Are you ready to order?",
     dialoguePromptKorean: "주문하시겠어요?",
     category: 'food',
+    acceptableAnswers: ["What would you recommend?", "What's good here?", "Do you have any recommendations?"],
   },
   {
     id: 'dining-allergy-gluten',
@@ -658,6 +760,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Do you have any dietary restrictions?",
     dialoguePromptKorean: "식이 제한이 있으신가요?",
     category: 'food',
+    acceptableAnswers: ["I have a gluten allergy.", "I can't eat gluten.", "I'm intolerant to gluten."],
   },
   {
     id: 'dining-well-done',
@@ -672,6 +775,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How would you like your steak cooked?",
     dialoguePromptKorean: "스테이크 굽기는 어떻게 해드릴까요?",
     category: 'food',
+    acceptableAnswers: ["Fully cooked, please.", "I'd like it well-done.", "Please cook it all the way through."],
   },
   {
     id: 'dining-split-bill',
@@ -686,6 +790,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Will that be on one bill or separate?",
     dialoguePromptKorean: "같이 계산해 드릴까요, 따로 하실 건가요?",
     category: 'food',
+    acceptableAnswers: ["Can we pay separately?", "Could we have separate bills?", "We'd like to split the check."],
   },
   {
     id: 'dining-refill',
@@ -700,6 +805,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How's your drink?",
     dialoguePromptKorean: "음료는 어떠세요?",
     category: 'food',
+    acceptableAnswers: ["Could I have a refill?", "May I get a refill, please?", "Can I have another one?"],
   },
 
   // ── 중급: 호텔 서비스 (int-hotel-2) ─────────────────────────────────────
@@ -716,6 +822,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Your room is all set. Is there anything else?",
     dialoguePromptKorean: "객실 준비됐습니다. 더 필요하신 것 있으세요?",
     category: 'place',
+    acceptableAnswers: ["What is the wifi password?", "Could I get the wifi password?", "Do you have wifi here?"],
   },
   {
     id: 'hotel-extra-towels',
@@ -730,6 +837,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Housekeeping. Do you need anything?",
     dialoguePromptKorean: "하우스키핑입니다. 필요하신 것 있으세요?",
     category: 'place',
+    acceptableAnswers: ["Could I have some extra towels?", "May I get more towels, please?", "Can you bring some extra towels?"],
   },
   {
     id: 'hotel-late-checkout',
@@ -741,6 +849,7 @@ export const SENTENCES: SentenceItem[] = [
     englishDistractors: ["I'll check out early", "I'm leaving now", "extend my stay", "at noon"],
     difficulty: 'basic',
     scenario: '체크아웃 시간을 늦추고 싶을 때',
+    acceptableAnswers: ["Is a late checkout possible?", "Could I check out late?", "Would it be okay to have a late checkout?"],
     dialoguePrompt: "Checkout is at 11 AM. Will that work for you?",
     dialoguePromptKorean: "체크아웃은 오전 11시입니다. 괜찮으세요?",
     category: 'place',
@@ -758,6 +867,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How is your stay so far?",
     dialoguePromptKorean: "지금까지 머무심은 어떠세요?",
     category: 'place',
+    acceptableAnswers: ["The next room is way too loud.", "It's very noisy next door.", "The noise from next door is too much."],
   },
   {
     id: 'hotel-room-service',
@@ -767,11 +877,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["I'd like to order", "room service"],
     distractors: ["직접 내려갈게요", "배달 시킬게요"],
     englishDistractors: ["I'll go to the restaurant", "I'll order delivery", "breakfast menu", "the bar"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '호텔에서 룸서비스를 요청할 때',
     dialoguePrompt: "Hello, this is the front desk. How can I help you?",
     dialoguePromptKorean: "안녕하세요, 프런트입니다. 도와드릴까요?",
     category: 'place',
+    acceptableAnswers: ["I want to order room service.", "Can I order room service?", "I'd like to place a room service order."],
   },
 
   // ── 중급: 대화 이어가기 (int-social-3) ───────────────────────────────────
@@ -788,6 +899,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Morning! Back to work already, huh?",
     dialoguePromptKorean: "아침이에요! 벌써 출근이에요?",
     category: 'daily',
+    acceptableAnswers: ["How did your weekend go?", "Did you have a good weekend?", "What did you do this weekend?"],
   },
   {
     id: 'social-me-too',
@@ -802,6 +914,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'm so tired today.",
     dialoguePromptKorean: "오늘 너무 피곤해요.",
     category: 'daily',
+    acceptableAnswers: ["Same here!", "I feel the same way!", "So do I!"],
   },
   {
     id: 'social-really',
@@ -816,6 +929,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I just got promoted!",
     dialoguePromptKorean: "방금 승진했어요!",
     category: 'daily',
+    acceptableAnswers: ["Seriously? That's incredible!", "Wow, is that true? Amazing!", "Oh wow, that's wonderful!"],
   },
   {
     id: 'social-take-care',
@@ -830,6 +944,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Alright, I should get going.",
     dialoguePromptKorean: "자, 이제 가봐야겠어요.",
     category: 'daily',
+    acceptableAnswers: ["Stay safe!", "Look after yourself!", "You take care too!"],
   },
   {
     id: 'social-by-the-way',
@@ -839,11 +954,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["By the way,", "did you hear the news?"],
     distractors: ["뉴스 안 봐요", "상관없어요"],
     englishDistractors: ["I don't watch news", "I don't care", "did you see that", "have you read"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '대화 중 새로운 화제를 꺼낼 때',
     dialoguePrompt: "Anyway, how have you been lately?",
     dialoguePromptKorean: "그나저나 요즘 어떻게 지냈어요?",
     category: 'daily',
+    acceptableAnswers: ["Anyway, did you hear the news?", "Oh, by the way — did you catch the news?", "Changing the subject, did you hear the news?"],
   },
 
   // ── 고급: 입출국 (adv-airport-2) ─────────────────────────────────────────
@@ -860,6 +976,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Do you have anything to declare today?",
     dialoguePromptKorean: "오늘 신고할 물품이 있으신가요?",
     category: 'place',
+    acceptableAnswers: ["I don't have anything to declare.", "Nothing to declare.", "I have no items to declare."],
   },
   {
     id: 'adv-visit-purpose',
@@ -874,6 +991,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What's the purpose of your visit?",
     dialoguePromptKorean: "방문 목적이 무엇인가요?",
     category: 'place',
+    acceptableAnswers: ["I'm visiting as a tourist.", "I'm here on holiday.", "I'm here for sightseeing."],
   },
   {
     id: 'adv-connecting-flight',
@@ -888,6 +1006,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Is this your final destination?",
     dialoguePromptKorean: "이곳이 최종 목적지인가요?",
     category: 'place',
+    acceptableAnswers: ["I'm connecting to Seoul.", "My connection goes to Seoul.", "I have a layover and my next flight is to Seoul."],
   },
   {
     id: 'adv-checked-bags',
@@ -902,6 +1021,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How many bags are you checking today?",
     dialoguePromptKorean: "오늘 수하물을 몇 개 부치시나요?",
     category: 'place',
+    acceptableAnswers: ["I'm checking two bags.", "I have two bags to check in.", "I'd like to check two pieces of luggage."],
   },
   {
     id: 'adv-window-seat',
@@ -916,6 +1036,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Do you have a seat preference?",
     dialoguePromptKorean: "원하시는 좌석이 있으신가요?",
     category: 'place',
+    acceptableAnswers: ["I'd like a window seat, please.", "Could I get a window seat?", "I'd prefer a window seat, please.", "A window seat, please."],
   },
 
   // ── 고급: 위로·격려 (adv-biz-3) ──────────────────────────────────────────
@@ -932,6 +1053,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I feel like nothing is going right lately.",
     dialoguePromptKorean: "요즘 모든 게 잘 안 풀리는 것 같아요.",
     category: 'daily',
+    acceptableAnswers: ["It'll get better, I promise.", "Things are going to improve, I promise.", "I promise things will turn around."],
   },
   {
     id: 'adv-you-can-do',
@@ -946,6 +1068,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'm so nervous about my job interview tomorrow.",
     dialoguePromptKorean: "내일 취업 면접 때문에 너무 긴장돼요.",
     category: 'daily',
+    acceptableAnswers: ["You've got this! I have faith in you.", "I know you can do it! I believe in you.", "You'll be great! I'm rooting for you."],
   },
   {
     id: 'adv-worry-fine',
@@ -960,6 +1083,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What if I fail the interview?",
     dialoguePromptKorean: "면접에서 떨어지면 어떡하죠?",
     category: 'daily',
+    acceptableAnswers: ["Don't stress, everything will work out.", "No need to worry, things will sort themselves out.", "Don't worry — it'll be fine."],
   },
   {
     id: 'adv-hang-in-there',
@@ -974,6 +1098,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I don't know how much longer I can keep doing this.",
     dialoguePromptKorean: "얼마나 더 이렇게 버틸 수 있을지 모르겠어요.",
     category: 'daily',
+    acceptableAnswers: ["Keep going, you've got this!", "Just hold on a little longer!", "Stay strong, you can do it!"],
   },
   {
     id: 'adv-proud-of-you',
@@ -988,6 +1113,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I finally finished my project after months of work.",
     dialoguePromptKorean: "몇 달간의 작업 끝에 프로젝트를 드디어 마쳤어요.",
     category: 'daily',
+    acceptableAnswers: ["I'm so proud of all that you've accomplished.", "You should know how proud I am of everything you've done."],
   },
 
   // ── 고급: 자연스러운 표현 (adv-idiom-3) ──────────────────────────────────
@@ -1004,6 +1130,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I just won the lottery!",
     dialoguePromptKorean: "복권에 당첨됐어요!",
     category: 'daily',
+    acceptableAnswers: ["Are you serious?", "No way, are you joking?", "You've got to be kidding me!"],
   },
   {
     id: 'adv-no-way',
@@ -1018,6 +1145,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "They're closing the restaurant we love!",
     dialoguePromptKorean: "우리가 좋아하는 식당이 문을 닫는대요!",
     category: 'daily',
+    acceptableAnswers: ["That can't be true! I can't believe it.", "Seriously? That's unbelievable!", "No way, I can't believe that!"],
   },
   {
     id: 'adv-hang-on',
@@ -1032,6 +1160,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Have you decided what to order yet?",
     dialoguePromptKorean: "무엇을 주문할지 결정하셨나요?",
     category: 'daily',
+    acceptableAnswers: ["Wait a moment, I'll be right back.", "Just a second, I'll be back.", "Hold on, I'll be right back."],
   },
   {
     id: 'adv-fair-enough',
@@ -1046,6 +1175,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I know it's not perfect, but it's the best we can do right now.",
     dialoguePromptKorean: "완벽하진 않지만, 지금 우리가 할 수 있는 최선이에요.",
     category: 'daily',
+    acceptableAnswers: ["Fair point. I see where you're coming from.", "That's fair. I understand what you mean.", "I get it. That makes sense."],
   },
   {
     id: 'adv-figured-out',
@@ -1060,6 +1190,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "You've been stuck on that problem all day!",
     dialoguePromptKorean: "하루 종일 그 문제에 매달려 있었잖아요!",
     category: 'daily',
+    acceptableAnswers: ["I finally worked it out!", "I've got it figured out!", "I finally solved it!"],
   },
 
   // ── 중급: 쇼핑 (int-shopping-1/2) ────────────────────────────────────────
@@ -1076,6 +1207,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Welcome! How can I help you today?",
     dialoguePromptKorean: "어서오세요! 오늘 어떻게 도와드릴까요?",
     category: 'place',
+    acceptableAnswers: ["Pardon me, where are the fitting rooms?", "Could you tell me where the fitting room is?", "Where are the changing rooms?"],
   },
   {
     id: 'shopping-how-much',
@@ -1090,6 +1222,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Can I help you find anything?",
     dialoguePromptKorean: "찾으시는 것 있으세요?",
     category: 'place',
+    acceptableAnswers: ["What's the price of this?", "How much does this cost?", "Could you tell me the price?"],
   },
   {
     id: 'shopping-too-expensive',
@@ -1099,11 +1232,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["That's too expensive.", "Do you have", "anything cheaper?"],
     distractors: ["괜찮은 가격이에요", "살게요"],
     englishDistractors: ["That's a good price", "I'll take it", "a discount", "something fancier"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '상품이 비쌀 때 더 싼 것을 요청할 때',
     dialoguePrompt: "This jacket is $250.",
     dialoguePromptKorean: "이 재킷은 250달러입니다.",
     category: 'place',
+    acceptableAnswers: ["It's a bit pricey. Do you have something more affordable?", "That's quite expensive. Is there anything cheaper?"],
   },
   {
     id: 'shopping-other-colors',
@@ -1118,6 +1252,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How do you like that one?",
     dialoguePromptKorean: "저건 어떠세요?",
     category: 'place',
+    acceptableAnswers: ["Does this come in other colors?", "Are there any other color options?", "Can I see this in a different color?"],
   },
   {
     id: 'shopping-try-on',
@@ -1132,6 +1267,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Did you find something you like?",
     dialoguePromptKorean: "마음에 드는 것 찾으셨나요?",
     category: 'place',
+    acceptableAnswers: ["Could I try this on?", "May I try this on?", "Is it okay if I try this on?"],
   },
   {
     id: 'shopping-credit-card',
@@ -1146,6 +1282,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Are you ready to pay?",
     dialoguePromptKorean: "계산하시겠어요?",
     category: 'place',
+    acceptableAnswers: ["Do you accept credit cards?", "Is it okay to pay by card?", "Can I use a credit card?"],
   },
   {
     id: 'shopping-receipt',
@@ -1160,6 +1297,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Here's your change. Have a nice day!",
     dialoguePromptKorean: "거스름돈 드립니다. 좋은 하루 되세요!",
     category: 'place',
+    acceptableAnswers: ["Could I get a receipt?", "May I have a receipt?", "Can I get a receipt, please?"],
   },
   {
     id: 'shopping-gift-wrap',
@@ -1174,6 +1312,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Is this a gift for someone?",
     dialoguePromptKorean: "선물용인가요?",
     category: 'place',
+    acceptableAnswers: ["Could you gift wrap this for me, please?", "Would you be able to wrap this as a gift?", "Can you wrap this up as a present?"],
   },
   {
     id: 'shopping-size',
@@ -1188,6 +1327,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How does that fit?",
     dialoguePromptKorean: "사이즈 잘 맞으세요?",
     category: 'place',
+    acceptableAnswers: ["Do you have this in a bigger size?", "Is there a larger size available?", "Can I get this in a size up?"],
   },
   {
     id: 'shopping-refund',
@@ -1202,6 +1342,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Hello, how can I help you today?",
     dialoguePromptKorean: "안녕하세요, 오늘 어떻게 도와드릴까요?",
     category: 'place',
+    acceptableAnswers: ["I want to return this.", "I'd like to make a return.", "Could I return this item?"],
   },
 
   // ── 중급: 길 찾기 (int-directions-1/2) ───────────────────────────────────
@@ -1218,6 +1359,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Excuse me, do you need some help?",
     dialoguePromptKorean: "실례합니다, 도움이 필요하세요?",
     category: 'place',
+    acceptableAnswers: ["How can I get to the train station?", "Which way is the train station?", "Can you tell me how to get to the train station?"],
   },
   {
     id: 'directions-turn-left',
@@ -1232,6 +1374,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How do I get to the museum?",
     dialoguePromptKorean: "박물관에 어떻게 가나요?",
     category: 'place',
+    acceptableAnswers: ["Take a left at the corner.", "You'll want to turn left at the corner.", "Make a left turn at the corner."],
   },
   {
     id: 'directions-straight',
@@ -1246,6 +1389,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How do I find the post office?",
     dialoguePromptKorean: "우체국은 어떻게 찾아가나요?",
     category: 'place',
+    acceptableAnswers: ["Walk straight ahead for two blocks.", "Head straight for two blocks.", "Go ahead two blocks."],
   },
   {
     id: 'directions-bus-stop',
@@ -1260,6 +1404,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Can I help you with directions?",
     dialoguePromptKorean: "길 안내해 드릴까요?",
     category: 'place',
+    acceptableAnswers: ["Could you tell me where the nearest bus stop is?", "How do I get to the nearest bus stop?", "Do you know where the closest bus stop is?"],
   },
   {
     id: 'directions-how-far',
@@ -1274,6 +1419,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The park is that way.",
     dialoguePromptKorean: "공원은 저쪽이에요.",
     category: 'place',
+    acceptableAnswers: ["How far away is it?", "Is it far from here?", "How far is that from where we are?"],
   },
   {
     id: 'directions-excuse-walking',
@@ -1288,6 +1434,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Hi there, are you looking for something?",
     dialoguePromptKorean: "안녕하세요, 뭔가 찾고 계신가요?",
     category: 'place',
+    acceptableAnswers: ["Excuse me, is it walkable from here?", "Pardon me, can I walk there?", "Is it possible to walk there from here?"],
   },
   {
     id: 'directions-on-right',
@@ -1302,6 +1449,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Where can I find a pharmacy nearby?",
     dialoguePromptKorean: "근처에 약국이 어디 있나요?",
     category: 'place',
+    acceptableAnswers: ["The pharmacy is on the right.", "You'll find the pharmacy on your right.", "The pharmacy is to your right."],
   },
   {
     id: 'directions-subway',
@@ -1316,6 +1464,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How do I get to City Hall?",
     dialoguePromptKorean: "시청까지 어떻게 가나요?",
     category: 'place',
+    acceptableAnswers: ["Get on the subway to City Hall.", "Catch the subway to City Hall station.", "Ride the subway to City Hall."],
   },
   {
     id: 'directions-take-a-cab',
@@ -1330,6 +1479,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How can I get to the airport quickly?",
     dialoguePromptKorean: "공항에 빨리 가려면 어떻게 해야 하나요?",
     category: 'place',
+    acceptableAnswers: ["I'd suggest taking a cab from here.", "You'd better take a taxi from here.", "A cab from here would be your best bet."],
   },
 
   // ── 중급: 대중교통 (int-transport-1/2) ───────────────────────────────────
@@ -1346,6 +1496,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Hello, where are you heading?",
     dialoguePromptKorean: "안녕하세요, 어디 가세요?",
     category: 'transport',
+    acceptableAnswers: ["A ticket to Seoul, please.", "I'd like one ticket to Seoul.", "Can I get one ticket to Seoul?"],
   },
   {
     id: 'transport-does-stop',
@@ -1360,6 +1511,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Can I help you?",
     dialoguePromptKorean: "도와드릴까요?",
     category: 'transport',
+    acceptableAnswers: ["Will this bus stop at City Hall?", "Does this bus go to City Hall?", "Is City Hall one of the stops on this bus?"],
   },
   {
     id: 'transport-how-many-stops',
@@ -1374,6 +1526,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "You need to take this line.",
     dialoguePromptKorean: "이 노선을 타셔야 해요.",
     category: 'transport',
+    acceptableAnswers: ["How many stations is it?", "How many stops away is it?", "How many stops until we get there?"],
   },
   {
     id: 'transport-transfer',
@@ -1388,6 +1541,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "You're taking line 2 to get there.",
     dialoguePromptKorean: "거기 가려면 2호선을 타세요.",
     category: 'transport',
+    acceptableAnswers: ["Do I have to change trains?", "Is a transfer required?", "Do I need to change lines?"],
   },
   {
     id: 'transport-get-off',
@@ -1402,6 +1556,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Are you looking for your stop?",
     dialoguePromptKorean: "내릴 역 찾고 계세요?",
     category: 'transport',
+    acceptableAnswers: ["I'm getting off at the next stop.", "The next stop is mine.", "I'll be getting off at the next station."],
   },
   {
     id: 'transport-late',
@@ -1416,6 +1571,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The platform is over there.",
     dialoguePromptKorean: "승강장은 저쪽이에요.",
     category: 'transport',
+    acceptableAnswers: ["Is the train delayed?", "Has the train been delayed?", "Is there a delay on the train?"],
   },
   {
     id: 'transport-which-platform',
@@ -1430,6 +1586,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Welcome to the station. How can I help you?",
     dialoguePromptKorean: "역에 오신 것을 환영합니다. 도와드릴까요?",
     category: 'transport',
+    acceptableAnswers: ["Which platform is the train on?", "What platform does the train depart from?", "From which platform does the train leave?"],
   },
   {
     id: 'transport-reserved-seat',
@@ -1444,6 +1601,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Excuse me, do you mind?",
     dialoguePromptKorean: "실례합니다, 괜찮으세요?",
     category: 'transport',
+    acceptableAnswers: ["Is this seat taken?", "Has this seat been reserved?", "Is anyone sitting here?"],
   },
   {
     id: 'transport-arrival',
@@ -1458,6 +1616,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The train to Busan is boarding now.",
     dialoguePromptKorean: "부산행 열차가 지금 탑승 중입니다.",
     category: 'transport',
+    acceptableAnswers: ["When does it arrive?", "What's the arrival time?", "At what time does it get there?"],
   },
 
   // ── 중급: 은행 (int-bank-1/2) ─────────────────────────────────────────────
@@ -1469,11 +1628,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["I'd like to", "open a bank account"],
     distractors: ["계좌 닫고 싶어요", "잔액 확인해 주세요"],
     englishDistractors: ["I'd like to close my account", "Check my balance please", "a savings account", "a joint account"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '은행에서 새 계좌를 만들 때',
     dialoguePrompt: "Good afternoon, how can I help you?",
     dialoguePromptKorean: "안녕하세요, 어떻게 도와드릴까요?",
     category: 'place',
+    acceptableAnswers: ["I want to open an account.", "I'm here to open a bank account.", "I'd like to set up a bank account."],
   },
   {
     id: 'bank-exchange',
@@ -1483,11 +1643,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["I'd like to", "exchange some money"],
     distractors: ["송금하고 싶어요", "입금하고 싶어요"],
     englishDistractors: ["I'd like to transfer money", "I'd like to deposit money", "dollars to euros", "the exchange rate"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '은행이나 환전소에서 환전할 때',
     dialoguePrompt: "What can I help you with today?",
     dialoguePromptKorean: "오늘 어떤 도움이 필요하세요?",
     category: 'place',
+    acceptableAnswers: ["I need to exchange some currency.", "I want to change some money.", "Could I exchange some money, please?"],
   },
   {
     id: 'bank-withdraw',
@@ -1497,11 +1658,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["I'd like to", "withdraw some cash"],
     distractors: ["입금하고 싶어요", "카드 사용할게요"],
     englishDistractors: ["I'd like to deposit", "I'll use my card", "from the ATM", "all of it"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '은행에서 현금 인출을 요청할 때',
     dialoguePrompt: "Please step up to the counter.",
     dialoguePromptKorean: "카운터로 나와주세요.",
     category: 'place',
+    acceptableAnswers: ["I need to take out some cash.", "I'd like to make a cash withdrawal.", "Can I withdraw some money, please?"],
   },
   {
     id: 'bank-transfer',
@@ -1511,11 +1673,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["I need to make", "a wire transfer"],
     distractors: ["현금 인출할게요", "ATM 어디 있어요?"],
     englishDistractors: ["I'll withdraw cash", "Where is the ATM?", "an international transfer", "to my account"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '다른 계좌로 송금할 때',
     dialoguePrompt: "How may I assist you today?",
     dialoguePromptKorean: "오늘 어떻게 도와드릴까요?",
     category: 'place',
+    acceptableAnswers: ["I'd like to wire some money.", "I need to transfer money to another account.", "I want to send a wire transfer."],
   },
   {
     id: 'bank-fee',
@@ -1530,6 +1693,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'll process your transfer now.",
     dialoguePromptKorean: "지금 송금 처리해 드릴게요.",
     category: 'place',
+    acceptableAnswers: ["Are there any fees for this?", "Do you charge a fee for this transaction?", "Is there a charge for this?"],
   },
   {
     id: 'bank-balance',
@@ -1544,6 +1708,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Is there anything I can help you with?",
     dialoguePromptKorean: "도와드릴 것이 있나요?",
     category: 'place',
+    acceptableAnswers: ["I'd like to check my balance.", "Could you tell me my account balance?", "How much do I have in my account?"],
   },
   {
     id: 'bank-pin',
@@ -1558,6 +1723,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Please enter your PIN to continue.",
     dialoguePromptKorean: "계속하려면 비밀번호를 입력해 주세요.",
     category: 'place',
+    acceptableAnswers: ["I can't remember my PIN.", "I've forgotten my PIN.", "I don't remember my PIN number."],
   },
   {
     id: 'bank-lost-card',
@@ -1572,6 +1738,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Good morning, how can I help you?",
     dialoguePromptKorean: "안녕하세요, 어떻게 도와드릴까요?",
     category: 'place',
+    acceptableAnswers: ["I've lost my debit card.", "My debit card is missing.", "I can't find my debit card."],
   },
   {
     id: 'bank-minimum',
@@ -1586,6 +1753,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Let me tell you about our account options.",
     dialoguePromptKorean: "계좌 옵션에 대해 설명해 드릴게요.",
     category: 'place',
+    acceptableAnswers: ["Do I need a minimum deposit?", "Is there a minimum amount to open an account?", "What is the minimum deposit?"],
   },
 
   // ── 중급: 병원 (int-hospital-1/2) ─────────────────────────────────────────
@@ -1597,11 +1765,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["I'd like to", "make an appointment"],
     distractors: ["예약 취소하고 싶어요", "바로 진료 가능해요?"],
     englishDistractors: ["I'd like to cancel", "Can I be seen now?", "for tomorrow", "with the doctor"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '병원에서 진료 예약을 할 때',
     dialoguePrompt: "Hello, how can I help you?",
     dialoguePromptKorean: "안녕하세요, 도와드릴까요?",
     category: 'health',
+    acceptableAnswers: ["I'd like to book an appointment.", "Can I schedule an appointment?", "I want to make an appointment."],
   },
   {
     id: 'hospital-headache',
@@ -1616,6 +1785,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What seems to be the problem today?",
     dialoguePromptKorean: "오늘 어떤 증상이 있으세요?",
     category: 'health',
+    acceptableAnswers: ["I've got a really bad headache.", "My head is aching badly.", "I'm suffering from a severe headache."],
   },
   {
     id: 'hospital-fever',
@@ -1630,6 +1800,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What brings you in today?",
     dialoguePromptKorean: "오늘 무슨 일로 오셨나요?",
     category: 'health',
+    acceptableAnswers: ["I've got a fever and my throat is sore.", "My temperature is high and I have a sore throat.", "I'm running a fever and my throat hurts."],
   },
   {
     id: 'hospital-allergy',
@@ -1644,6 +1815,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Before I prescribe, any allergies?",
     dialoguePromptKorean: "처방 전에, 알레르기가 있으신가요?",
     category: 'health',
+    acceptableAnswers: ["I have a penicillin allergy.", "Penicillin gives me an allergic reaction.", "I can't take penicillin — I'm allergic."],
   },
   {
     id: 'hospital-test',
@@ -1658,6 +1830,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I've examined you and I want to be sure.",
     dialoguePromptKorean: "진찰해봤는데 확인이 필요해요.",
     category: 'health',
+    acceptableAnswers: ["Will I need to have any tests done?", "Do I need to undergo any testing?", "Are any tests necessary?"],
   },
   {
     id: 'hospital-prescription',
@@ -1672,6 +1845,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Your examination is done.",
     dialoguePromptKorean: "진찰이 끝났습니다.",
     category: 'health',
+    acceptableAnswers: ["Could I get a prescription?", "May I have a prescription please?", "Can you write me a prescription?"],
   },
   {
     id: 'hospital-insurance',
@@ -1686,6 +1860,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Do you have insurance with you?",
     dialoguePromptKorean: "보험증 가지고 계신가요?",
     category: 'health',
+    acceptableAnswers: ["Is this insurance accepted here?", "Will you take this insurance?", "Can I use this insurance here?"],
   },
   {
     id: 'hospital-specialist',
@@ -1700,6 +1875,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Based on your symptoms, I want to refer you.",
     dialoguePromptKorean: "증상에 따라 다른 곳에 의뢰하고 싶어요.",
     category: 'health',
+    acceptableAnswers: ["Should I see a specialist?", "Will I need a specialist?", "Is a referral to a specialist necessary?"],
   },
   {
     id: 'hospital-pharmacy',
@@ -1714,6 +1890,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Here is your prescription.",
     dialoguePromptKorean: "처방전 드립니다.",
     category: 'health',
+    acceptableAnswers: ["Where can I get this prescription filled?", "Which pharmacy can fill this?", "Where do I go to get this prescription?"],
   },
 
   // ── 중급: 전화 통화 (int-phone-1/2) ──────────────────────────────────────
@@ -1730,6 +1907,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Thank you for calling. How can I direct your call?",
     dialoguePromptKorean: "전화해 주셔서 감사합니다. 어디로 연결해 드릴까요?",
     category: 'daily',
+    acceptableAnswers: ["Have I reached customer service?", "Is this customer service?", "Am I through to customer support?"],
   },
   {
     id: 'phone-hold-on',
@@ -1744,6 +1922,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Can I speak with the manager?",
     dialoguePromptKorean: "매니저와 통화할 수 있을까요?",
     category: 'daily',
+    acceptableAnswers: ["Could you hold on for a second?", "Just a moment, please.", "Bear with me for just a second."],
   },
   {
     id: 'phone-can-you-repeat',
@@ -1758,6 +1937,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The meeting has been rescheduled to the 15th.",
     dialoguePromptKorean: "회의가 15일로 변경됐어요.",
     category: 'daily',
+    acceptableAnswers: ["Sorry, could you repeat that?", "Could you say that again, please?", "I'm sorry, could you repeat that?"],
   },
   {
     id: 'phone-call-back',
@@ -1772,6 +1952,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Do you have a minute to talk?",
     dialoguePromptKorean: "잠깐 얘기할 시간 있으세요?",
     category: 'daily',
+    acceptableAnswers: ["Could I call you back?", "Is it okay if I call you back later?", "Let me call you back later."],
   },
   {
     id: 'phone-message',
@@ -1786,6 +1967,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'm sorry, she's not available right now.",
     dialoguePromptKorean: "죄송한데 지금 자리를 비우셨어요.",
     category: 'daily',
+    acceptableAnswers: ["Could I leave a message for her?", "Is it possible to leave a message?", "Would you take a message for me?"],
   },
   {
     id: 'phone-wrong-number',
@@ -1800,6 +1982,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Hello, is this Jenny?",
     dialoguePromptKorean: "여보세요, 제니 씨인가요?",
     category: 'daily',
+    acceptableAnswers: ["I believe you've dialed the wrong number.", "You've got the wrong number.", "I'm afraid you've reached the wrong number."],
   },
   {
     id: 'phone-speak-up',
@@ -1814,6 +1997,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The package should arrive by Thursday.",
     dialoguePromptKorean: "소포는 목요일까지 도착할 거예요.",
     category: 'daily',
+    acceptableAnswers: ["Could you speak a bit louder?", "I'm having trouble hearing you — could you speak up?", "Would you mind speaking louder?"],
   },
   {
     id: 'phone-available',
@@ -1828,6 +2012,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Thank you for calling. Who are you calling for?",
     dialoguePromptKorean: "전화해 주셔서 감사합니다. 누구를 찾으시나요?",
     category: 'daily',
+    acceptableAnswers: ["Could I speak with Mr. Kim?", "Is Mr. Kim in?", "May I speak to Mr. Kim?"],
   },
   {
     id: 'phone-conference',
@@ -1837,11 +2022,12 @@ export const SENTENCES: SentenceItem[] = [
     englishParts: ["Let me put you", "on a conference call"],
     distractors: ["나중에 다시 전화할게요", "끊겠습니다"],
     englishDistractors: ["I'll call back later", "I'll hang up now", "on hold", "to voicemail"],
-    difficulty: 'basic',
+    difficulty: 'intermediate',
     scenario: '여러 사람과 동시에 통화를 연결할 때',
     dialoguePrompt: "I need to bring in my colleague on this call.",
     dialoguePromptKorean: "이 통화에 동료를 연결해야 해요.",
     category: 'daily',
+    acceptableAnswers: ["I'll add you to a conference call.", "Let me connect you to a group call.", "I'm going to set up a conference call."],
   },
 
   // ── 고급: 회의 (adv-meeting-1/2) ─────────────────────────────────────────
@@ -1858,6 +2044,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Good morning, everyone. Shall we get started?",
     dialoguePromptKorean: "모두 안녕하세요. 시작할까요?",
     category: 'daily',
+    acceptableAnswers: ["Let's run through today's agenda.", "Shall we go over the agenda for today?", "Let's review today's agenda."],
   },
   {
     id: 'adv-meeting-discuss',
@@ -1872,6 +2059,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What would you like to talk about first?",
     dialoguePromptKorean: "무엇부터 이야기하고 싶으세요?",
     category: 'daily',
+    acceptableAnswers: ["I want to talk about the budget proposal.", "Can we discuss the budget proposal?", "I'd like to go over the budget proposal."],
   },
   {
     id: 'adv-meeting-next-steps',
@@ -1886,6 +2074,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We've reached a decision on the project.",
     dialoguePromptKorean: "프로젝트에 대한 결정이 났어요.",
     category: 'daily',
+    acceptableAnswers: ["Where do we go from here?", "What should our next actions be?", "What steps should we take next?"],
   },
   {
     id: 'adv-meeting-postpone',
@@ -1900,6 +2089,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We still have a lot to cover today.",
     dialoguePromptKorean: "오늘 아직 다룰 게 많아요.",
     category: 'daily',
+    acceptableAnswers: ["Could we push this to next week?", "Can we reschedule this for next week?", "Is it possible to delay this until next week?"],
   },
   {
     id: 'adv-meeting-on-track',
@@ -1914,6 +2104,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The client is expecting the report by Friday.",
     dialoguePromptKorean: "클라이언트가 금요일까지 보고서를 기대하고 있어요.",
     category: 'daily',
+    acceptableAnswers: ["Are we on schedule to meet the deadline?", "Do we expect to hit the deadline?", "Will we make the deadline?"],
   },
   {
     id: 'adv-meeting-input',
@@ -1928,6 +2119,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Before we finalize, does everyone agree?",
     dialoguePromptKorean: "확정하기 전에, 모두 동의하시나요?",
     category: 'daily',
+    acceptableAnswers: ["I'd love to hear what everyone thinks.", "Can everyone share their thoughts on this?", "I want to get everyone's perspective on this."],
   },
   {
     id: 'adv-meeting-deadline',
@@ -1942,6 +2134,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "When does this need to be completed?",
     dialoguePromptKorean: "이게 언제까지 완료돼야 하나요?",
     category: 'daily',
+    acceptableAnswers: ["We need to finish by this Friday.", "This Friday is our deadline.", "Everything is due this Friday."],
   },
   {
     id: 'adv-meeting-follow-up',
@@ -1956,6 +2149,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I have some concerns I'd like to discuss.",
     dialoguePromptKorean: "논의하고 싶은 우려 사항이 있어요.",
     category: 'daily',
+    acceptableAnswers: ["I'll get back to you after the meeting.", "I'll reach out to you once the meeting is over.", "Let's touch base after the meeting."],
   },
   {
     id: 'adv-meeting-minutes',
@@ -1970,6 +2164,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Let's begin the meeting.",
     dialoguePromptKorean: "회의를 시작하겠습니다.",
     category: 'daily',
+    acceptableAnswers: ["Who's writing the minutes?", "Who will be recording the minutes today?", "Is someone taking notes today?"],
   },
   {
     id: 'adv-meeting-decision',
@@ -1984,6 +2179,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We're running out of time on this issue.",
     dialoguePromptKorean: "이 문제에 대한 시간이 부족해요.",
     category: 'daily',
+    acceptableAnswers: ["A decision has to be made by tomorrow.", "We have to decide by tomorrow.", "Tomorrow is the deadline for our decision."],
   },
 
   // ── 고급: 이메일 (adv-email-1/2) ─────────────────────────────────────────
@@ -2000,6 +2196,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Have you heard back from the client?",
     dialoguePromptKorean: "클라이언트에게서 답장 받으셨나요?",
     category: 'daily',
+    acceptableAnswers: ["I'm reaching out to follow up on my last email.", "I wanted to check in regarding my previous email.", "This is a follow-up to my earlier email."],
   },
   {
     id: 'adv-email-attached',
@@ -2014,6 +2211,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Did you send over the proposal?",
     dialoguePromptKorean: "제안서 보내셨나요?",
     category: 'daily',
+    acceptableAnswers: ["I've attached the document for your reference.", "Please see the attached file.", "Kindly find the document attached."],
   },
   {
     id: 'adv-email-clarify',
@@ -2028,6 +2226,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "There seems to be some confusion about the meeting time.",
     dialoguePromptKorean: "회의 시간에 대해 혼란이 있는 것 같아요.",
     category: 'daily',
+    acceptableAnswers: ["I'm emailing to clear up the details.", "I'd like to clarify a few things.", "I'm reaching out to clarify some details."],
   },
   {
     id: 'adv-email-confirm',
@@ -2042,6 +2241,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I just sent over the important documents.",
     dialoguePromptKorean: "방금 중요한 서류를 보냈어요.",
     category: 'daily',
+    acceptableAnswers: ["Kindly confirm that you received this email.", "Please let me know you've received this.", "Could you confirm receipt of this email?"],
   },
   {
     id: 'adv-email-deadline',
@@ -2056,6 +2256,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We're waiting on your confirmation.",
     dialoguePromptKorean: "당신의 확인을 기다리고 있어요.",
     category: 'daily',
+    acceptableAnswers: ["Please reply by the end of business today.", "Kindly get back to me by end of day.", "I'd appreciate a response by the end of the day."],
   },
   {
     id: 'adv-email-appreciate',
@@ -2070,6 +2271,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Thank you for getting back to me so quickly.",
     dialoguePromptKorean: "빨리 답장해 주셔서 감사해요.",
     category: 'daily',
+    acceptableAnswers: ["Thank you for your quick response.", "We're grateful for your swift reply.", "Thanks for getting back to us so quickly."],
   },
   {
     id: 'adv-email-update',
@@ -2084,6 +2286,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What's the current status of the project?",
     dialoguePromptKorean: "프로젝트 현재 상황이 어떻게 되나요?",
     category: 'daily',
+    acceptableAnswers: ["I'm reaching out to provide an update.", "I wanted to keep you updated.", "This email is to share a quick update."],
   },
   {
     id: 'adv-email-loop',
@@ -2098,6 +2301,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Can you handle this issue directly?",
     dialoguePromptKorean: "이 문제를 직접 처리해 줄 수 있나요?",
     category: 'daily',
+    acceptableAnswers: ["I'm copying my colleague on this email.", "I'm adding my colleague to this thread.", "I've CC'd my colleague on this email."],
   },
   {
     id: 'adv-email-convenient',
@@ -2112,6 +2316,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I'd like to schedule a call to discuss this.",
     dialoguePromptKorean: "이에 대해 논의하려고 통화 일정을 잡고 싶어요.",
     category: 'daily',
+    acceptableAnswers: ["Let me know what time works for you.", "Feel free to let me know a convenient time.", "Please tell me when you're available."],
   },
   {
     id: 'adv-email-priority',
@@ -2126,6 +2331,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I just received an urgent request from the client.",
     dialoguePromptKorean: "방금 클라이언트로부터 긴급 요청을 받았어요.",
     category: 'daily',
+    acceptableAnswers: ["This is urgent.", "This is a top-priority issue.", "Please treat this as high priority."],
   },
 
   // ── 고급: 협상 (adv-negotiate-1/2) ───────────────────────────────────────
@@ -2142,6 +2348,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Can you do any better on the price?",
     dialoguePromptKorean: "가격을 좀 더 낮춰 주실 수 있나요?",
     category: 'daily',
+    acceptableAnswers: ["That's the best we can do.", "We can't go any lower than this.", "This is our final offer."],
   },
   {
     id: 'adv-negotiate-middle',
@@ -2156,6 +2363,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We're still pretty far apart on the price.",
     dialoguePromptKorean: "아직 가격 차이가 꽤 있네요.",
     category: 'daily',
+    acceptableAnswers: ["Can we find a middle ground?", "Is there a compromise we can reach?", "Could we split the difference?"],
   },
   {
     id: 'adv-negotiate-counter',
@@ -2170,6 +2378,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Our initial proposal is $50,000.",
     dialoguePromptKorean: "저희 초기 제안은 50,000달러입니다.",
     category: 'daily',
+    acceptableAnswers: ["We'd like to propose a counter-offer.", "We have a counter-proposal.", "We'd like to suggest an alternative offer."],
   },
   {
     id: 'adv-negotiate-acceptable',
@@ -2184,6 +2393,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We're offering it at $80 per unit.",
     dialoguePromptKorean: "단가 80달러에 제공하고 있습니다.",
     category: 'daily',
+    acceptableAnswers: ["We can't accept that price.", "That's outside our budget.", "The price doesn't work for us."],
   },
   {
     id: 'adv-negotiate-terms',
@@ -2198,6 +2408,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Both sides seem willing to move forward.",
     dialoguePromptKorean: "양측 모두 진행할 의향이 있는 것 같아요.",
     category: 'daily',
+    acceptableAnswers: ["Let's go over the contract terms.", "We should review the conditions of the deal.", "I'd like to talk through the agreement terms."],
   },
   {
     id: 'adv-negotiate-deal',
@@ -2212,6 +2423,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I think we've found a workable solution.",
     dialoguePromptKorean: "실행 가능한 해결책을 찾은 것 같아요.",
     category: 'daily',
+    acceptableAnswers: ["Are we in agreement?", "Shall we consider this settled?", "Can we call this a done deal?"],
   },
   {
     id: 'adv-negotiate-flexible',
@@ -2226,6 +2438,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We're concerned about the delivery schedule.",
     dialoguePromptKorean: "배달 일정이 우려됩니다.",
     category: 'daily',
+    acceptableAnswers: ["There's some room to adjust the schedule.", "We have flexibility with the delivery dates.", "The timeline is open to discussion."],
   },
   {
     id: 'adv-negotiate-bottom-line',
@@ -2240,6 +2453,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "We need at least a 20% discount.",
     dialoguePromptKorean: "최소 20% 할인이 필요합니다.",
     category: 'daily',
+    acceptableAnswers: ["We can't go any lower than this.", "This is the lowest price we can offer.", "We have no more room to negotiate."],
   },
   {
     id: 'adv-negotiate-agree',
@@ -2254,6 +2468,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How about we settle on 15% off?",
     dialoguePromptKorean: "15% 할인으로 합의하는 건 어떨까요?",
     category: 'daily',
+    acceptableAnswers: ["I believe we can come to an agreement on that.", "That seems acceptable to us.", "We're on board with that."],
   },
   {
     id: 'adv-negotiate-finalize',
@@ -2268,6 +2483,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I believe we've reached an agreement.",
     dialoguePromptKorean: "합의에 도달한 것 같아요.",
     category: 'daily',
+    acceptableAnswers: ["Let's wrap up the specifics.", "Let's nail down the final details.", "Let's get the details sorted out."],
   },
 
   // ── 고급: 뉴스·시사 (adv-news-1/2) ───────────────────────────────────────
@@ -2284,6 +2500,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Big news today, have you checked online?",
     dialoguePromptKorean: "오늘 큰 뉴스가 있는데, 온라인 확인하셨어요?",
     category: 'daily',
+    acceptableAnswers: ["Have you read the news today?", "Did you catch today's headline?", "Did you see the top story today?"],
   },
   {
     id: 'adv-news-opinion',
@@ -2298,6 +2515,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The new policy has been getting a lot of attention.",
     dialoguePromptKorean: "새 정책이 많은 주목을 받고 있어요.",
     category: 'daily',
+    acceptableAnswers: ["How do you feel about this issue?", "What are your thoughts on this matter?", "What's your take on this topic?"],
   },
   {
     id: 'adv-news-source',
@@ -2312,6 +2530,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Apparently the company is shutting down.",
     dialoguePromptKorean: "그 회사가 폐업한다고 하네요.",
     category: 'daily',
+    acceptableAnswers: ["How did you come across that information?", "Who told you that?", "Where did that information come from?"],
   },
   {
     id: 'adv-news-agree',
@@ -2326,6 +2545,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The cost of living has gotten really out of hand.",
     dialoguePromptKorean: "생활비가 정말 감당하기 어려워졌어요.",
     category: 'daily',
+    acceptableAnswers: ["I totally agree with you.", "I completely share your view.", "You're absolutely right."],
   },
   {
     id: 'adv-news-impact',
@@ -2340,6 +2560,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The new trade agreement was just signed.",
     dialoguePromptKorean: "새 무역 협정이 방금 체결됐어요.",
     category: 'daily',
+    acceptableAnswers: ["This is going to significantly affect the economy.", "The economic impact of this will be enormous.", "This will greatly influence the economy."],
   },
   {
     id: 'adv-news-surprised',
@@ -2354,6 +2575,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Did you hear that they're merging the two companies?",
     dialoguePromptKorean: "두 회사가 합병한다는 소식 들으셨나요?",
     category: 'daily',
+    acceptableAnswers: ["That news really caught me off guard.", "I was shocked to learn about that.", "It was quite a surprise to hear that."],
   },
   {
     id: 'adv-news-controversial',
@@ -2368,6 +2590,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What do you think about the new immigration law?",
     dialoguePromptKorean: "새 이민법에 대해 어떻게 생각하세요?",
     category: 'daily',
+    acceptableAnswers: ["It's quite a divisive issue.", "People have strong opinions about that.", "That's a really debated subject."],
   },
   {
     id: 'adv-news-follow',
@@ -2382,6 +2605,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "The trial has been going on for months now.",
     dialoguePromptKorean: "재판이 몇 달째 계속되고 있어요.",
     category: 'daily',
+    acceptableAnswers: ["I've been keeping up with this story.", "I've been watching this case carefully.", "I've been tracking this news closely."],
   },
   {
     id: 'adv-news-turn-out',
@@ -2396,6 +2620,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What happened with that scandal we heard about?",
     dialoguePromptKorean: "우리가 들었던 그 스캔들은 어떻게 됐나요?",
     category: 'daily',
+    acceptableAnswers: ["It turned out to be a mix-up.", "It was all just a misunderstanding.", "As it turned out, there was no real issue."],
   },
   {
     id: 'adv-news-local',
@@ -2410,6 +2635,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Election day is coming up next week.",
     dialoguePromptKorean: "다음 주가 선거일이에요.",
     category: 'daily',
+    acceptableAnswers: ["Have you been watching the local election?", "Are you keeping track of the local election?", "Have you been keeping up with the local election?"],
   },
 
   // ── 고급: 건강 생활 (adv-health-1/2) ─────────────────────────────────────
@@ -2426,6 +2652,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How do you stay so healthy?",
     dialoguePromptKorean: "어떻게 그렇게 건강을 유지하세요?",
     category: 'health',
+    acceptableAnswers: ["Living healthy begins with building good habits.", "Good habits are the foundation of a healthy life.", "Health starts with forming the right habits."],
   },
   {
     id: 'adv-health-mental',
@@ -2440,6 +2667,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I've been neglecting my well-being lately.",
     dialoguePromptKorean: "요즘 제 건강을 소홀히 한 것 같아요.",
     category: 'health',
+    acceptableAnswers: ["Your mental well-being is as important as your physical health.", "Mental and physical health are equally important.", "We should value mental health as much as physical health."],
   },
   {
     id: 'adv-health-workout',
@@ -2454,6 +2682,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How do you stay in shape?",
     dialoguePromptKorean: "어떻게 몸매를 유지하세요?",
     category: 'health',
+    acceptableAnswers: ["I aim to exercise at least three times a week.", "I make it a goal to work out three times a week.", "I exercise a minimum of three times per week."],
   },
   {
     id: 'adv-health-diet',
@@ -2468,6 +2697,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Have you made any changes to your eating habits?",
     dialoguePromptKorean: "식습관을 바꾼 것이 있나요?",
     category: 'health',
+    acceptableAnswers: ["I've been working on improving my diet.", "I'm making an effort to eat more nutritiously.", "I've been aiming for a healthier diet."],
   },
   {
     id: 'adv-health-checkup',
@@ -2482,6 +2712,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Have you been taking care of your health recently?",
     dialoguePromptKorean: "최근에 건강 관리 잘 하고 계신가요?",
     category: 'health',
+    acceptableAnswers: ["How long has it been since your last physical?", "When did you last see the doctor for a checkup?", "How long ago was your most recent health check?"],
   },
   {
     id: 'adv-health-stress',
@@ -2496,6 +2727,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "You look a bit tired. Are you okay?",
     dialoguePromptKorean: "좀 피곤해 보여요. 괜찮으세요?",
     category: 'health',
+    acceptableAnswers: ["I'm under a lot of stress these days.", "I've been really overwhelmed with stress lately.", "I've been quite stressed out recently."],
   },
   {
     id: 'adv-health-habit',
@@ -2510,6 +2742,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I've been trying to quit smoking for months.",
     dialoguePromptKorean: "몇 달째 금연하려고 노력하고 있어요.",
     category: 'health',
+    acceptableAnswers: ["Changing bad habits takes real effort.", "It's not easy to quit bad habits.", "Overcoming bad habits is always a challenge."],
   },
   {
     id: 'adv-health-sleep',
@@ -2524,6 +2757,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I've been staying up really late working.",
     dialoguePromptKorean: "일하느라 정말 늦게까지 자지 못하고 있어요.",
     category: 'health',
+    acceptableAnswers: ["Adequate sleep is essential for good health.", "Sleep is vital for your overall well-being.", "You need sufficient sleep to stay healthy."],
   },
   {
     id: 'adv-health-prevention',
@@ -2538,6 +2772,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I always wait until I'm sick to do anything.",
     dialoguePromptKorean: "저는 항상 아프고 나서야 뭔가를 해요.",
     category: 'health',
+    acceptableAnswers: ["It's better to prevent illness than to treat it.", "Preventing disease is more effective than curing it.", "A preventive approach is always better than treatment."],
   },
   {
     id: 'adv-health-balance',
@@ -2552,6 +2787,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I feel like work is taking over my whole life.",
     dialoguePromptKorean: "일이 제 삶 전체를 잠식하는 것 같아요.",
     category: 'health',
+    acceptableAnswers: ["Balancing work and personal life is essential.", "Maintaining a balance between work and life matters.", "A good work-life balance is key to well-being."],
   },
 
   // ── 고급: 기술 (adv-tech-1/2) ─────────────────────────────────────────────
@@ -2568,6 +2804,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "My computer is running really slowly.",
     dialoguePromptKorean: "컴퓨터가 정말 느리게 돌아가요.",
     category: 'daily',
+    acceptableAnswers: ["Your software needs to be updated.", "Please update your software.", "It's time to update your software."],
   },
   {
     id: 'adv-tech-backup',
@@ -2582,6 +2819,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I lost all my files when my hard drive crashed.",
     dialoguePromptKorean: "하드 드라이브가 고장나서 파일을 다 잃었어요.",
     category: 'daily',
+    acceptableAnswers: ["Always keep a backup of your data.", "You should regularly back up your files.", "Don't forget to save a backup of your data."],
   },
   {
     id: 'adv-tech-crash',
@@ -2596,6 +2834,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What seems to be the problem with your laptop?",
     dialoguePromptKorean: "노트북에 무슨 문제가 있나요?",
     category: 'daily',
+    acceptableAnswers: ["My laptop keeps shutting down unexpectedly.", "My computer freezes all the time.", "My computer keeps going down."],
   },
   {
     id: 'adv-tech-share',
@@ -2610,6 +2849,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "I can't quite follow your explanation.",
     dialoguePromptKorean: "설명을 잘 이해하지 못했어요.",
     category: 'daily',
+    acceptableAnswers: ["Could you share your screen?", "Would you mind sharing your screen?", "Please share your display with me."],
   },
   {
     id: 'adv-tech-setting',
@@ -2624,6 +2864,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "How do I turn on notifications?",
     dialoguePromptKorean: "알림은 어떻게 켜나요?",
     category: 'daily',
+    acceptableAnswers: ["Open the settings menu and turn on this feature.", "Navigate to settings and switch on the feature.", "Go into settings and activate this option."],
   },
   {
     id: 'adv-tech-password',
@@ -2638,6 +2879,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Are you having trouble logging in?",
     dialoguePromptKorean: "로그인에 문제가 있으신가요?",
     category: 'daily',
+    acceptableAnswers: ["I can't remember my password.", "I don't recall my password.", "My password has slipped my mind."],
   },
   {
     id: 'adv-tech-download',
@@ -2652,6 +2894,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Why is the file still not downloaded?",
     dialoguePromptKorean: "파일이 왜 아직도 다운로드가 안 되나요?",
     category: 'daily',
+    acceptableAnswers: ["This download is taking forever.", "The file is taking way too long to download.", "The download speed is way too slow."],
   },
   {
     id: 'adv-tech-sync',
@@ -2666,6 +2909,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Is your calendar showing the correct events?",
     dialoguePromptKorean: "캘린더에 일정이 제대로 표시되고 있나요?",
     category: 'daily',
+    acceptableAnswers: ["My phone is not syncing correctly.", "The sync on my phone is not working.", "My phone has a syncing issue."],
   },
   {
     id: 'adv-tech-connection',
@@ -2680,6 +2924,7 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "Are you having trouble with the wifi?",
     dialoguePromptKorean: "와이파이에 문제가 있으신가요?",
     category: 'daily',
+    acceptableAnswers: ["I'm unable to connect to the internet.", "I have no internet connection.", "I can't get online."],
   },
   {
     id: 'adv-tech-ai',
@@ -2694,5 +2939,6 @@ export const SENTENCES: SentenceItem[] = [
     dialoguePrompt: "What do you think about all the new AI tools?",
     dialoguePromptKorean: "새로운 AI 도구들에 대해 어떻게 생각하세요?",
     category: 'daily',
+    acceptableAnswers: ["AI is transforming the world.", "Artificial intelligence is reshaping our world.", "AI is revolutionizing the way we live."],
   },
 ]

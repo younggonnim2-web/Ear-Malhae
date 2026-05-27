@@ -59,6 +59,8 @@ function buildSentenceSequence(
       seq.push({ kind: 'sentence-pick', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어' })
     for (const s of sentences)
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, fillDir: 'ko', tag: '새로운 단어' })
+    for (const s of sentences.slice(0, 1))
+      seq.push({ kind: 'translate-type', sentenceId: s.id, tag: '어려운 연습' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어', distractorCount: 2 })
     // 말해보기: 핵심 단어 1문제 (가장 짧은 단어 englishPart)
@@ -80,6 +82,8 @@ function buildSentenceSequence(
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.parts.length > 1 ? 1 : 0, fillDir: 'ko', tag: '새로운 패턴' })
     for (const s of sentences.slice(0, 1))
       seq.push({ kind: 'listen-type', sentenceId: s.id, tag: '어려운 연습' })
+    for (const s of sentences.slice(0, 1))
+      seq.push({ kind: 'translate-type', sentenceId: s.id, tag: '어려운 연습' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 3 })
     // 말해보기: 핵심 단어 1 + 문장 전체 1
@@ -103,6 +107,8 @@ function buildSentenceSequence(
       seq.push({ kind: 'fill-blank', sentenceId: s.id, blankIndex: s.englishParts.length > 1 ? 1 : 0, fillDir: 'en', keyboardInput: true, tag: '어려운 연습' })
     for (const s of sentences.slice(0, 2))
       seq.push({ kind: 'listen-type', sentenceId: s.id, tag: '어려운 연습' })
+    for (const s of sentences.slice(0, 2))
+      seq.push({ kind: 'translate-type', sentenceId: s.id, tag: '어려운 연습' })
     for (const s of sentences)
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습', distractorCount: 3 })
     // 말해보기: 핵심 단어 1 + 문장 전체 1 (tier 1과 동일 구성)
@@ -246,6 +252,9 @@ function buildWordsSequence(
     for (const s of pickSentences(3, 2))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'en-to-ko', tag: '새로운 단어', distractorCount: 2 })
 
+    for (const id of shuffle([...itemIds]).slice(0, 2))
+      seq.push({ kind: 'type-word', itemId: id, tag: '어려운 연습' })
+
     seq.push({ kind: 'matching' })
 
     for (const s of pickSentences(3, 5))
@@ -259,6 +268,9 @@ function buildWordsSequence(
       seq.push({ kind: 'listen-choice', itemId: id, direction: 'ko-to-en' })
       seq.push({ kind: 'image-choice', itemId: id, direction: 'en-to-ko', displayMode: 'list' })
     }
+
+    for (const id of shuffle([...itemIds]).slice(0, 3))
+      seq.push({ kind: 'type-word', itemId: id, tag: '어려운 연습' })
 
     for (const id of shuffle([...itemIds]).slice(0, 2))
       seq.push({ kind: 'speak-check', itemId: id, tag: '어려운 연습' })

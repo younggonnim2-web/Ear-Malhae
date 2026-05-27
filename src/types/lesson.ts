@@ -13,6 +13,8 @@ export type ChallengeKind =
   | 'sentence-pick'
   | 'dialogue-choice'
   | 'listen-type'
+  | 'type-word'
+  | 'translate-type'
 
 export type ChallengeTag = '새로운 단어' | '어려운 연습' | '새로운 패턴' | '복습'
 

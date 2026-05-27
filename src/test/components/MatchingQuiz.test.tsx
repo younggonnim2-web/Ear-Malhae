@@ -9,15 +9,17 @@ const items: WordItem[] = [
   { id: 'grape', word: 'grape', meaning: '포도', emoji: '🍇', category: 'fruit' },
 ]
 
+const mockSpeak = vi.fn()
+
 describe('MatchingQuiz', () => {
   it('영어 3개 + 한글 3개 렌더링', () => {
-    render(<MatchingQuiz items={items} onComplete={vi.fn()} />)
+    render(<MatchingQuiz items={items} onComplete={vi.fn()} speak={mockSpeak} />)
     expect(screen.getByText('apple')).toBeInTheDocument()
     expect(screen.getByText('사과')).toBeInTheDocument()
   })
 
   it('오답 선택 시 animate-flash 클래스 적용', () => {
-    render(<MatchingQuiz items={items} onComplete={vi.fn()} />)
+    render(<MatchingQuiz items={items} onComplete={vi.fn()} speak={mockSpeak} />)
     fireEvent.click(screen.getByText('apple'))
     fireEvent.click(screen.getByText('바나나'))  // 오답
     const wrongBtn = screen.getByText('바나나').closest('button')!
@@ -27,7 +29,7 @@ describe('MatchingQuiz', () => {
   it('올바른 짝 선택 시 onComplete 호출 (3쌍 완료 후)', async () => {
     vi.useFakeTimers()
     const onComplete = vi.fn()
-    render(<MatchingQuiz items={items} onComplete={onComplete} />)
+    render(<MatchingQuiz items={items} onComplete={onComplete} speak={mockSpeak} />)
 
     fireEvent.click(screen.getByText('apple'))
     fireEvent.click(screen.getByText('사과'))

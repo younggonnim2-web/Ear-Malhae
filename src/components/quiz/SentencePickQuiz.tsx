@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { SentenceItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
+import type { SpeakFn } from '../../hooks/useSpeech'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { TagBadge } from '../TagBadge'
@@ -12,7 +13,7 @@ interface Props {
   direction: 'en-to-ko' | 'ko-to-en'
   onCorrect: () => void
   onWrong?: () => void
-  speak?: (text: string, lang?: string, rate?: number) => void
+  speak?: SpeakFn
   isSpeaking?: boolean
   tag?: ChallengeTag
 }
@@ -52,7 +53,7 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
     if (answered) return
     setSelected(choice)
     // 영어 선택지는 TTS 재생 (en-to-ko: 프롬프트가 영어이므로 선택지는 한국어 → 스킵)
-    if (!isEnToKo && speak) speak(choice, 'en-US')
+    if (!isEnToKo && speak) speak(choice, 'en-US', 1.0, 'sentence')
   }
 
   function handleConfirm() {
@@ -74,7 +75,7 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
         )}
         {isEnToKo && speak && (
           <button
-            onClick={() => speak(prompt, 'en-US')}
+            onClick={() => speak(prompt, 'en-US', 1.0, 'sentence')}
             className="flex items-center gap-1 text-primary text-xs font-semibold mt-2"
           >
             <span className={isSpeaking ? 'animate-speaking inline-block' : ''}>🔊</span> 다시 듣기

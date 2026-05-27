@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { SentenceItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
+import type { SpeakFn } from '../../hooks/useSpeech'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
 import { CharacterBubble } from '../CharacterBubble'
@@ -13,7 +14,7 @@ interface Props {
   direction?: 'ko' | 'en'
   onCorrect: () => void
   onWrong?: () => void
-  speak?: (text: string, lang?: string, rate?: number) => void
+  speak?: SpeakFn
   isSpeaking?: boolean
   tag?: ChallengeTag
   keyboardInput?: boolean
@@ -40,7 +41,7 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
   useEffect(() => {
     if (lastSpokenIdRef.current === sentence.id) return
     lastSpokenIdRef.current = sentence.id
-    if (speak) speak(sentence.english, 'en-US')
+    if (speak) speak(sentence.english, 'en-US', 1.0, 'sentence')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentence.id])
 
@@ -84,7 +85,7 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
         <>
           <CharacterBubble
             word={sentence.korean}
-            onSpeak={speak ? () => speak(sentence.english, 'en-US') : undefined}
+            onSpeak={speak ? () => speak(sentence.english, 'en-US', 1.0, 'sentence') : undefined}
             isSpeaking={isSpeaking}
           />
           {answered && (
@@ -174,7 +175,7 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
         <>
           <CharacterBubble
             word={sentence.english}
-            onSpeak={speak ? () => speak(sentence.english, 'en-US') : undefined}
+            onSpeak={speak ? () => speak(sentence.english, 'en-US', 1.0, 'sentence') : undefined}
             isSpeaking={isSpeaking}
           />
           {answered && (

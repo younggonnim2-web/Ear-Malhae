@@ -35,7 +35,7 @@ export function QuizStep({ item, allItems, assignment, onComplete, onWrong: _onW
   }
 
   if (assignment.type === 'matching') {
-    return <MatchingQuiz items={matchItems} onComplete={handleCorrect} />
+    return <MatchingQuiz items={matchItems} onComplete={handleCorrect} speak={speak} />
   }
 
   if (assignment.type === 'listen-choice') {
