@@ -489,7 +489,7 @@ export function LessonSession() {
           </div>
         )}
 
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
           {renderChallenge()}
         </div>
       </div>

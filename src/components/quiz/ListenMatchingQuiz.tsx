@@ -55,85 +55,87 @@ export function ListenMatchingQuiz({ items, onComplete, speak, onSkip }: Props) 
   }
 
   return (
-    <div className="p-6 flex flex-col gap-6">
+    <div className="flex flex-col h-full p-6 gap-4">
       <p className="text-2xl font-bold text-ink">의미가 일치하는 단어끼리 짝을 지으세요</p>
 
-      <div className="flex gap-3">
-        {/* 좌: 오디오 버튼 */}
-        <div className="flex flex-col gap-3 flex-1">
-          {items.map(item => {
-            const isMatched = matched.has(item.id)
-            const isSelected = selectedLeft === item.id
-            const isPlaying = playingId === item.id
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleLeft(item.id)}
-                disabled={isMatched}
-                className={cn(
-                  'h-14 flex items-center gap-2 px-4 rounded-2xl border-2 transition-colors',
-                  isMatched && 'border-green-500 bg-green-50',
-                  !isMatched && isSelected && 'border-primary bg-primary/10',
-                  !isMatched && !isSelected && 'border-hairline bg-canvas',
-                )}
-              >
-                <span className={cn(
-                  'text-xl flex-shrink-0',
-                  isMatched ? 'text-green-500' : isSelected ? 'text-primary' : 'text-steel',
-                )}>
-                  🔊
-                </span>
-                <div className="flex gap-[3px] items-center">
-                  {BAR_HEIGHTS.map((h, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        width: 3,
-                        height: h,
-                        animationDelay: `${i * 0.06}s`,
-                        transformOrigin: 'center',
-                      }}
-                      className={cn(
-                        'rounded-full transition-colors',
-                        isMatched ? 'bg-green-400' : isSelected ? 'bg-primary' : 'bg-gray-300',
-                        isPlaying && 'animate-sound-bar',
-                      )}
-                    />
-                  ))}
-                </div>
-              </button>
-            )
-          })}
-        </div>
-
-        {/* 우: 한국어 텍스트 */}
-        <div className="flex flex-col gap-3 flex-1">
-          {rightItems.map(item => {
-            const isMatched = matched.has(item.id)
-            const isWrong = wrong === item.id
-            const isLastMatched = lastMatched === item.id
-            return (
-              <div key={item.id} className="relative">
-                {isLastMatched && (
-                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 z-10 pointer-events-none animate-float-up text-3xl leading-none">
-                    ✨
-                  </span>
-                )}
+      <div className="flex-1 flex items-center">
+        <div className="flex gap-3 w-full">
+          {/* 좌: 오디오 버튼 */}
+          <div className="flex flex-col gap-3 flex-1">
+            {items.map(item => {
+              const isMatched = matched.has(item.id)
+              const isSelected = selectedLeft === item.id
+              const isPlaying = playingId === item.id
+              return (
                 <button
-                  onClick={() => handleRight(item.id)}
-                  disabled={isMatched || !selectedLeft}
+                  key={item.id}
+                  onClick={() => handleLeft(item.id)}
+                  disabled={isMatched}
                   className={cn(
-                    'w-full h-14 flex items-center justify-center px-4 rounded-2xl border-2 text-base font-semibold transition-colors',
-                    isMatched && 'border-green-500 bg-green-50 text-green-700',
-                    !isMatched && isWrong && 'border-red-400 bg-red-50 text-red-600 animate-flash',
-                    !isMatched && !isWrong && 'border-hairline bg-canvas text-steel',
+                    'h-14 flex items-center gap-2 px-4 rounded-2xl border-2 transition-colors',
+                    isMatched && 'border-green-500 bg-green-50',
+                    !isMatched && isSelected && 'border-primary bg-primary/10',
+                    !isMatched && !isSelected && 'border-hairline bg-canvas',
                   )}
                 >
-                  {item.meaning}
+                  <span className={cn(
+                    'text-xl flex-shrink-0',
+                    isMatched ? 'text-green-500' : isSelected ? 'text-primary' : 'text-steel',
+                  )}>
+                    🔊
+                  </span>
+                  <div className="flex gap-[3px] items-center">
+                    {BAR_HEIGHTS.map((h, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          width: 3,
+                          height: h,
+                          animationDelay: `${i * 0.06}s`,
+                          transformOrigin: 'center',
+                        }}
+                        className={cn(
+                          'rounded-full transition-colors',
+                          isMatched ? 'bg-green-400' : isSelected ? 'bg-primary' : 'bg-gray-300',
+                          isPlaying && 'animate-sound-bar',
+                        )}
+                      />
+                    ))}
+                  </div>
                 </button>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
+
+          {/* 우: 한국어 텍스트 */}
+          <div className="flex flex-col gap-3 flex-1">
+            {rightItems.map(item => {
+              const isMatched = matched.has(item.id)
+              const isWrong = wrong === item.id
+              const isLastMatched = lastMatched === item.id
+              return (
+                <div key={item.id} className="relative">
+                  {isLastMatched && (
+                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 z-10 pointer-events-none animate-float-up text-3xl leading-none">
+                      ✨
+                    </span>
+                  )}
+                  <button
+                    onClick={() => handleRight(item.id)}
+                    disabled={isMatched || !selectedLeft}
+                    className={cn(
+                      'w-full h-14 flex items-center justify-center px-4 rounded-2xl border-2 text-base font-semibold transition-colors',
+                      isMatched && 'border-green-500 bg-green-50 text-green-700',
+                      !isMatched && isWrong && 'border-red-400 bg-red-50 text-red-600 animate-flash',
+                      !isMatched && !isWrong && 'border-hairline bg-canvas text-steel',
+                    )}
+                  >
+                    {item.meaning}
+                  </button>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
 

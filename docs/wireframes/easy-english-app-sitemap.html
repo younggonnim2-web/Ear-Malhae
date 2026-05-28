@@ -1657,6 +1657,62 @@
     <a href="#" data-path="/lesson/daily-1?kind=matching" class="quiz-test-btn">▶ 테스트</a>
   </div>
 
+  <!-- 5. listen-matching — 오디오 짝 맞추기 -->
+  <div class="quiz-type-card">
+    <div class="phone session">
+      <div class="phone-top"></div>
+      <div style="display:flex;flex-direction:column;gap:3px;padding:5px;flex:1;overflow:hidden">
+        <div class="wf-header back session">← 학습</div>
+        <div style="font-size:4.5px;text-align:center;color:var(--muted)">의미가 일치하는 단어끼리 짝을 지으세요</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;flex:1;align-content:center">
+          <!-- 좌: 오디오 버튼 -->
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="height:14px;display:flex;align-items:center;gap:2px;padding:0 4px;border:1px solid var(--hairline);border-radius:4px;background:var(--canvas)">
+              <span style="font-size:7px">🔊</span>
+              <div style="display:flex;gap:1px;align-items:center">
+                <div style="width:2px;height:4px;background:var(--muted);border-radius:1px"></div>
+                <div style="width:2px;height:7px;background:var(--muted);border-radius:1px"></div>
+                <div style="width:2px;height:5px;background:var(--muted);border-radius:1px"></div>
+                <div style="width:2px;height:9px;background:var(--muted);border-radius:1px"></div>
+                <div style="width:2px;height:6px;background:var(--muted);border-radius:1px"></div>
+              </div>
+            </div>
+            <div style="height:14px;display:flex;align-items:center;gap:2px;padding:0 4px;border:1.5px solid var(--green);border-radius:4px;background:var(--green-dim)">
+              <span style="font-size:7px;color:var(--green)">🔊</span>
+              <div style="display:flex;gap:1px;align-items:center">
+                <div style="width:2px;height:4px;background:var(--green);border-radius:1px"></div>
+                <div style="width:2px;height:7px;background:var(--green);border-radius:1px"></div>
+                <div style="width:2px;height:5px;background:var(--green);border-radius:1px"></div>
+                <div style="width:2px;height:9px;background:var(--green);border-radius:1px"></div>
+                <div style="width:2px;height:6px;background:var(--green);border-radius:1px"></div>
+              </div>
+            </div>
+            <div style="height:14px;display:flex;align-items:center;gap:2px;padding:0 4px;border:1px solid rgba(16,185,129,0.5);border-radius:4px;background:var(--emerald-dim)">
+              <span style="font-size:7px;color:var(--emerald)">🔊</span>
+              <div style="display:flex;gap:1px;align-items:center">
+                <div style="width:2px;height:4px;background:var(--emerald);border-radius:1px"></div>
+                <div style="width:2px;height:7px;background:var(--emerald);border-radius:1px"></div>
+                <div style="width:2px;height:5px;background:var(--emerald);border-radius:1px"></div>
+              </div>
+            </div>
+          </div>
+          <!-- 우: 한국어 텍스트 -->
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="height:14px;display:flex;align-items:center;justify-content:center;font-size:5.5px;font-weight:600;border:1px solid var(--hairline);border-radius:4px;background:var(--canvas);color:var(--steel)">개</div>
+            <div style="height:14px;display:flex;align-items:center;justify-content:center;font-size:5.5px;font-weight:600;border:1px solid var(--hairline);border-radius:4px;background:var(--canvas);color:var(--steel)">사과</div>
+            <div style="height:14px;display:flex;align-items:center;justify-content:center;font-size:5.5px;font-weight:700;border:1px solid rgba(16,185,129,0.5);border-radius:4px;background:var(--emerald-dim);color:#065f46">✓ 고양이</div>
+          </div>
+        </div>
+        <div style="font-size:4px;text-align:center;color:var(--steel)">선택된 🔊 클릭 후 한국어 짝 선택</div>
+        <div class="wf-btn secondary" style="font-size:5px;padding:2px 0">지금 들을 수 없어요</div>
+      </div>
+    </div>
+    <div class="quiz-type-label">오디오 짝 맞추기</div>
+    <div class="quiz-type-path">listen-matching · ListenMatchingQuiz.tsx</div>
+    <span class="wf-badge blue">기본</span>
+    <a href="#" data-path="/lesson/daily-1?kind=listen-matching" class="quiz-test-btn">▶ 테스트</a>
+  </div>
+
   <!-- ── 중급·고급 공통 ── -->
   <div class="catalog-group-label">중급·고급 공통 (Tier 0부터)</div>
 
@@ -2228,6 +2284,7 @@
         ├── <span class="file-ts">QuizStep.tsx</span>       ← 퀴즈 유형 분기 오케스트레이터
         ├── <span class="file-ts">ImageChoiceQuiz.tsx</span>← 유형 A — 그림 4지선다
         ├── <span class="file-ts">MatchingQuiz.tsx</span>   ← 유형 B — 영↔한 짝 맞추기
+        ├── <span class="file-ts">ListenMatchingQuiz.tsx</span>← 유형 B' — 🔊 오디오↔한국어 짝 맞추기
         ├── <span class="file-ts">ListenChoiceQuiz.tsx</span>← 유형 C — 소리 4지선다
         └── <span class="file-ts">SentenceBuilderQuiz.tsx</span>← 문장 연습 (세션 끝 3문제)</pre>
 </div>
