@@ -10,6 +10,8 @@ import { UnitMap } from './pages/UnitMap'
 import { Complete } from './pages/Complete'
 import { JumpTest } from './pages/JumpTest'
 import { Onboarding } from './pages/Onboarding'
+import { History } from './pages/History'
+import { ReviewSession } from './pages/ReviewSession'
 
 export default function App() {
   return (
@@ -28,6 +30,8 @@ export default function App() {
           <Route path="/words/:id" element={<StudySession mode="words" />} />
           <Route path="/complete" element={<Complete />} />
           <Route path="/jump/:sectionId" element={<JumpTest />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/review" element={<ReviewSession />} />
         </Routes>
       </BrowserRouter>
     </AppProvider>

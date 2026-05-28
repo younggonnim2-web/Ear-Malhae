@@ -13,6 +13,7 @@ import { buildChallengeSequence } from '../utils/lessonSequence'
 import { buildChoices } from '../utils/quizHelpers'
 import { FlashCard } from '../components/FlashCard'
 import { MatchingQuiz } from '../components/quiz/MatchingQuiz'
+import { ListenMatchingQuiz } from '../components/quiz/ListenMatchingQuiz'
 import { ImageChoiceQuiz } from '../components/quiz/ImageChoiceQuiz'
 import { ListenChoiceQuiz } from '../components/quiz/ListenChoiceQuiz'
 import { SentenceBuilderQuiz } from '../components/quiz/SentenceBuilderQuiz'
@@ -34,7 +35,7 @@ export function LessonSession() {
   const [searchParams] = useSearchParams()
   const kindParam = searchParams.get('kind')
   const completionOverride = searchParams.get('completion') !== null ? parseInt(searchParams.get('completion')!, 10) : null
-  const { markLessonDone, updateStreak, progress } = useApp()
+  const { markLessonDone, updateStreak, progress, addWrongAnswer, addSessionLog } = useApp()
   const { speak, isSpeaking } = useSpeech()
 
   const lesson = lessonId ? LESSONS_MAP[lessonId] : null
@@ -157,7 +158,9 @@ export function LessonSession() {
   const handleWrong = useCallback((challenge: LessonChallenge) => {
     setWrongCount(c => c + 1)
     setRetryQueue(prev => [...prev, { ...challenge }])
-  }, [])
+    const id = challenge.itemId ?? challenge.sentenceId
+    if (id && lessonId) addWrongAnswer(id, challenge.kind, lessonId)
+  }, [addWrongAnswer, lessonId])
 
   const handleSpeakSkip = useCallback(() => {
     if (!current) return
@@ -186,7 +189,10 @@ export function LessonSession() {
       setChallengeIndex(0)
     } else {
       const stars: 1 | 2 | 3 = wrongCount === 0 ? 3 : wrongCount <= 2 ? 2 : 1
-      if (lessonId) markLessonDone(lessonId, stars)
+      if (lessonId) {
+        markLessonDone(lessonId, stars)
+        addSessionLog(lessonId, stars)
+      }
       updateStreak()
       const sectionId = SECTIONS[sectionIndex]?.id
       navigate('/complete', { state: { stars, xpGained: STAR_XP[stars], sectionId } })
@@ -245,6 +251,10 @@ export function LessonSession() {
 
     if (current.kind === 'matching') {
       return <MatchingQuiz items={lessonItems} onComplete={advance} speak={speak} />
+    }
+
+    if (current.kind === 'listen-matching') {
+      return <ListenMatchingQuiz items={lessonItems} onComplete={advance} speak={speak} />
     }
 
     if (current.kind === 'image-choice' && item) {

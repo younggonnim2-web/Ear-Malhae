@@ -90,6 +90,13 @@ export function LearningPath() {
           <span className="text-orange-500 font-bold">🔥 {progress.streak}</span>
           <span className="text-yellow-500 font-bold">⚡ {progress.lessonProgress.length * 10}</span>
           <button
+            onClick={() => navigate('/history')}
+            aria-label="학습 히스토리"
+            className="text-lg text-steel hover:text-ink transition-colors"
+          >
+            📊
+          </button>
+          <button
             onClick={() => setShowDiffModal(true)}
             aria-label="난이도 설정"
             className="text-lg text-steel hover:text-ink transition-colors"

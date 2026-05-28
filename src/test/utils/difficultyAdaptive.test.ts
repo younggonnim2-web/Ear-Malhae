@@ -13,6 +13,8 @@ function makeProgress(overrides: Partial<AppStorage> = {}): AppStorage {
     lessonCompletionCount: {},
     onboardingDone: true,
     difficultyLevel: 'beginner',
+    wrongAnswers: {},
+    sessionLog: [],
     ...overrides,
   }
 }

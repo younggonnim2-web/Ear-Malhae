@@ -5,6 +5,7 @@ import type { SpeakFn } from '../../hooks/useSpeech'
 import { checkBestAnswer, stripPunct } from '../../utils/answerCheck'
 import type { AnswerResult } from '../../utils/answerCheck'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 import { TagBadge } from '../TagBadge'
 import { SentenceTranslationCard } from './SentenceTranslationCard'
 
@@ -46,7 +47,8 @@ export function ListenTypeQuiz({ sentence, onCorrect, onWrong, speak, isSpeaking
   useEffect(() => {
     if (lastSpokenIdRef.current === sentence.id) return
     lastSpokenIdRef.current = sentence.id
-    speak(sentence.english, 'en-US')
+    const timer = setTimeout(() => speak(sentence.english, 'en-US'), 1200)
+    return () => clearTimeout(timer)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sentence.id])
 
@@ -92,7 +94,7 @@ export function ListenTypeQuiz({ sentence, onCorrect, onWrong, speak, isSpeaking
             <span className={cn('text-2xl', isSpeaking && 'animate-speaking inline-block')}>🔊</span>
           </button>
           <button
-            onClick={() => speak(sentence.english, 'en-US', 0.5, 'sentence')}
+            onClick={() => speak(sentence.english, 'en-US', 0.3, 'sentence')}
             className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center transition-colors hover:bg-primary/80"
             aria-label="천천히 듣기"
           >
@@ -192,7 +194,10 @@ export function ListenTypeQuiz({ sentence, onCorrect, onWrong, speak, isSpeaking
 
       {answered && (
         <button
-          onClick={onCorrect}
+          onClick={() => {
+            if (isAccepted) playCorrectSound()
+            onCorrect()
+          }}
           className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
         >
           계속하기 ▶

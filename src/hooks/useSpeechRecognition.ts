@@ -1,8 +1,20 @@
 import { useCallback, useRef, useState } from 'react'
 
-// Web Speech API — 브라우저 타입이 완전하지 않아 직접 선언
+interface SpeechRecognitionAlternative {
+  transcript: string
+}
+interface SpeechRecognitionResult {
+  [index: number]: SpeechRecognitionAlternative
+  isFinal: boolean
+  length: number
+}
+interface SpeechRecognitionResultList {
+  [index: number]: SpeechRecognitionResult
+  length: number
+}
 interface SpeechRecognitionEvent {
-  results: { 0: { 0: { transcript: string } } }
+  resultIndex: number
+  results: SpeechRecognitionResultList
 }
 interface SpeechRecognitionErrorEvent {
   error: string
@@ -31,6 +43,7 @@ export interface UseSpeechRecognitionResult {
   startListening: () => void
   stopListening: () => void
   transcript: string
+  interimTranscript: string
   isListening: boolean
   isSupported: boolean
   error: string | null
@@ -44,6 +57,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
   const isSupported = Ctor !== null
 
   const [transcript, setTranscript] = useState('')
+  const [interimTranscript, setInterimTranscript] = useState('')
   const [isListening, setIsListening] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null)
@@ -60,11 +74,10 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
     if (!Ctor) return
     const recognition = new Ctor()
     recognition.lang = 'en-US'
-    recognition.interimResults = false
+    recognition.interimResults = true
     recognition.maxAlternatives = 3
     recognition.continuous = false
 
-    // onend가 result/error 없이 호출됐는지 추적
     let settled = false
 
     recognition.onstart = () => {
@@ -73,16 +86,33 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
       setIsListening(true)
       setError(null)
       setTranscript('')
+      setInterimTranscript('')
     }
 
     recognition.onresult = (event) => {
-      settled = true
-      clearAutoStop()
-      const text = event.results[0][0].transcript
-      // eslint-disable-next-line no-console
-      console.log('[STT] onresult — 인식됨:', text)
-      setTranscript(text)
-      setIsListening(false)
+      let interimText = ''
+      let finalText = ''
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i]
+        if (result.isFinal) {
+          finalText += result[0].transcript
+        } else {
+          interimText += result[0].transcript
+        }
+      }
+
+      if (finalText) {
+        settled = true
+        clearAutoStop()
+        // eslint-disable-next-line no-console
+        console.log('[STT] onresult (final) — 인식됨:', finalText)
+        setTranscript(finalText)
+        setInterimTranscript('')
+        setIsListening(false)
+      } else {
+        setInterimTranscript(interimText)
+      }
     }
 
     recognition.onerror = (event) => {
@@ -91,6 +121,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
       // eslint-disable-next-line no-console
       console.log('[STT] onerror — 에러:', event.error)
       setError(event.error)
+      setInterimTranscript('')
       setIsListening(false)
     }
 
@@ -98,15 +129,14 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
       clearAutoStop()
       // eslint-disable-next-line no-console
       console.log('[STT] onend — 종료 (settled:', settled, ')')
-      // result도 error도 없이 ended → no-speech로 처리
       if (!settled) setError('no-speech')
+      setInterimTranscript('')
       setIsListening(false)
     }
 
     recognitionRef.current = recognition
     recognition.start()
 
-    // 8초 내 응답 없으면 강제 stop
     timeoutRef.current = setTimeout(() => {
       recognitionRef.current?.stop()
     }, AUTO_STOP_MS)
@@ -115,15 +145,17 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
   const stopListening = useCallback(() => {
     clearAutoStop()
     recognitionRef.current?.stop()
+    setInterimTranscript('')
     setIsListening(false)
   }, [clearAutoStop])
 
   const reset = useCallback(() => {
     clearAutoStop()
     setTranscript('')
+    setInterimTranscript('')
     setError(null)
     setIsListening(false)
   }, [clearAutoStop])
 
-  return { startListening, stopListening, transcript, isListening, isSupported, error, reset }
+  return { startListening, stopListening, transcript, interimTranscript, isListening, isSupported, error, reset }
 }

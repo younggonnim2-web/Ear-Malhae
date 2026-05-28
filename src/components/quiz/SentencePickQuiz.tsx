@@ -4,6 +4,7 @@ import type { ChallengeTag } from '../../types/lesson'
 import type { SpeakFn } from '../../hooks/useSpeech'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 import { TagBadge } from '../TagBadge'
 import { SentenceTranslationCard } from './SentenceTranslationCard'
 
@@ -116,7 +117,13 @@ export function SentencePickQuiz({ sentence, allSentences, direction, onCorrect,
             {selected === answer ? '✓ 정답이에요! 👍' : `정답: "${answer}"`}
           </p>
           <SentenceTranslationCard english={sentence.english} korean={sentence.korean} speak={isEnToKo ? undefined : speak} />
-          <button onClick={onCorrect} className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full">
+          <button
+            onClick={() => {
+              if (selected === answer) playCorrectSound()
+              onCorrect()
+            }}
+            className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
+          >
             다음 ▶
           </button>
         </>

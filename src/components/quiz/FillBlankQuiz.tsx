@@ -4,6 +4,7 @@ import type { ChallengeTag } from '../../types/lesson'
 import type { SpeakFn } from '../../hooks/useSpeech'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 import { CharacterBubble } from '../CharacterBubble'
 import { TagBadge } from '../TagBadge'
 import { SentenceTranslationCard } from './SentenceTranslationCard'
@@ -231,7 +232,10 @@ export function FillBlankQuiz({ sentence, blankIndex, direction = 'ko', onCorrec
           </p>
           <SentenceTranslationCard english={sentence.english} korean={sentence.korean} speak={isEn ? speak : undefined} />
           <button
-            onClick={onCorrect}
+            onClick={() => {
+              if (keyboardInput ? isInputCorrect : selected === correctAnswer) playCorrectSound()
+              onCorrect()
+            }}
             className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
           >
             다음 ▶

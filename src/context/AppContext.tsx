@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react'
-import type { AppStorage, AppContextValue, DifficultyLevel } from '../types'
+import type { AppStorage, AppContextValue, DifficultyLevel, SessionLogEntry } from '../types'
+import type { ChallengeKind } from '../types/lesson'
 import { calculateStreak, getTodayString } from '../utils/streak'
 import { calcXp, calcLevel, calcXpToNext } from '../utils/xp'
 
@@ -15,6 +16,8 @@ const DEFAULT_STORAGE: AppStorage = {
   lessonCompletionCount: {},
   onboardingDone: false,
   difficultyLevel: 'beginner',
+  wrongAnswers: {},
+  sessionLog: [],
 }
 
 function loadStorage(): AppStorage {
@@ -106,6 +109,39 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setProgress(prev => ({ ...prev, difficultyLevel: level, onboardingDone: true }))
   }
 
+  function addWrongAnswer(id: string, kind: ChallengeKind, lessonId: string) {
+    setProgress(prev => {
+      const entry = prev.wrongAnswers[id]
+      return {
+        ...prev,
+        wrongAnswers: {
+          ...prev.wrongAnswers,
+          [id]: {
+            count: (entry?.count ?? 0) + 1,
+            kind,
+            lessonId,
+            lastWrongAt: new Date().toISOString(),
+          },
+        },
+      }
+    })
+  }
+
+  function clearWrongAnswer(id: string) {
+    setProgress(prev => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [id]: _removed, ...rest } = prev.wrongAnswers
+      return { ...prev, wrongAnswers: rest }
+    })
+  }
+
+  function addSessionLog(lessonId: string, stars: 1 | 2 | 3) {
+    setProgress(prev => {
+      const entry: SessionLogEntry = { lessonId, date: new Date().toISOString(), stars }
+      return { ...prev, sessionLog: [entry, ...prev.sessionLog].slice(0, 50) }
+    })
+  }
+
   function isPhraseUnlocked() {
     const wordLessonIds = [
       'fruit-1','fruit-2','animal-1','animal-2','animal-3',
@@ -128,6 +164,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isPhraseUnlocked,
       skipToSection,
       setDifficulty,
+      addWrongAnswer,
+      clearWrongAnswer,
+      addSessionLog,
       totalXp,
       currentLevel,
       xpToNextLevel,

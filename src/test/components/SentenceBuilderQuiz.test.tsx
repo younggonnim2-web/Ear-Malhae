@@ -23,26 +23,28 @@ describe('SentenceBuilderQuiz — 타일 모드', () => {
     expect(screen.getByText('받아요')).toBeInTheDocument()
   })
 
-  it('정답 순서로 탭 후 확인 → 1200ms 후 onCorrect 호출', () => {
+  it('정답 순서로 탭 후 확인 → 2000ms 후 onCorrect 자동 호출', () => {
     const onCorrect = vi.fn()
     render(<SentenceBuilderQuiz sentence={sentence} onCorrect={onCorrect} />)
     fireEvent.click(screen.getByText('커피'))
     fireEvent.click(screen.getByText('주세요'))
     fireEvent.click(screen.getByRole('button', { name: /확인/i }))
     expect(onCorrect).not.toHaveBeenCalled()
-    act(() => vi.advanceTimersByTime(1200))
+    act(() => vi.advanceTimersByTime(2000))
     expect(onCorrect).toHaveBeenCalledTimes(1)
   })
 
-  it('오답 탭 제출 → 정답 안내 표시 + 1200ms 후 onCorrect 호출', () => {
+  it('오답 탭 제출 → 정답 안내 표시 + 다음 버튼으로 수동 진행', () => {
     const onCorrect = vi.fn()
     render(<SentenceBuilderQuiz sentence={sentence} onCorrect={onCorrect} />)
     fireEvent.click(screen.getByText('주세요'))
     fireEvent.click(screen.getByText('커피'))
     fireEvent.click(screen.getByRole('button', { name: /확인/i }))
     expect(screen.getByText(/정답:/i)).toBeInTheDocument()
+    // 오답 시 자동 진행 없음 — 다음 버튼 클릭 필요
+    act(() => vi.advanceTimersByTime(3000))
     expect(onCorrect).not.toHaveBeenCalled()
-    act(() => vi.advanceTimersByTime(1200))
+    fireEvent.click(screen.getByRole('button', { name: /다음/i }))
     expect(onCorrect).toHaveBeenCalledTimes(1)
   })
 

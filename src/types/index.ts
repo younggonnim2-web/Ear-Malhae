@@ -1,3 +1,5 @@
+import type { ChallengeKind } from './lesson'
+
 export interface AlphabetItem {
   id: string
   letter: string
@@ -34,6 +36,8 @@ export interface AppStorage {
   lessonCompletionCount: Record<string, number>
   onboardingDone: boolean
   difficultyLevel: DifficultyLevel
+  wrongAnswers: Record<string, WrongAnswerEntry>
+  sessionLog: SessionLogEntry[]
 }
 
 export interface AppContextValue {
@@ -45,9 +49,25 @@ export interface AppContextValue {
   isPhraseUnlocked: () => boolean
   skipToSection: (lessonIds: string[]) => void
   setDifficulty: (level: DifficultyLevel) => void
+  addWrongAnswer: (id: string, kind: ChallengeKind, lessonId: string) => void
+  clearWrongAnswer: (id: string) => void
+  addSessionLog: (lessonId: string, stars: 1 | 2 | 3) => void
   totalXp: number
   currentLevel: number
   xpToNextLevel: number | null
+}
+
+export interface WrongAnswerEntry {
+  count: number
+  kind: ChallengeKind
+  lessonId: string
+  lastWrongAt: string
+}
+
+export interface SessionLogEntry {
+  lessonId: string
+  date: string
+  stars: 1 | 2 | 3
 }
 
 export type QuizType = 'image-choice' | 'matching' | 'listen-choice' | 'sentence-builder'

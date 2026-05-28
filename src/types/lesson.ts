@@ -4,6 +4,7 @@ import type { QuizDirection } from './index'
 export type ChallengeKind =
   | 'flash'
   | 'matching'
+  | 'listen-matching'
   | 'image-choice'
   | 'listen-choice'
   | 'sentence-builder'

@@ -5,6 +5,7 @@ import type { SpeakFn } from '../../hooks/useSpeech'
 import { checkBestAnswer, stripPunct } from '../../utils/answerCheck'
 import type { AnswerResult } from '../../utils/answerCheck'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 import { TagBadge } from '../TagBadge'
 import { SentenceTranslationCard } from './SentenceTranslationCard'
 
@@ -201,7 +202,10 @@ export function TranslateTypeQuiz({ sentence, onCorrect, onWrong, speak, tag }: 
 
       {answered && (
         <button
-          onClick={onCorrect}
+          onClick={() => {
+            if (isAccepted) playCorrectSound()
+            onCorrect()
+          }}
           className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
         >
           계속하기 ▶

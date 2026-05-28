@@ -4,6 +4,7 @@ import { isWordItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
 import type { SpeakFn } from '../../hooks/useSpeech'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 import { CharacterBubble } from '../CharacterBubble'
 import { TagBadge } from '../TagBadge'
 
@@ -135,7 +136,12 @@ export function ImageChoiceQuiz({
       )}
       {answered && (
         <button
-          onClick={selected === item.id ? onCorrect : allowNextOnWrong ? onNext : onCorrect}
+          onClick={() => {
+            if (selected === item.id) playCorrectSound()
+            if (selected === item.id) onCorrect()
+            else if (allowNextOnWrong) onNext?.()
+            else onCorrect()
+          }}
           className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
         >
           다음 ▶

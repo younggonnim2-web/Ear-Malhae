@@ -11,6 +11,7 @@ function mockRecognition(overrides: Partial<recognitionModule.UseSpeechRecogniti
     startListening: vi.fn(),
     stopListening: vi.fn(),
     transcript: '',
+    interimTranscript: '',
     isListening: false,
     isSupported: true,
     error: null,

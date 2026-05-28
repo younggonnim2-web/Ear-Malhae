@@ -3,6 +3,7 @@ import type { StudyItem, QuizDirection } from '../../types'
 import { isWordItem } from '../../types'
 import type { SpeakFn } from '../../hooks/useSpeech'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 
 interface Props {
   item: StudyItem
@@ -30,7 +31,8 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong,
   useEffect(() => {
     if (lastSpokenIdRef.current === item.id) return
     lastSpokenIdRef.current = item.id
-    speak(word, 'en-US')
+    const timer = setTimeout(() => speak(word, 'en-US'), 1200)
+    return () => clearTimeout(timer)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.id])
 
@@ -60,7 +62,7 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong,
           <span className={cn('text-3xl text-white', isSpeaking && 'animate-speaking inline-block')}>🔊</span>
         </button>
         <button
-          onClick={() => speak(word, 'en-US', 0.5)}
+          onClick={() => speak(word, 'en-US', 0.3)}
           className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center transition-colors hover:bg-primary/80"
           aria-label="천천히 듣기"
         >
@@ -110,7 +112,10 @@ export function ListenChoiceQuiz({ item, choices, direction, onCorrect, onWrong,
 
       {answered && (
         <button
-          onClick={onCorrect}
+          onClick={() => {
+            if (selected === item.id) playCorrectSound()
+            onCorrect()
+          }}
           className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
         >
           다음 ▶

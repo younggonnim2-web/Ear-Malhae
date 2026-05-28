@@ -4,6 +4,7 @@ import type { ChallengeTag } from '../../types/lesson'
 import type { SpeakFn } from '../../hooks/useSpeech'
 import { shuffle } from '../../utils/quizHelpers'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 import { CharacterBubble } from '../CharacterBubble'
 import { TagBadge } from '../TagBadge'
 import { SentenceTranslationCard } from './SentenceTranslationCard'
@@ -49,8 +50,7 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
   useEffect(() => {
     if (lastSpokenIdRef.current === sentence.id) return
     lastSpokenIdRef.current = sentence.id
-    // en-to-ko: 영어 문장 자동 발음 / listenBuild: 힌트 없이 오디오만
-    if ((isEnToKo || listenBuild) && speak) {
+    if (speak) {
       speak(sentence.english, 'en-US', 1.0, 'sentence')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +90,7 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
     setResult(correct ? 'correct' : 'wrong')
     setChecked(true)
     if (!correct) onWrong?.()
-    if (autoAdvance) setTimeout(onCorrect, 1200)
+    if (autoAdvance && correct) setTimeout(onCorrect, 2000)
   }
 
   const hasInput = selected.length > 0
@@ -140,7 +140,7 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
         <>
           <CharacterBubble
             word={displayWord}
-            onSpeak={isEnToKo && speak ? () => speak(sentence.english, 'en-US', 1.0, 'sentence') : undefined}
+            onSpeak={!listenBuild && speak ? () => speak(sentence.english, 'en-US', 1.0, 'sentence') : undefined}
             isSpeaking={isSpeaking}
           />
           {checked && (
@@ -213,9 +213,12 @@ export function SentenceBuilderQuiz({ sentence, onCorrect, onWrong, speak, direc
         </button>
       )}
 
-      {checked && !autoAdvance && (
+      {checked && (!autoAdvance || result === 'wrong') && (
         <button
-          onClick={onCorrect}
+          onClick={() => {
+            if (result === 'correct') playCorrectSound()
+            onCorrect()
+          }}
           className="w-full py-3 bg-primary text-ink rounded-full font-bold text-base"
         >
           다음 ▶

@@ -255,7 +255,7 @@ function buildWordsSequence(
     for (const id of shuffle([...itemIds]).slice(0, 2))
       seq.push({ kind: 'type-word', itemId: id, tag: '어려운 연습' })
 
-    seq.push({ kind: 'matching' })
+    seq.push({ kind: 'listen-matching' })
 
     for (const s of pickSentences(3, 5))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 2 })
@@ -296,7 +296,7 @@ function buildWordsSequence(
     for (const s of pickSentences(1, 7))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습', distractorCount: 3 })
 
-    seq.push({ kind: 'matching' })
+    seq.push({ kind: 'listen-matching' })
 
     for (const s of pickSentences(4, 8))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습', distractorCount: 3 })
@@ -327,15 +327,15 @@ function buildWordsSequence(
     for (const s of pickSentences(2, 7))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', listenBuild: true, tag: '어려운 연습' })
 
-    seq.push({ kind: 'matching' })
+    seq.push({ kind: 'listen-matching' })
 
     for (const s of pickSentences(5, 9))
       seq.push({ kind: 'sentence-builder', sentenceId: s.id, direction: 'ko-to-en', tag: '어려운 연습' })
   }
 
-  // 이전 섹션 복습 문제 — matching 직전에 삽입
+  // 이전 섹션 복습 문제 — matching/listen-matching 직전에 삽입
   if (reviewItems.length > 0) {
-    const matchIdx = seq.findIndex(c => c.kind === 'matching')
+    const matchIdx = seq.findIndex(c => c.kind === 'matching' || c.kind === 'listen-matching')
     if (matchIdx >= 0) {
       seq.splice(matchIdx, 0, ...buildReviewChallenges(reviewItems))
     }

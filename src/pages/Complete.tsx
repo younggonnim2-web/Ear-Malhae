@@ -195,12 +195,29 @@ export function Complete() {
         </button>
       )}
 
-      <button
-        onClick={() => navigate('/')}
-        className="w-full py-5 bg-primary text-ink font-bold text-2xl rounded-full"
-      >
-        홈으로
-      </button>
+      {state?.sectionId ? (
+        <div className="w-full flex flex-col gap-3">
+          <button
+            onClick={() => navigate(`/section/${state.sectionId}`)}
+            className="w-full py-5 bg-primary text-white font-bold text-2xl rounded-full"
+          >
+            계속하기
+          </button>
+          <button
+            onClick={() => navigate('/')}
+            className="w-full py-4 border-2 border-hairline text-steel font-bold text-lg rounded-full"
+          >
+            홈으로
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={() => navigate('/')}
+          className="w-full py-5 bg-primary text-white font-bold text-2xl rounded-full"
+        >
+          홈으로
+        </button>
+      )}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import type { StudyItem } from '../../types'
 import type { ChallengeTag } from '../../types/lesson'
 import { isWordItem } from '../../types'
 import { cn } from '../../utils/cn'
+import { playCorrectSound } from '../../utils/sound'
 import { TagBadge } from '../TagBadge'
 
 interface Props {
@@ -134,7 +135,10 @@ export function WordTypeQuiz({ item, onCorrect, onWrong, tag }: Props) {
 
       {answered && (
         <button
-          onClick={onCorrect}
+          onClick={() => {
+            if (isAccepted) playCorrectSound()
+            onCorrect()
+          }}
           className="w-full py-4 bg-primary text-ink text-xl font-bold rounded-full"
         >
           계속하기 ▶

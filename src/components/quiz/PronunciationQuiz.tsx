@@ -22,8 +22,33 @@ interface Props {
 
 type Phase = 'idle' | 'listening' | 'result' | 'blocked'
 
+function TranscriptHighlight({ transcript, target, matched }: { transcript: string; target: string; matched: boolean }) {
+  if (matched) {
+    return <span className="text-green-600 font-semibold">"{transcript}"</span>
+  }
+  const targetWords = new Set(
+    target.toLowerCase().split(/\s+/).map(w => w.replace(/[^a-z]/g, ''))
+  )
+  const words = transcript.split(/\s+/)
+  return (
+    <>
+      &ldquo;
+      {words.map((word, i) => {
+        const clean = word.toLowerCase().replace(/[^a-z]/g, '')
+        const hit = targetWords.has(clean) || [...targetWords].some(tw => tw.includes(clean) || clean.includes(tw))
+        return (
+          <span key={i} className={hit ? 'text-green-600 font-semibold' : 'text-orange-500'}>
+            {word}{i < words.length - 1 ? ' ' : ''}
+          </span>
+        )
+      })}
+      &rdquo;
+    </>
+  )
+}
+
 export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSpeaking, isLastChance, tag }: Props) {
-  const { startListening, stopListening, transcript, isSupported, error, reset } =
+  const { startListening, stopListening, transcript, interimTranscript, isSupported, error, reset } =
     useSpeechRecognition()
 
   const [phase, setPhase] = useState<Phase>('idle')
@@ -31,7 +56,6 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
   const [matched, setMatched] = useState(false)
   const [lastTranscript, setLastTranscript] = useState('')
 
-  // 발음 대상과 한국어 의미 — item 우선, 없으면 phrase 사용
   const targetWord = item
     ? (isWordItem(item) ? item.word : item.letter)
     : (phrase?.english ?? '')
@@ -41,7 +65,6 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
   const isLongPhrase = targetWord.includes(' ')
   const promptText = isLongPhrase ? '이 문장을 말해보세요' : '이 단어를 말해보세요'
 
-  // 인식 결과 도착 시 평가
   useEffect(() => {
     if (!transcript) return
     const result = evaluateTyped(transcript, targetWord)
@@ -52,7 +75,6 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
     setPhase('result')
   }, [transcript, targetWord])
 
-  // 에러 처리
   useEffect(() => {
     if (!error) return
     if (error === 'no-speech') {
@@ -60,11 +82,9 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
       setPhase('result')
       setMatched(false)
     } else if (error === 'not-allowed' || error === 'service-not-allowed') {
-      // 마이크 권한 거부 → 결과 화면에서 안내
       setLastTranscript('')
       setPhase('blocked')
     } else {
-      // network 등 기타 에러 → 결과 없음으로 처리
       setLastTranscript('')
       setPhase('result')
       setMatched(false)
@@ -105,7 +125,6 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
 
       <p className="text-lg text-steel text-center font-semibold">{promptText}</p>
 
-      {/* 발음 대상 표시 — 문장은 더 작은 폰트로 */}
       <div className="flex flex-col items-center gap-2 py-4">
         <span className={`${isLongPhrase ? 'text-3xl' : 'text-5xl'} font-black text-ink text-center`}>{targetWord}</span>
         {meaning && (
@@ -146,11 +165,10 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
 
       {/* 녹음 중 */}
       {phase === 'listening' && (
-        <div className="flex flex-col items-center gap-5">
+        <div className="flex flex-col items-center gap-4">
           <div className="w-24 h-24 rounded-full bg-red-500 flex items-center justify-center shadow-xl">
             <span className="text-4xl">🎤</span>
           </div>
-          {/* 이퀄라이저 파형 */}
           <div className="flex items-center gap-1.5 h-10">
             {[0, 0.1, 0.2, 0.3, 0.4, 0.2, 0.1].map((delay, i) => (
               <div
@@ -161,6 +179,16 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
             ))}
           </div>
           <p className="text-red-500 font-bold text-lg">듣고 있어요...</p>
+
+          {/* 실시간 인식 텍스트 */}
+          <div className="min-h-[48px] w-full bg-gray-50 border border-hairline rounded-2xl px-4 py-3 text-center">
+            {interimTranscript ? (
+              <p className="text-steel text-base italic opacity-80">"{interimTranscript}"</p>
+            ) : (
+              <p className="text-gray-300 text-sm">말하면 여기에 표시돼요</p>
+            )}
+          </div>
+
           <button
             onClick={() => { stopListening(); setPhase('idle') }}
             className="text-sm text-steel underline"
@@ -197,14 +225,20 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
               <p className="text-3xl font-black text-green-600">잘하셨어요! 👏</p>
               <p className="text-base text-green-500 mt-1">발음이 정확해요</p>
               {lastTranscript && (
-                <p className="text-sm text-steel mt-2">들린 말: &ldquo;{lastTranscript}&rdquo;</p>
+                <p className="text-sm text-steel mt-3">
+                  🎤 인식된 내용:{' '}
+                  <TranscriptHighlight transcript={lastTranscript} target={targetWord} matched={matched} />
+                </p>
               )}
             </div>
           ) : canRetry ? (
             <div className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-5 text-center">
               <p className="text-2xl font-bold text-orange-600">다시 해볼까요? 💪</p>
               {lastTranscript ? (
-                <p className="text-sm text-steel mt-2">들린 말: &ldquo;{lastTranscript}&rdquo;</p>
+                <p className="text-sm text-steel mt-3">
+                  🎤 인식된 내용:{' '}
+                  <TranscriptHighlight transcript={lastTranscript} target={targetWord} matched={matched} />
+                </p>
               ) : (
                 <p className="text-sm text-steel mt-2">소리가 잘 안 들렸어요</p>
               )}
@@ -213,6 +247,12 @@ export function PronunciationQuiz({ item, phrase, onCorrect, onSkip, speak, isSp
             <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-5 text-center">
               <p className="text-2xl font-bold text-blue-600">괜찮아요! 계속 연습해봐요 😊</p>
               <p className="text-sm text-steel mt-1">정답: {targetWord}</p>
+              {lastTranscript && (
+                <p className="text-sm text-steel mt-3">
+                  🎤 인식된 내용:{' '}
+                  <TranscriptHighlight transcript={lastTranscript} target={targetWord} matched={matched} />
+                </p>
+              )}
             </div>
           )}
 
