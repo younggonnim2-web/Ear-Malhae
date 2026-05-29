@@ -121,7 +121,8 @@ function buildSentenceSequence(
       seq.push({ kind: 'speak-sentence', sentenceId: (sentences[1] ?? sentences[0]).id, tag: '어려운 연습' })
   }
 
-  return seq
+  const SENTENCE_CAP = [Infinity, 20, 22][tier] ?? 20
+  return tier === 0 ? seq : seq.slice(0, SENTENCE_CAP)
 }
 
 /**
@@ -341,7 +342,8 @@ function buildWordsSequence(
     }
   }
 
-  return seq
+  const WORDS_CAP = [Infinity, 20, 22, 24][tier] ?? 20
+  return tier === 0 ? seq : seq.slice(0, WORDS_CAP)
 }
 
 /**
