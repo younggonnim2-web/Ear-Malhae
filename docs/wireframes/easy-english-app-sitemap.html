@@ -1638,23 +1638,45 @@
       <div class="phone-top"></div>
       <div style="display:flex;flex-direction:column;gap:3px;padding:5px;flex:1;overflow:hidden">
         <div class="wf-header back session">← 학습</div>
-        <div style="font-size:4.5px;text-align:center;color:var(--muted)">영↔한 짝을 맞추세요</div>
-        <div class="wf-match-grid" style="margin-top:2px">
-          <div class="wf-match-card selected">apple</div>
-          <div class="wf-match-card">개</div>
-          <div class="wf-match-card">cat</div>
-          <div class="wf-match-card matched">사과</div>
-          <div class="wf-match-card">dog</div>
-          <div class="wf-match-card">고양이</div>
+        <div style="font-size:4.5px;text-align:center;color:var(--muted)">의미가 같은 단어끼리 짝을 지으세요</div>
+        <div style="display:flex;gap:3px;flex:1;align-items:center">
+          <!-- 좌: 영어 단어 + 숫자 뱃지 -->
+          <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:center;gap:2px;padding:2px 4px;border:1px solid rgba(16,185,129,0.5);border-radius:4px;background:var(--emerald-dim)">
+              <span style="width:7px;height:7px;border-radius:50%;background:#bbf7d0;color:#065f46;font-size:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">✓</span>
+              <span style="font-size:5.5px;font-weight:600;color:#065f46">apple</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:2px;padding:2px 4px;border:1.5px solid var(--green);border-radius:4px;background:var(--green-dim)">
+              <span style="width:7px;height:7px;border-radius:50%;background:#f0fdf4;color:#6b7280;font-size:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">2</span>
+              <span style="font-size:5.5px;font-weight:600;color:var(--ink)">cat</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:2px;padding:2px 4px;border:1px solid var(--hairline);border-radius:4px;background:var(--canvas)">
+              <span style="width:7px;height:7px;border-radius:50%;background:#f3f4f6;color:#6b7280;font-size:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">3</span>
+              <span style="font-size:5.5px;font-weight:600;color:var(--ink)">dog</span>
+            </div>
+          </div>
+          <!-- 우: 한국어 뜻 + 숫자 뱃지 (셔플) -->
+          <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:center;gap:2px;padding:2px 4px;border:1px solid var(--hairline);border-radius:4px;background:var(--canvas)">
+              <span style="width:7px;height:7px;border-radius:50%;background:#f3f4f6;color:#6b7280;font-size:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">4</span>
+              <span style="font-size:5.5px;font-weight:600;color:var(--steel)">개</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:2px;padding:2px 4px;border:1px solid rgba(16,185,129,0.5);border-radius:4px;background:var(--emerald-dim)">
+              <span style="width:7px;height:7px;border-radius:50%;background:#bbf7d0;color:#065f46;font-size:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">✓</span>
+              <span style="font-size:5.5px;font-weight:600;color:#065f46">사과</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:2px;padding:2px 4px;border:1px solid var(--hairline);border-radius:4px;background:var(--canvas)">
+              <span style="width:7px;height:7px;border-radius:50%;background:#f3f4f6;color:#6b7280;font-size:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700">6</span>
+              <span style="font-size:5.5px;font-weight:600;color:var(--steel)">고양이</span>
+            </div>
+          </div>
         </div>
-        <div style="font-size:4.5px;text-align:center;color:var(--steel)">apple 선택됨</div>
-        <div class="wf-btn primary mt-auto">확인 ▶</div>
       </div>
     </div>
     <div class="quiz-type-label">매칭</div>
     <div class="quiz-type-path">matching · MatchingQuiz.tsx</div>
     <span class="wf-badge blue">기본</span>
-    <a href="#" data-path="/lesson/daily-1?kind=matching" class="quiz-test-btn">▶ 테스트</a>
+    <a href="#" data-path="/lesson/daily-1?kind=matching&completion=0" class="quiz-test-btn">▶ 테스트</a>
   </div>
 
   <!-- 5. listen-matching — 오디오 짝 맞추기 -->
@@ -1703,14 +1725,13 @@
             <div style="height:14px;display:flex;align-items:center;justify-content:center;font-size:5.5px;font-weight:700;border:1px solid rgba(16,185,129,0.5);border-radius:4px;background:var(--emerald-dim);color:#065f46">✓ 고양이</div>
           </div>
         </div>
-        <div style="font-size:4px;text-align:center;color:var(--steel)">선택된 🔊 클릭 후 한국어 짝 선택</div>
-        <div class="wf-btn secondary" style="font-size:5px;padding:2px 0">지금 들을 수 없어요</div>
+        <div class="wf-btn secondary" style="font-size:5px;padding:2px 0;margin-top:auto">지금 들을 수 없어요</div>
       </div>
     </div>
     <div class="quiz-type-label">오디오 짝 맞추기</div>
     <div class="quiz-type-path">listen-matching · ListenMatchingQuiz.tsx</div>
     <span class="wf-badge blue">기본</span>
-    <a href="#" data-path="/lesson/daily-1?kind=listen-matching" class="quiz-test-btn">▶ 테스트</a>
+    <a href="#" data-path="/lesson/daily-1?kind=listen-matching&completion=1" class="quiz-test-btn">▶ 테스트</a>
   </div>
 
   <!-- ── 중급·고급 공통 ── -->

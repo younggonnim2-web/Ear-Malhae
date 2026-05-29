@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useParams, useSearchParams } from 'react-router-dom'
 import { AppProvider } from './context/AppContext'
 import { LearningPath } from './pages/LearningPath'
 import { SectionPath } from './pages/SectionPath'
@@ -13,6 +13,14 @@ import { Onboarding } from './pages/Onboarding'
 import { History } from './pages/History'
 import { ReviewSession } from './pages/ReviewSession'
 
+// lessonId 또는 completion 파라미터가 바뀌면 LessonSession을 재마운트
+function LessonRoute() {
+  const { lessonId } = useParams<{ lessonId: string }>()
+  const [searchParams] = useSearchParams()
+  const completion = searchParams.get('completion')
+  return <LessonSession key={`${lessonId}-${completion ?? 'live'}`} />
+}
+
 export default function App() {
   return (
     <AppProvider>
@@ -22,7 +30,7 @@ export default function App() {
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/units" element={<UnitMap />} />
           <Route path="/section/:sectionId" element={<SectionPath />} />
-          <Route path="/lesson/:lessonId" element={<LessonSession />} />
+          <Route path="/lesson/:lessonId" element={<LessonRoute />} />
           {/* 기존 routes 유지 (하위 호환) */}
           <Route path="/alphabet" element={<AlphabetList />} />
           <Route path="/alphabet/:id" element={<StudySession mode="alphabet" />} />

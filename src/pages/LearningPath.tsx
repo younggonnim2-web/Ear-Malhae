@@ -84,7 +84,7 @@ export function LearningPath() {
       <div className="sticky top-0 z-10 bg-canvas border-b border-hairline px-4 py-3 max-w-md mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🦉</span>
-          <span className="font-black text-ink text-lg">쉬운 영어</span>
+          <span className="font-black text-ink text-lg">이어 말해</span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-orange-500 font-bold">🔥 {progress.streak}</span>

@@ -17,7 +17,7 @@ function renderHome() {
 describe('Home', () => {
   it('제목과 섹션 카드 렌더링', () => {
     renderHome()
-    expect(screen.getByText('Easy English')).toBeInTheDocument()
+    expect(screen.getByText('Ear Malhae')).toBeInTheDocument()
     expect(screen.getByText('알파벳')).toBeInTheDocument()
     expect(screen.getByText('단어')).toBeInTheDocument()
   })

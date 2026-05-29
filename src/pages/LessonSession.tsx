@@ -103,17 +103,14 @@ export function LessonSession() {
     return SENTENCES.filter(s => !s.category || s.category === unitId)
   }, [lesson?.unitId, unit?.type]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [challenges, setChallenges] = useState<LessonChallenge[]>(() =>
-    lesson
-      ? buildChallengeSequence(lesson, lessonIndex, relevantSentences, unit?.type ?? 'words', completionCount, sectionBaseTier, reviewItems, difficultyOffset)
-      : []
-  )
-  const [challengeIndex, setChallengeIndex] = useState(() => {
-    if (!kindParam || !lesson) return 0
+  const [{ initialChallenges, initialIndex }] = useState(() => {
+    if (!lesson) return { initialChallenges: [] as LessonChallenge[], initialIndex: 0 }
     const chs = buildChallengeSequence(lesson, lessonIndex, relevantSentences, unit?.type ?? 'words', completionCount, sectionBaseTier, reviewItems, difficultyOffset)
-    const idx = chs.findIndex(c => c.kind === kindParam)
-    return idx >= 0 ? idx : 0
+    const idx = kindParam ? chs.findIndex(c => c.kind === kindParam) : -1
+    return { initialChallenges: chs, initialIndex: idx >= 0 ? idx : 0 }
   })
+  const [challenges, setChallenges] = useState<LessonChallenge[]>(initialChallenges)
+  const [challengeIndex, setChallengeIndex] = useState(initialIndex)
   const [retryQueue, setRetryQueue] = useState<LessonChallenge[]>([])
   const [phase, setPhase] = useState<'main' | 'retry'>('main')
   const [wrongCount, setWrongCount] = useState(0)

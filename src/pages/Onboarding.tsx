@@ -52,7 +52,7 @@ export function Onboarding() {
     <div className="min-h-screen bg-surface flex flex-col max-w-md mx-auto px-6 pt-12 pb-8">
       <div className="flex flex-col items-center gap-2 mb-8">
         <span className="text-6xl">🦉</span>
-        <h1 className="text-3xl font-black text-ink">쉬운 영어</h1>
+        <h1 className="text-3xl font-black text-ink">이어 말해</h1>
         <p className="text-steel text-center text-base mt-1">
           현재 영어 실력을 알려주세요!<br />
           맞춤 학습 경로로 시작할게요.

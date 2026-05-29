@@ -48,7 +48,7 @@ export function Home() {
   return (
     <div className="min-h-screen bg-surface max-w-md mx-auto">
       <div className="bg-ink px-4 pt-10 pb-8 text-center text-white">
-        <h1 className="text-3xl font-bold">Easy English</h1>
+        <h1 className="text-3xl font-bold">Ear Malhae</h1>
         <p className="text-white/60 mt-1">Lv.{currentLevel} · {totalXp} XP</p>
       </div>
 
