@@ -27,6 +27,19 @@ describe('data integrity', () => {
     expect(new Set(ids).size).toBe(ids.length)
   })
 
+  it('words.ts emoji 중복 없음 (선택지 시각 혼동 방지)', () => {
+    const emojiMap = new Map<string, string[]>()
+    for (const w of WORDS) {
+      const list = emojiMap.get(w.emoji) ?? []
+      list.push(w.id)
+      emojiMap.set(w.emoji, list)
+    }
+    const duplicates = [...emojiMap.entries()]
+      .filter(([, ids]) => ids.length > 1)
+      .map(([emoji, ids]) => `${emoji}: ${ids.join(', ')}`)
+    expect(duplicates, `중복 emoji:\n${duplicates.join('\n')}`).toHaveLength(0)
+  })
+
   it('모든 문장: parts.length === englishParts.length (위치 매핑 평행)', () => {
     for (const s of SENTENCES) {
       expect(
