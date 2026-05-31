@@ -38,7 +38,8 @@ describe('MatchingQuiz', () => {
     fireEvent.click(screen.getByText('grape'))
     fireEvent.click(screen.getByText('포도'))
 
-    vi.advanceTimersByTime(600)
+    // MatchingQuiz는 마지막 짝 매칭 후 setTimeout(onComplete, 800)
+    vi.advanceTimersByTime(800)
     expect(onComplete).toHaveBeenCalledTimes(1)
   })
 })
